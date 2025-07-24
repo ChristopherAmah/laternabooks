@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import LaternaLogo from '../assets/laterna.png';
 import { FaTwitter, FaFacebookF, FaGooglePlusG, FaPinterestP, FaLinkedinIn, FaInstagram, FaSearch, FaShoppingCart, FaHeart } from 'react-icons/fa';
-import dreamCount from '../assets/dreamCount.jpeg'
+import dreamCount from '../assets/dreamcount.jpeg'
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
