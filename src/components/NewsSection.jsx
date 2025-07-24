@@ -18,7 +18,7 @@ const books = [
 const products = [
   {
     id: 1,
-    image: 'https://placehold.co/200x300/F5DEB3/000000?text=Vintage', // Placeholder for Vintage poster
+    image: dreamCount, // Placeholder for Vintage poster
     title: 'Corporate',
     rating: 5,
     originalPrice: '$100.00',
@@ -27,7 +27,7 @@ const products = [
   },
   {
     id: 2,
-    image: 'https://placehold.co/200x300/ADD8E6/000000?text=Habbits', // Placeholder for Habbits poster
+    image: dreamCount, // Placeholder for Habbits poster
     title: 'Habbits',
     rating: 5,
     originalPrice: '$100.00',
@@ -36,7 +36,7 @@ const products = [
   },
   {
     id: 3,
-    image: 'https://placehold.co/200x300/000000/FFFFFF?text=Your+Design', // Placeholder for The Devils poster
+    image: dreamCount, // Placeholder for The Devils poster
     title: 'The Devils',
     rating: 5,
     originalPrice: '$400.00',
@@ -45,7 +45,7 @@ const products = [
   },
   {
     id: 4,
-    image: 'https://placehold.co/200x300/FFA500/000000?text=The+Secret', // Placeholder for The Secret poster
+    image: dreamCount, // Placeholder for The Secret poster
     title: 'The Secret',
     rating: 5,
     originalPrice: '$80.00',
@@ -74,35 +74,61 @@ const StarRating = ({ rating }) => {
 
 // Product Card Component
 const ProductCard = ({ product }) => {
-  return (
-    <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-4">
-      {product.onSale && (
-        <span className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold p-3 rounded-full">
-          Sale!
-        </span>
-      )}
-      <img
-        src={product.image}
-        alt={product.title}
-        className="w-full h-auto object-cover rounded-md mb-4"
-        onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/200x300/CCCCCC/000000?text=Image+Error'; }}
-      />
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.title}</h3>
-      <StarRating rating={product.rating} />
-      <div className="flex items-center mt-2">
-        {product.originalPrice && product.salePrice && (
-          <span className="text-gray-500 line-through mr-2">{product.originalPrice}</span>
-        )}
-        {product.salePrice && (
-          <span className="text-orange-500 font-bold">{product.salePrice}</span>
-        )}
-        {!product.onSale && product.originalPrice && (
-          <span className="text-orange-500 font-bold">{product.originalPrice}</span>
-        )}
-      </div>
-    </div>
-  );
+    return (
+        <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
+            {/* Sale Badge */}
+            {product.onSale && (
+                <span className="absolute top-2 right-2 bg-teal-400 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
+                    Sale!
+                </span>
+            )}
+
+            {/* Image Container with Hover Effect */}
+            {/* The image in the example has a slight border/shadow and a hover effect */}
+            <div className="w-full max-h-72 sm:max-h-80 md:max-h-96 rounded-md mb-3 border border-gray-200 shadow-sm bg-gray-100">
+              <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-full object-contain transition duration-300 ease-in-out hover:brightness-90 hover:scale-105"
+                  onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                          'https://placehold.co/300x400/CCCCCC/000000?text=Image+Error';
+                  }}
+              />
+          </div>
+
+            {/* Product Title */}
+            <h3 className="text-sm sm:text-base font-semibold text-center text-gray-800 mb-1">
+                {product.title}
+            </h3>
+
+            {/* Star Rating */}
+            <StarRating rating={product.rating} />
+
+            {/* Price Section */}
+            <div className="flex items-center mt-1 sm:mt-2">
+                {product.originalPrice && product.salePrice && (
+                    <span className="text-xs sm:text-sm text-gray-500 line-through mr-2">
+                        {product.originalPrice}
+                    </span>
+                )}
+                {product.salePrice && (
+                    <span className="text-sm sm:text-base text-orange-500 font-bold"> {/* Removed rounded-full here */}
+                        {product.salePrice}
+                    </span>
+                )}
+                {/* Display original price if not on sale */}
+                {!product.onSale && product.originalPrice && (
+                    <span className="text-sm sm:text-base text-orange-500 font-bold">
+                        {product.originalPrice}
+                    </span>
+                )}
+            </div>
+        </div>
+    );
 };
+
 
 
 
