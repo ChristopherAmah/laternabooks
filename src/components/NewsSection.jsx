@@ -632,7 +632,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
             </div>
 
             {/* Section 2: New Collections */}
-            <div className="flex flex-col lg:flex-row-reverse justify-center items-start bg-white py-12 gap-6 px-4">               
+            <div className="flex flex-col lg:flex-row-reverse justify-center items-start bg-white py-12 gap-6">               
                 {/* Left: Image Categories */}
                 <div className="flex flex-col items-center flex-1">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-2 mt-6">New Collection</h2>

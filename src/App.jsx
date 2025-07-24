@@ -14,12 +14,10 @@ function App() {
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
       <div className='overflow-hidden'>
-        <div style={{height:'100vh'}}>
           <Topbar />
           <Navbar />
           {/* <Tesst /> */}
           <Hero />
-        </div>
         <NewsSection />
         <BlogSection />
         <CompanyLogo />
