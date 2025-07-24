@@ -78,7 +78,7 @@ const ProductCard = ({ product }) => {
         <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
             {/* Sale Badge */}
             {product.onSale && (
-                <span className="absolute top-2 right-2 bg-teal-400 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
+                <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
                     Sale!
                 </span>
             )}
