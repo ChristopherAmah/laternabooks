@@ -107,28 +107,28 @@ const ProductCard = ({ product }) => {
 
 const NewsSection = () => {
   return (
-    <section className='px-4 shadow-lg'>   
-        <div className="sm:px-6 lg:px-10 px-12">
+    <section className="md:px-4 md:shadow-lg">   
+        <div className="sm:px-6 md:px-4">
             <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg ">
                 {/* Categories */}
-                <div className="flex text-white overflow-hidden shadow-lg">
-                    {[
-                        { icon: 'fa-heart', label: 'Love & Romance', bg: 'bg-orange-500' },
-                        { icon: 'fa-utensils', label: 'Cooking & Food', bg: 'bg-gray-500' },
-                        { icon: 'fa-desktop', label: 'Computer', bg: 'bg-orange-500' },
-                        { icon: 'fa-book', label: 'Crime Books', bg: 'bg-gray-500' },
-                        { icon: 'fa-building', label: 'Business', bg: 'bg-orange-500' },
-                    ].map((cat, idx) => (
-                        <div
-                        key={idx}
-                        className={`flex-1 text-center py-6 transition-colors duration-300 ${cat.bg}`}
-                        >
-                        <i
-                            className={`fas ${cat.icon} text-2xl block mb-1 transition-transform duration-500 hover:rotate-[360deg]`}
-                        />
-                        <p className="font-semibold">{cat.label}</p>
-                        </div>
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 text-white shadow-lg">
+                  {[
+                    { icon: 'fa-heart', label: 'Love & Romance', bg: 'bg-orange-500' },
+                    { icon: 'fa-utensils', label: 'Cooking & Food', bg: 'bg-gray-500' },
+                    { icon: 'fa-desktop', label: 'Computer', bg: 'bg-orange-500' },
+                    { icon: 'fa-book', label: 'Crime Books', bg: 'bg-gray-500' },
+                    { icon: 'fa-building', label: 'Business', bg: 'bg-orange-500' },
+                  ].map((cat, idx) => (
+                    <div
+                      key={idx}
+                      className={`text-center py-8 px-4 transition-colors duration-300 ${cat.bg}`}
+                    >
+                      <i
+                        className={`fas ${cat.icon} text-4xl p-4 mb-2 block transition-transform duration-500 hover:rotate-[360deg]`}
+                      />
+                      <p className="font-semibold">{cat.label}</p>
+                    </div>
+                  ))}
                 </div>
 
 
@@ -145,20 +145,20 @@ const NewsSection = () => {
 
                     <div className="flex flex-col md:flex-row justify-center items-center md:gap-8 gap-8">
                         {/* Left Image */}
-                        <div className="relative flex-1 min-64 px-5">
+                        <div className="relative flex justify-center items-center min-64 md:w-1/2">
                             <img
                                 src={dreamCount}
                                 alt="New Book Sales"
-                                className="w-64 justify-center items-center"
+                                className="w-64 h-auto justify-center items-center"
                             />
-                            <div className="absolute bottom-0 left-0 w-64 ml-8 bg-black/70 text-white p-8">
+                            <div className="absolute bottom-4 left-1/2 w-64 bg-black/70 text-white px-6 py-4">
                                 <h3 className="text-lg font-semibold">New Book Sales</h3>
                                 <p className="text-sm">Get new books for half of the price</p>
                             </div>
                         </div>
 
                         {/* Right News List */}
-                        <div className="flex-1 min-w-[300px] flex flex-col gap-6">
+                        <div className="md:w-1/2 w-full flex flex-col gap-6 p-2">
                         {[
                             {
                             date: ['Jul', '19'],
@@ -183,12 +183,12 @@ const NewsSection = () => {
                             },
                         ].map((news, idx) => (
                             <div key={idx} className="flex gap-4">
-                            <div className="bg-orange-600 text-white rounded-md px-3 py-2 text-center font-bold">
+                            <div className="min-w-[60px] bg-orange-600 text-white rounded-md px-3 py-2 text-center font-bold">
                                 <p className="text-sm">{news.date[0]}</p>
-                                <p className="text-lg">{news.date[1]}</p>
+                                <p className="text-lg leading-tight">{news.date[1]}</p>
                             </div>
                             <div>
-                                <h4 className="text-gray-800 font-semibold">{news.title}</h4>
+                                <h4 className="text-gray-800 font-semibold text-base sm:text-lg">{news.title}</h4>
                                 <p className="text-sm text-gray-500">{news.meta}</p>
                                 <p className="text-sm text-gray-600 mt-1">{news.excerpt}</p>
                             </div>

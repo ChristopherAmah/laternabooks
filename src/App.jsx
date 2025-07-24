@@ -8,7 +8,7 @@ import NewsSection from './components/NewsSection'
 import BlogSection from './components/BlogSection';
 import CompanyLogo from './components/CompanyLogo';
 import Topbar from './components/Topbar';
-import Tesst from './components/tesst';
+// import Tesst from './components/tesst';
 
 function App() {
   return (
