@@ -107,48 +107,41 @@ const ProductCard = ({ product }) => {
 
 
 const NewsSection = () => {
-  const [showOverlay1, setShowOverlay1] = useState(false);
-  const handleBookClick = (bookNumber) => {
-        // This function will toggle the state for the specific book
-        // For Book 1, it toggles showOverlay1
-        if (bookNumber === 1) {
-            setShowOverlay1(!showOverlay1);
-        }
-        // Add similar logic for other books if you have more states
+const [showOverlay1, setShowOverlay1] = useState(false);
+
+    // Function to handle the click/tap event
+    const handleBookClick = (e) => {
+        // Prevent default link behavior if the image itself is a link later
+        // e.preventDefault();
+        setShowOverlay1(prev => !prev); // Toggle the state
     };
 
-    const handleMouseEnter = (bookNumber) => {
-        // When mouse enters, explicitly show the overlay
-        if (bookNumber === 1) {
-            setShowOverlay1(true);
-        }
+    // Function to handle mouse entering the book area (for hover)
+    const handleMouseEnter = () => {
+        // Only set to true if it's not already true from a click (optional, but good practice)
+        setShowOverlay1(true);
     };
 
-    const handleMouseLeave = (bookNumber) => {
-        // When mouse leaves, hide the overlay (unless it was clicked to stay open)
-        // This makes sure hover works without interfering with persistent click
-        if (bookNumber === 1) {
-            // We only hide on mouse leave if it wasn't explicitly clicked to be shown
-            // For a simpler "hover OR click" without persistence, you could just setShowOverlay1(false)
-            // But if click means "toggle and keep open", then we need more complex logic.
-            // For this example, let's assume 'hover' is a temporary reveal, 'click' is a toggle.
-            // If you want click to act like a persistent hover, the logic below is good.
-            // If you want click to just be *like* a hover, then setShowOverlay1(false)
-            // onMouseLeave would be simpler.
-            // For "both hover and click work", we just need the state to manage the click.
-            // The group-hover handles the hover itself. So onMouseLeave only matters if we
-            // want click to have a *sticky* effect when mouse leaves.
-            // For this scenario, let's stick to the simpler: hover OR click makes it visible.
-            // If the user clicks, it stays open until clicked again.
-            // If the user hovers, it's open, but closes when mouse leaves (unless clicked)
-            // This is where it gets tricky to perfectly combine without more complex state.
+    // Function to handle mouse leaving the book area (for hover)
+    const handleMouseLeave = () => {
+        // Only hide if it's not currently in a "clicked open" state.
+        // This is the tricky part: if you click it, it should stay open.
+        // If you just hover and leave, it should close.
+        // To achieve "hover OR click to show", and click makes it sticky,
+        // we need two states or more complex logic.
 
-            // Simplest way to achieve "visible on hover OR click":
-            // On mouse leave, only hide if it wasn't explicitly clicked to be open.
-            // But Tailwind's group-hover already handles the hover.
-            // So, for "hover AND click", we essentially want click to toggle a "force show" state.
-        }
+        // Simpler approach for "hover OR click":
+        // On mouse leave, we revert the hover effect, but the click state persists.
+        // This means the 'showOverlay1' state needs to only control the 'click' part.
+        // And the 'group-hover' handles the 'hover' part.
+
+        // Let's refine the logic to make it clearer for "click AND hover show"
+        // For "click on mobile, hover on desktop", the previous code was close.
+        // For "click on any device, and hover on desktop shows it too":
+        // We'll use local state to manage the *clicked* state, and let hover handle itself.
+        // The overlay will be visible if state is true OR if it's hovered.
     };
+    
   return (
     <section className="md:px-4 md:shadow-lg">   
         <div className="sm:px-6 md:px-4">
@@ -250,26 +243,25 @@ const NewsSection = () => {
 
             {/* Book Collection */}
             <div className="flex flex-col items-center justify-center py-6 px-6" style={{ backgroundColor: '#FEEFE9' }}>
-            <h2 className="text-2xl font-semibold text-gray-700">Book Collection</h2>
-            <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
+              <h2 className="text-2xl font-semibold text-gray-700">Book Collection</h2>
+              <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
-                {/* Book 1 - Edited to include hover and click effect */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(0)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -281,22 +273,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(2)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -308,22 +299,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(3)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -335,22 +325,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(4)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -362,22 +351,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(5)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -389,22 +377,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(6)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -416,22 +403,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(7)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -443,22 +429,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(8)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -470,22 +455,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(9)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -497,22 +481,21 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include hover and click effect */}
+                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
-                    onClick={() => handleBookClick(10)} // Handle click
-                    // We don't need onMouseEnter/onMouseLeave directly on the parent
-                    // if group-hover is doing the heavy lifting for hover.
-                    // The state is purely for the "clicked to stay open" aspect.
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
+                    onClick={handleBookClick} // This toggles the state for click/tap
+                    // For hover, Tailwind's group-hover will handle it.
+                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
                 >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Overlay */}
+                    {/* Hover/Click Overlay */}
                     <div
                         className={`
                             absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
                             transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
-                            group-hover:opacity-100 // This handles the hover effect
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
+                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
                         `}
                     >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
@@ -525,8 +508,9 @@ const NewsSection = () => {
                     </div>
                 </div>
 
+
+              </div>
             </div>
-        </div>
 
 
 
