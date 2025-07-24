@@ -259,7 +259,7 @@ const NewsSection = () => {
                                 alt="New Book Sales"
                                 className="w-64 h-auto justify-center items-center"
                             />
-                            <div className="absolute bottom-4 left-1/2 w-64 bg-black/70 text-white px-6 py-4">
+                            <div className="absolute bottom-4 left-1/3 w-64 bg-black/70 text-white px-6 py-4">
                                 <h3 className="text-lg font-semibold">New Book Sales</h3>
                                 <p className="text-sm">Get new books for half of the price</p>
                             </div>
