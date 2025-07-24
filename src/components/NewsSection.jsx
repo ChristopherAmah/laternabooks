@@ -27,7 +27,7 @@ const products = [
   },
   {
     id: 2,
-    image: dreamCount, // Placeholder for Habbits poster
+    image: business, // Placeholder for Habbits poster
     title: 'Habbits',
     rating: 5,
     originalPrice: '$100.00',
@@ -564,7 +564,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
 
             <section className="py-12">
             {/* Section 1: Amazing Collections */}
-            <div className="flex flex-col lg:flex-row justify-center items-start bg-white w-full gap-6 px-4">
+            <div className="flex flex-col lg:flex-row justify-center items-start bg-white w-full gap-6">
                 {/* Left: Image Categories */}
                 <div className="flex flex-col items-center flex-1 p-4">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-2">Amazing Collection</h2>
@@ -575,7 +575,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
                     <div className="text-center">
                     <p className="text-lg font-medium text-gray-500 mb-2">Cooking Style</p>
                     <div className="border-gray-500 p-2 shadow-md">
-                        <img src={dreamCount} alt="Cooking" className="w-40 h-40 object-contain" />
+                        <img src={dreamCount} alt="Cooking" className="w-50 h-50 object-contain" />
                     </div>
                     </div>
 
@@ -583,7 +583,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
                     <div className="text-center">
                     <h3 className="text-lg font-medium text-gray-500 mb-2">Just Listen</h3>
                     <div className="border-gray-500 p-2 shadow-md">
-                        <img src={business} alt="Just Listen" className="w-40 h-40 object-contain" />
+                        <img src={business} alt="Just Listen" className="w-50 h-50 object-contain" />
                     </div>
                     </div>
                 </div>
@@ -643,7 +643,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
                     <div className="text-center">
                     <p className="text-lg font-medium text-gray-500 mb-2">Cooking Style</p>
                     <div className="border-gray-500 p-2 shadow-md">
-                        <img src={dreamCount} alt="Cooking" className="w-40 h-40 object-contain" />
+                        <img src={dreamCount} alt="Cooking" className="w-50 h-50 object-contain" />
                     </div>
                     </div>
 
@@ -651,7 +651,7 @@ const [showOverlay1, setShowOverlay1] = useState(false);
                     <div className="text-center">
                     <h3 className="text-lg font-medium text-gray-500 mb-2">Just Listen</h3>
                     <div className="border-gray-500 p-2 shadow-md">
-                        <img src={business} alt="Just Listen" className="w-40 h-40 object-contain" />
+                        <img src={business} alt="Just Listen" className="w-50 h-50 object-contain" />
                     </div>
                     </div>
                 </div>
