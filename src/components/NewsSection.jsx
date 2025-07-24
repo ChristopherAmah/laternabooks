@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dreamCount from '../assets/dreamcount.jpeg'
 import business from '../assets/business.jpg'
 
@@ -14,6 +14,7 @@ const books = [
     { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
     { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
 ];
+
 const products = [
   {
     id: 1,
@@ -106,6 +107,48 @@ const ProductCard = ({ product }) => {
 
 
 const NewsSection = () => {
+  const [showOverlay1, setShowOverlay1] = useState(false);
+  const handleBookClick = (bookNumber) => {
+        // This function will toggle the state for the specific book
+        // For Book 1, it toggles showOverlay1
+        if (bookNumber === 1) {
+            setShowOverlay1(!showOverlay1);
+        }
+        // Add similar logic for other books if you have more states
+    };
+
+    const handleMouseEnter = (bookNumber) => {
+        // When mouse enters, explicitly show the overlay
+        if (bookNumber === 1) {
+            setShowOverlay1(true);
+        }
+    };
+
+    const handleMouseLeave = (bookNumber) => {
+        // When mouse leaves, hide the overlay (unless it was clicked to stay open)
+        // This makes sure hover works without interfering with persistent click
+        if (bookNumber === 1) {
+            // We only hide on mouse leave if it wasn't explicitly clicked to be shown
+            // For a simpler "hover OR click" without persistence, you could just setShowOverlay1(false)
+            // But if click means "toggle and keep open", then we need more complex logic.
+            // For this example, let's assume 'hover' is a temporary reveal, 'click' is a toggle.
+            // If you want click to act like a persistent hover, the logic below is good.
+            // If you want click to just be *like* a hover, then setShowOverlay1(false)
+            // onMouseLeave would be simpler.
+            // For "both hover and click work", we just need the state to manage the click.
+            // The group-hover handles the hover itself. So onMouseLeave only matters if we
+            // want click to have a *sticky* effect when mouse leaves.
+            // For this scenario, let's stick to the simpler: hover OR click makes it visible.
+            // If the user clicks, it stays open until clicked again.
+            // If the user hovers, it's open, but closes when mouse leaves (unless clicked)
+            // This is where it gets tricky to perfectly combine without more complex state.
+
+            // Simplest way to achieve "visible on hover OR click":
+            // On mouse leave, only hide if it wasn't explicitly clicked to be open.
+            // But Tailwind's group-hover already handles the hover.
+            // So, for "hover AND click", we essentially want click to toggle a "force show" state.
+        }
+    };
   return (
     <section className="md:px-4 md:shadow-lg">   
         <div className="sm:px-6 md:px-4">
@@ -211,11 +254,24 @@ const NewsSection = () => {
             <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(0)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -225,11 +281,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(2)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -239,11 +308,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(3)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -253,11 +335,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(4)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -267,11 +362,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(5)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -281,11 +389,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(6)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -295,11 +416,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(7)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -309,11 +443,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(8)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -323,11 +470,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(9)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -337,11 +497,24 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
-                {/* Book 1 - Edited to include the hover effect */}
-                <div className="relative shadow-lg rounded overflow-hidden group">
+                {/* Book 1 - Edited to include hover and click effect */}
+                <div
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer for visual feedback
+                    onClick={() => handleBookClick(10)} // Handle click
+                    // We don't need onMouseEnter/onMouseLeave directly on the parent
+                    // if group-hover is doing the heavy lifting for hover.
+                    // The state is purely for the "clicked to stay open" aspect.
+                >
                     <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    {/* Overlay */}
+                    <div
+                        className={`
+                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                            transition-opacity duration-300 ease-in-out
+                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'}
+                            group-hover:opacity-100 // This handles the hover effect
+                        `}
+                    >
                         <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
                         <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
                         <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
@@ -351,6 +524,7 @@ const NewsSection = () => {
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
 
