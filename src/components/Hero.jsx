@@ -48,7 +48,7 @@ const Hero = () => {
   const [animationKey, setAnimationKey] = useState(0);
 
   return (
-    <div className="carousel relative h-[81vh]">
+    <div className="carousel relative h-[70vh]">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
