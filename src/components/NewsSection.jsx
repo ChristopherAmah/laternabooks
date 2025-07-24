@@ -280,7 +280,7 @@ const NewsSection = () => {
                             title: 'Novels that sharpen your mind',
                             meta: 'Design / Fiction / Marketing / Photography',
                             excerpt:
-                                'Nulla eleifend vel risus eget ultricies. Praesent sed tortor...',
+                                'Nulla eleifend vel risus eget . Praesent sed tortor...',
                             },
                             {
                             date: ['Mar', '31'],
