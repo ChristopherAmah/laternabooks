@@ -8,7 +8,6 @@ import NewsSection from './components/NewsSection'
 import BlogSection from './components/BlogSection';
 import CompanyLogo from './components/CompanyLogo';
 import Topbar from './components/Topbar';
-// import Tesst from './components/tesst';
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
       <div className='overflow-hidden'>
           <Topbar />
           <Navbar />
-          {/* <Tesst /> */}
           <Hero />
         <NewsSection />
         <BlogSection />

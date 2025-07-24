@@ -15,6 +15,81 @@ const books = [
     { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
 ];
 
+const collection = [
+  {
+    title: 'Dream Count',
+    description: 'Inspiring book on purpose',
+    oldPrice: '$500.00',
+    price: '$350.00',
+    image: dreamCount, // import your image
+  },
+  {
+    title: 'Mindset Shift',
+    description: 'Reframe your thoughts',
+    oldPrice: '$300.00',
+    price: '$250.00',
+    image:dreamCount, // another image
+  },
+  {
+    title: 'Wealth Within',
+    description: 'Financial intelligence guide',
+    oldPrice: '$400.00',
+    price: '$320.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  {
+    title: 'The Creative Spark',
+    description: 'Unlock your inner genius',
+    oldPrice: '$250.00',
+    price: '$200.00',
+    image: dreamCount,
+  },
+  // Add more book objects here...
+];
+
+
 const products = [
   {
     id: 1,
@@ -133,41 +208,12 @@ const ProductCard = ({ product }) => {
 
 
 const NewsSection = () => {
-const [showOverlay1, setShowOverlay1] = useState(false);
+ const [activeIndex, setActiveIndex] = useState(null); // store the index of the clicked book
 
-    // Function to handle the click/tap event
-    const handleBookClick = (e) => {
-        // Prevent default link behavior if the image itself is a link later
-        // e.preventDefault();
-        setShowOverlay1(prev => !prev); // Toggle the state
-    };
+  const handleBookClick = (index) => {
+    setActiveIndex(prevIndex => (prevIndex === index ? null : index)); // toggle logic
+  };
 
-    // Function to handle mouse entering the book area (for hover)
-    const handleMouseEnter = () => {
-        // Only set to true if it's not already true from a click (optional, but good practice)
-        setShowOverlay1(true);
-    };
-
-    // Function to handle mouse leaving the book area (for hover)
-    const handleMouseLeave = () => {
-        // Only hide if it's not currently in a "clicked open" state.
-        // This is the tricky part: if you click it, it should stay open.
-        // If you just hover and leave, it should close.
-        // To achieve "hover OR click to show", and click makes it sticky,
-        // we need two states or more complex logic.
-
-        // Simpler approach for "hover OR click":
-        // On mouse leave, we revert the hover effect, but the click state persists.
-        // This means the 'showOverlay1' state needs to only control the 'click' part.
-        // And the 'group-hover' handles the 'hover' part.
-
-        // Let's refine the logic to make it clearer for "click AND hover show"
-        // For "click on mobile, hover on desktop", the previous code was close.
-        // For "click on any device, and hover on desktop shows it too":
-        // We'll use local state to manage the *clicked* state, and let hover handle itself.
-        // The overlay will be visible if state is true OR if it's hovered.
-    };
-    
   return (
     <section className="md:px-4 md:shadow-lg">   
         <div className="sm:px-6 md:px-4">
@@ -265,281 +311,43 @@ const [showOverlay1, setShowOverlay1] = useState(false);
 
 
 
-
-
             {/* Book Collection */}
             <div className="flex flex-col items-center justify-center py-6 px-6" style={{ backgroundColor: '#FEEFE9' }}>
               <h2 className="text-2xl font-semibold text-gray-700">Book Collection</h2>
               <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
+                {collection.map((book, index) => (
                 <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
+                  key={index}
+                  className="relative shadow-lg rounded overflow-hidden group cursor-pointer"
+                  onClick={() => handleBookClick(index)}
                 >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
+                  <img src={book.image} alt={book.title} className="w-full h-auto object-cover" />
+                  
+                  <div
+                    className={`
+                      absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                      transition-opacity duration-300 ease-in-out
+                      ${activeIndex === index ? 'opacity-100' : 'opacity-0'}
+                      lg:group-hover:opacity-100
+                    `}
+                  >
+                    <a href="#" className="text-lg font-bold text-gray-800 hover:text-orange-500 text-center">
+                      {book.title}
+                    </a>
+                    <p className="text-lg font-semibold text-gray-800 text-center">{book.description}</p>
+                    <p className="text-sm text-gray-600 line-through mt-2">{book.oldPrice}</p>
+                    <p className="text-xl font-bold text-orange-500">{book.price}</p>
+                    <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                      Add to cart
+                    </button>
+                  </div>
                 </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-                {/* Book 1 - Corrected for click on mobile AND hover on desktop */}
-                <div
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer" // Added cursor-pointer
-                    onClick={handleBookClick} // This toggles the state for click/tap
-                    // For hover, Tailwind's group-hover will handle it.
-                    // We don't want onMouseEnter/Leave to interfere with click state for persistence.
-                >
-                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
-                    {/* Hover/Click Overlay */}
-                    <div
-                        className={`
-                            absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                            transition-opacity duration-300 ease-in-out
-                            ${showOverlay1 ? 'opacity-100' : 'opacity-0'} // This controls visibility via click state
-                            lg:group-hover:opacity-100 // This ensures hover works on desktop (overrides state if needed)
-                        `}
-                    >
-                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
-                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
-                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
-                        <p className="text-xl font-bold text-orange-500">$350.00</p>
-                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                            Add to cart
-                        </button>
-                    </div>
-                </div>
-
+              ))}
 
               </div>
             </div>
-
-
-
 
 
 
