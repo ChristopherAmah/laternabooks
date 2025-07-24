@@ -211,57 +211,148 @@ const NewsSection = () => {
             <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
-                {/* Book 1 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 2 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 2" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 3 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 3" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 4 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 4" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 5 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 5" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 6 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 6" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 7 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 7" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 8 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 8" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 9 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 9" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
-
-                {/* Book 10 */}
-                <div className="shadow-lg rounded overflow-hidden">
-                <img src={dreamCount} alt="Book 10" className="w-full h-auto object-cover" />
+                {/* Book 1 - Edited to include the hover effect */}
+                <div className="relative shadow-lg rounded overflow-hidden group">
+                    <img src={dreamCount} alt="Book 1" className="w-full h-auto object-cover" />
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-white/90 bg-opacity-90 flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                        <a href="#" className='text-lg font-bold text-gray-800 hover:text-orange-500 text-center'>Business Books</a>
+                        <p className="text-lg font-semibold text-gray-800 text-center">Downloadable Product</p>
+                        <p className="text-sm text-gray-600 line-through mt-2">$450.00</p>
+                        <p className="text-xl font-bold text-orange-500">$350.00</p>
+                        <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
             </div>
-            </div>
+        </div>
 
 
 
