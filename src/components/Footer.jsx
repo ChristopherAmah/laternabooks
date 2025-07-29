@@ -43,7 +43,7 @@ const footerLinks = {
 }
 const Footer = () => {
   return (
-    <footer style={{backgroundColor: '#4F4F4F'}} id='contact'>
+    <footer style={{backgroundColor: 'black'}} id='contact'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-8'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12'>
                 {/* brand column */}
@@ -75,7 +75,7 @@ const Footer = () => {
                             <ul className='space-y-3'>
                                 {links.map((link) => (
                                 <li key={link.name}>
-                                    <a href={link.href} className='text-white hover:text-gray-900'>{link.name}</a>
+                                    <a href={link.href} className='text-white hover:text-orange-500'>{link.name}</a>
                                 </li>
                                 ))}
                             </ul>
