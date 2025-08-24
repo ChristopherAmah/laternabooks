@@ -58,10 +58,43 @@ const Navbar = () => {
                 ]
             }
         },
-        { href: '#', label: 'E-BOOKS' },
+        {
+            href: '#',
+            label: 'MULTIMEDIA',
+            dropdownContent: {
+                type: 'multi-column',
+                columns: [
+                    {
+                        title: 'Categories',
+                        items: [
+                            { label: 'Audio', href: '#' },
+                            { label: 'Music & Video', href: '#' },
+                        ]
+                    },
+                    {
+                        title: 'Top Rated Products',
+                        items: [
+                            { title: 'Guitar', originalPrice: '$100.00', salePrice: '$80.00' },
+                            { title: 'Grand Piano', originalPrice: '$120.00', salePrice: '$90.00' },
+                            { title: 'Art of War (Audio)', originalPrice: '$150.00', salePrice: '$100.00' },
+                        ],
+                        type: 'product-list' // Indicate this column contains product items
+                    },
+                    {
+                        title: 'Best Selling Products',
+                        items: [
+                            { title: 'Guitar', image: dreamCount },
+                            { title: 'Art of War (Audio)', image: dreamCount },
+                        ],
+                        type: 'image-list' // Indicate this column contains images
+                    }
+                ]
+            }
+        },
+        { href: '#', label: 'GIFT ITEMS' },
         // { href: '#', label: 'FEATURES', links: ['Blog', 'Docs', 'Guides'] },
+        { href: '#blog', label: 'FRAGRANCES' },
         { href: '#blog', label: 'ABOUT' },
-        { href: '#blog', label: 'BLOG' },
         { href: '#contact', label: 'CONTACT' },
     ];
 
@@ -81,7 +114,7 @@ const Navbar = () => {
                 </button>
 
                 {/* desktop navitems */}
-                <div className='hidden md:flex items-center gap-10'>
+                <div className='hidden md:flex items-center gap-2'>
                     {navLinks.map((link, index) => (
                         <div key={index} className="relative group h-full flex items-center"> {/* Added flex items-center for vertical alignment */}
                             <a

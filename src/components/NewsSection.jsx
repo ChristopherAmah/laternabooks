@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import dreamCount from '../assets/dreamcount.jpeg'
+import guitar from '../assets/guitar.jpg'
+import perfume from '../assets/perfume.jpg'
+import bible from '../assets/bible.jpg'
 import business from '../assets/business.jpg'
+import { Link } from "react-router-dom";
 
 const books = [
     { title: "Vintage - The Art of Poster", image: dreamCount },
@@ -102,8 +106,8 @@ const products = [
   },
   {
     id: 2,
-    image: business, // Placeholder for Habbits poster
-    title: 'Habbits',
+    image: guitar, // Placeholder for Habbits poster
+    title: 'Guitar',
     rating: 5,
     originalPrice: '$100.00',
     salePrice: null, // Not on sale
@@ -111,8 +115,8 @@ const products = [
   },
   {
     id: 3,
-    image: dreamCount, // Placeholder for The Devils poster
-    title: 'The Devils',
+    image: perfume, // Placeholder for The Devils poster
+    title: 'Chanel No 5',
     rating: 5,
     originalPrice: '$400.00',
     salePrice: '$280.00',
@@ -120,8 +124,8 @@ const products = [
   },
   {
     id: 4,
-    image: dreamCount, // Placeholder for The Secret poster
-    title: 'The Secret',
+    image: bible, // Placeholder for The Secret poster
+    title: 'The Bible',
     rating: 5,
     originalPrice: '$80.00',
     salePrice: '$120.00', // Assuming this is a price range or a typo in the image
@@ -221,23 +225,25 @@ const NewsSection = () => {
                 {/* Categories */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 text-white shadow-lg">
                   {[
-                    { icon: 'fa-heart', label: 'Love & Romance', bg: 'bg-orange-500' },
-                    { icon: 'fa-utensils', label: 'Cooking & Food', bg: 'bg-gray-500' },
-                    { icon: 'fa-desktop', label: 'Computer', bg: 'bg-orange-500' },
-                    { icon: 'fa-book', label: 'Crime Books', bg: 'bg-gray-500' },
-                    { icon: 'fa-building', label: 'Business', bg: 'bg-orange-500' },
+                    { icon: 'fa-book', label: 'Books', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-play', label: 'Multimedia', bg: 'bg-gray-500', link: '/' },
+                    { icon: 'fa-gift', label: 'Gift Items', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-spray-can-sparkles', label: 'Fragrances', bg: 'bg-gray-500', link: '/' },
+                    { icon: 'fa-phone', label: 'Devices', bg: 'bg-orange-500', link: '/' },
                   ].map((cat, idx) => (
-                    <div
+                    <Link
                       key={idx}
+                      to={cat.link}
                       className={`text-center py-8 px-4 transition-colors duration-300 ${cat.bg}`}
                     >
                       <i
                         className={`fas ${cat.icon} text-4xl p-4 mb-2 block transition-transform duration-500 hover:rotate-[360deg]`}
                       />
                       <p className="font-semibold">{cat.label}</p>
-                    </div>
+                    </Link>
                   ))}
                 </div>
+
 
 
 
@@ -364,152 +370,7 @@ const NewsSection = () => {
                     <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
-            </div>
-
-
-
-
-
-            <section className="py-12">
-            {/* Section 1: Amazing Collections */}
-            <div className="flex flex-col lg:flex-row justify-center items-start bg-white w-full gap-6">
-                {/* Left: Image Categories */}
-                <div className="flex flex-col items-center flex-1 p-4">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Amazing Collection</h2>
-                <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
-
-                <div className="flex flex-wrap justify-center gap-4">
-                    {/* Category 1 */}
-                    <div className="text-center">
-                    <p className="text-lg font-medium text-gray-500 mb-2">Cooking Style</p>
-                    <div className="border-gray-500 p-2 shadow-md">
-                        <img src={dreamCount} alt="Cooking" className="w-50 h-50 object-contain" />
-                    </div>
-                    </div>
-
-                    {/* Category 2 */}
-                    <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-500 mb-2">Just Listen</h3>
-                    <div className="border-gray-500 p-2 shadow-md">
-                        <img src={business} alt="Just Listen" className="w-50 h-50 object-contain" />
-                    </div>
-                    </div>
-                </div>
-                </div>
-
-                {/* Right: Book Detail */}
-                <div className="flex flex-col md:flex-row items-center flex-1 bg-[#FEEFE9] p-4 w-full gap-6">
-                <div className="w-48 shrink-0">
-                    <img src={dreamCount} alt="Free Fall" className="w-48 mb-4 shadow" />
-                </div>
-
-                <div className="flex-1 w-full">
-                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">Free Fall</h3>
-
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span className="line-through text-gray-500">$100.00</span>
-                    <span className="text-xl font-bold text-gray-700">$80.00</span>
-                    <span className="bg-gray-800 text-white text-sm px-2 py-1 ml-auto">New</span>
-                    </div>
-
-                    <p className="text-gray-600 font-medium mb-2">Details :</p>
-
-                    <table className="border w-full text-left text-gray-700 text-sm">
-                    <thead>
-                        <tr className="border">
-                        <th className="p-2 text-center font-medium" colSpan="2">Information</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="border">
-                        <td className="p-2">Name</td>
-                        <td className="p-2">My Life</td>
-                        </tr>
-                        <tr className="border">
-                        <td className="p-2">ISBN-10</td>
-                        <td className="p-2">0553213873</td>
-                        </tr>
-                        <tr className="border">
-                        <td className="p-2">Language</td>
-                        <td className="p-2">English</td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </div>
-                </div>
-            </div>
-
-            {/* Section 2: New Collections */}
-            <div className="flex flex-col lg:flex-row-reverse justify-center items-start bg-white py-12 gap-6">               
-                {/* Left: Image Categories */}
-                <div className="flex flex-col items-center flex-1">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-2 mt-6">New Collection</h2>
-                <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
-
-                <div className="flex flex-wrap justify-center gap-4">
-                    {/* Category 1 */}
-                    <div className="text-center">
-                    <p className="text-lg font-medium text-gray-500 mb-2">Cooking Style</p>
-                    <div className="border-gray-500 p-2 shadow-md">
-                        <img src={dreamCount} alt="Cooking" className="w-50 h-50 object-contain" />
-                    </div>
-                    </div>
-
-                    {/* Category 2 */}
-                    <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-500 mb-2">Just Listen</h3>
-                    <div className="border-gray-500 p-2 shadow-md">
-                        <img src={business} alt="Just Listen" className="w-50 h-50 object-contain" />
-                    </div>
-                    </div>
-                </div>
-                </div>
-
-                {/* Right: Book Detail */}
-                <div className="flex flex-col md:flex-row items-center flex-1 bg-[#FEEFE9] p-4 w-full gap-6">
-                <div className="w-48 shrink-0">
-                    <img src={dreamCount} alt="Free Fall" className="w-48 mb-4 shadow" />
-                </div>
-
-                <div className="flex-1 w-full">
-                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">Free Fall</h3>
-
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span className="line-through text-gray-500">$100.00</span>
-                    <span className="text-xl font-bold text-gray-700">$80.00</span>
-                    <span className="bg-gray-800 text-white text-sm px-2 py-1 ml-auto">New</span>
-                    </div>
-
-                    <p className="text-gray-600 font-medium mb-2">Details :</p>
-
-                    <table className="border w-full text-left text-gray-700 text-sm">
-                    <thead>
-                        <tr className="border">
-                        <th className="p-2 text-center font-medium" colSpan="2">Information</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="border">
-                        <td className="p-2">Name</td>
-                        <td className="p-2">My Life</td>
-                        </tr>
-                        <tr className="border">
-                        <td className="p-2">ISBN-10</td>
-                        <td className="p-2">0553213873</td>
-                        </tr>
-                        <tr className="border">
-                        <td className="p-2">Language</td>
-                        <td className="p-2">English</td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </div>
-                </div>
-            </div>
-            </section>
-
-
-            
+            </div>           
         </div>
     </section>
   );
