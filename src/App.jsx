@@ -3,7 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
-import Gallery from './pages/Gallery'
+import Products from './pages/Products'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Topbar from './components/Topbar';
@@ -17,7 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         <Footer />
       </div>

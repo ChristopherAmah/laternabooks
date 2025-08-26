@@ -91,7 +91,7 @@ const App = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {category.items.slice(0, 4).map((item, idx) => (
                     <div key={idx} className="text-center">
-                      <a href={`/category/${formatLink(item.name)}`}>
+                      <a href={`/products/`}>
                         <img
                           src={item.img}
                           alt={item.name}
@@ -103,7 +103,7 @@ const App = () => {
                   ))}
                 </div>
                 <a
-                  href={`/category/${formatLink(category.link)}`}
+                  href={`/products/`}
                   className="mt-4 inline-block text-blue-500 hover:underline"
                 >
                   {category.link}
@@ -129,7 +129,7 @@ const App = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {category.items.slice(0, 4).map((item, idx) => (
                     <div key={idx} className="text-center">
-                      <a href={`/category/${formatLink(item.name)}`}>
+                      <a href={`/products/`}>
                         <img
                           src={item.img}
                           alt={item.name}
@@ -141,7 +141,7 @@ const App = () => {
                   ))}
                 </div>
                 <a
-                  href={`/category/${formatLink(category.link)}`}
+                  href={`/produts/`}
                   className="mt-4 inline-block text-blue-500 hover:underline"
                 >
                   {category.link}
@@ -173,7 +173,7 @@ const App = () => {
                 key={index}
                 className="inline-block text-center min-w-[140px]"
               >
-                <a href={`/product/${formatLink(item.name)}`}>
+                <a href={`/products/`}>
                   <img
                     src={item.img}
                     alt={item.name}
@@ -217,7 +217,7 @@ const App = () => {
                 key={index}
                 className="inline-block text-center min-w-[140px]"
               >
-                <a href={`/product/${formatLink(item.name)}`}>
+                <a href={`profucts//`}>
                   <img
                     src={item.img}
                     alt={item.name}
@@ -258,7 +258,7 @@ const App = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {category.items.slice(0, 4).map((item, idx) => (
                     <div key={idx} className="text-center">
-                      <a href={`/category/${formatLink(item.name)}`}>
+                      <a href={`/products/`}>
                         <img
                           src={item.img}
                           alt={item.name}
@@ -270,7 +270,7 @@ const App = () => {
                   ))}
                 </div>
                 <a
-                  href={`/category/${formatLink(category.link)}`}
+                  href={`/products/`}
                   className="mt-4 inline-block text-blue-500 hover:underline"
                 >
                   {category.link}
@@ -302,7 +302,7 @@ const App = () => {
                 key={index}
                 className="inline-block text-center min-w-[140px]"
               >
-                <a href={`/product/${formatLink(item.name)}`}>
+                <a href={`/products/`}>
                   <img
                     src={item.img}
                     alt={item.name}
@@ -346,7 +346,7 @@ const App = () => {
                 key={index}
                 className="inline-block text-center min-w-[140px]"
               >
-                <a href={`/product/${formatLink(item.name)}`}>
+                <a href={`/products/`}>
                   <img
                     src={item.img}
                     alt={item.name}
@@ -387,7 +387,7 @@ const App = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {category.items.slice(0, 4).map((item, idx) => (
                     <div key={idx} className="text-center">
-                      <a href={`/category/${formatLink(item.name)}`}>
+                      <a href={`/products/`}>
                         <img
                           src={item.img}
                           alt={item.name}
@@ -399,7 +399,7 @@ const App = () => {
                   ))}
                 </div>
                 <a
-                  href={`/category/${formatLink(category.link)}`}
+                  href={`/products/`}
                   className="mt-4 inline-block text-blue-500 hover:underline"
                 >
                   {category.link}
