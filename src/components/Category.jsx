@@ -73,7 +73,7 @@ const App = () => {
     text.toLowerCase().replace(/\s+/g, "-"); // turn names into slugs
 
   return (
-    <div className="min-h-screen bg-gray-100 mt-[-200px]">
+    <div className="min-h-screen bg-gray-100 mt-[-300px]">
       {/* Categories Section */}
       <div className="relative">
         <div
