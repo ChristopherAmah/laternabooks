@@ -21,7 +21,7 @@ const Navbar = () => {
   const [activeLink, setActiveLink] = useState('/');
   const [mobileDropdown, setMobileDropdown] = useState(null);
 
-  // Updated navLinks with routes for dropdowns
+  // Updated navLinks with routes for dropdowns (replace '/' with actual routes)
   const navLinks = [
     { to: '/', label: 'HOME' },
     {
@@ -32,27 +32,27 @@ const Navbar = () => {
           {
             title: 'Categories',
             items: [
-              { label: 'Business', href: '/' },
-              { label: 'Computer', href: '/' },
-              { label: 'Crime Books', href: '/' },
-              { label: 'Cooking & Food', href: '/' },
-              { label: 'Love & Romance', href: '/' },
+              { label: 'Business', href: '/' }, // Update to '/books/business'
+              { label: 'Computer', href: '/' }, // Update to '/books/computer'
+              { label: 'Crime Books', href: '/' }, // Update to '/books/crime'
+              { label: 'Cooking & Food', href: '/' }, // Update to '/books/cooking'
+              { label: 'Love & Romance', href: '/' }, // Update to '/books/romance'
             ],
           },
           {
             title: 'Top Rated Products',
             items: [
-              { title: 'Zero Oil Cook', originalPrice: '$100.00', salePrice: '$80.00', href: '/' },
-              { title: 'Corporate', originalPrice: '$120.00', salePrice: '$90.00', href: '/' },
-              { title: 'Web Designing', originalPrice: '$150.00', salePrice: '$100.00', href: '/' },
+              { title: 'Zero Oil Cook', originalPrice: '$100.00', salePrice: '$80.00', href: '/' }, // Update href
+              { title: 'Corporate', originalPrice: '$120.00', salePrice: '$90.00', href: '/' }, // Update href
+              { title: 'Web Designing', originalPrice: '$150.00', salePrice: '$100.00', href: '/' }, // Update href
             ],
             type: 'product-list',
           },
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Just Listen', image: dreamCount, href: '/' },
-              { title: 'Downloadable Prod', image: dreamCount, href: '/' },
+              { title: 'Just Listen', image: dreamCount, href: '/' }, // Update href
+              { title: 'Downloadable Prod', image: dreamCount, href: '/' }, // Update href
             ],
             type: 'image-list',
           },
@@ -67,35 +67,35 @@ const Navbar = () => {
           {
             title: 'Categories',
             items: [
-              { label: 'Audio', href: '/' },
-              { label: 'Music & Video', href: '/' },
+              { label: 'Audio', href: '/' }, // Update to '/multimedia/audio'
+              { label: 'Music & Video', href: '/' }, // Update to '/multimedia/video'
             ],
           },
           {
             title: 'Top Rated Products',
             items: [
-              { title: 'Guitar', originalPrice: '$100.00', salePrice: '$80.00', href: '/' },
-              { title: 'Grand Piano', originalPrice: '$120.00', salePrice: '$90.00', href: '/' },
-              { title: 'Art of War (Audio)', originalPrice: '$150.00', salePrice: '$100.00', href: '/' },
+              { title: 'Guitar', originalPrice: '$100.00', salePrice: '$80.00', href: '/' }, // Update href
+              { title: 'Grand Piano', originalPrice: '$120.00', salePrice: '$90.00', href: '/' }, // Update href
+              { title: 'Art of War (Audio)', originalPrice: '$150.00', salePrice: '$100.00', href: '/' }, // Update href
             ],
             type: 'product-list',
           },
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Guitar', image: guitar, href: '/' },
-              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+              { title: 'Guitar', image: guitar, href: '/' }, // Update href
+              { title: 'Art of War (Audio)', image: dreamCount, href: '/' }, // Update href
             ],
             type: 'image-list',
           },
         ],
       },
     },
-    { to: '/', label: 'GIFT ITEMS' },
-    { to: '/', label: 'FRAGRANCES' },
+    { to: '/', label: 'GIFT ITEMS' }, // Update to '/gift-items'
+    { to: '/', label: 'FRAGRANCES' }, // Update to '/fragrances'
     { to: '/shop', label: 'SHOP' },
-    { to: '/', label: 'ABOUT' },
-    { to: '/', label: 'CONTACT' },
+    { to: '/', label: 'ABOUT' }, // Update to '/about'
+    { to: '/', label: 'CONTACT' }, // Update to '/contact'
   ];
 
   return (
@@ -105,19 +105,19 @@ const Navbar = () => {
         <div>
           <Link to="/" className="block">
             <img
-                src={LaternaLogo}
-                alt="logo"
-                className="rounded-lg relative z-10 hover:scale-[1.02] transition-transform duration-300"
+              src={LaternaLogo}
+              alt="logo"
+              className="rounded-lg relative z-10 hover:scale-[1.02] transition-transform duration-300"
             />
-           </Link>
+          </Link>
         </div>
 
-        {/* mobile menu button*/}
+        {/* Mobile menu button */}
         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
           {isMenuOpen ? <HiX className="size-6" /> : <HiMenu className="size-6" />}
         </button>
 
-        {/* desktop navitems */}
+        {/* Desktop nav items */}
         <div className="hidden md:flex items-center gap-2">
           {navLinks.map((link, index) => (
             <div key={index} className="relative group h-full flex items-center">
@@ -198,7 +198,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* get in touch btn */}
+        {/* Get in touch buttons */}
         <div className="hidden md:flex items-center space-x-3">
           <span className="bg-orange-500 p-3 rounded-full text-white">
             <FaSearch className="cursor-pointer hover:text-orange-700" />
@@ -212,33 +212,48 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* mobile menu items */}
+      {/* Mobile menu items */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 py-4">
           <div className="container mx-auto px-4 space-y-3">
             {navLinks.map((link, index) => (
               <div key={index}>
-                <button
-                  className="w-full text-left text-sm font-medium text-gray-700 flex justify-between items-center py-2"
-                  onClick={() =>
-                    link.dropdownContent && link.dropdownContent.type === 'multi-column'
-                      ? setMobileDropdown(mobileDropdown === link.label ? null : link.label)
-                      : link.to && setIsMenuOpen(false)
-                  }
-                >
-                  {link.label}
-                  {link.dropdownContent && (
-                    <span className="text-gray-500 text-xs">
-                      {mobileDropdown === link.label ? '▲' : '▼'}
-                    </span>
-                  )}
-                </button>
+                {link.to ? (
+                  <Link
+                    to={link.to}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setActiveLink(link.to);
+                    }}
+                    className="w-full text-left text-sm font-medium text-gray-700 flex justify-between items-center py-2"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button
+                    className="w-full text-left text-sm font-medium text-gray-700 flex justify-between items-center py-2"
+                    onClick={() =>
+                      link.dropdownContent && link.dropdownContent.type === 'multi-column'
+                        ? setMobileDropdown(mobileDropdown === link.label ? null : link.label)
+                        : null
+                    }
+                    aria-expanded={link.dropdownContent ? mobileDropdown === link.label : undefined}
+                    aria-controls={link.dropdownContent ? `dropdown-${index}` : undefined}
+                  >
+                    {link.label}
+                    {link.dropdownContent && (
+                      <span className="text-gray-500 text-xs">
+                        {mobileDropdown === link.label ? '▲' : '▼'}
+                      </span>
+                    )}
+                  </button>
+                )}
 
                 {/* Mobile Dropdown */}
                 {link.dropdownContent &&
                   link.dropdownContent.type === 'multi-column' &&
                   mobileDropdown === link.label && (
-                    <div className="pl-4 border-l border-gray-200 ml-2">
+                    <div id={`dropdown-${index}`} className="pl-4 border-l border-gray-200 ml-2">
                       {link.dropdownContent.columns.map((column, colIndex) => (
                         <div key={colIndex} className="mb-4 last:mb-0">
                           <h5 className="font-bold text-gray-800 text-sm mb-2">{column.title}</h5>
