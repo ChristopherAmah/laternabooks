@@ -93,13 +93,14 @@ const Navbar = () => {
     },
     { to: '/', label: 'GIFT ITEMS' },
     { to: '/', label: 'FRAGRANCES' },
+    { to: '/shop', label: 'SHOP' },
     { to: '/', label: 'ABOUT' },
     { to: '/', label: 'CONTACT' },
   ];
 
   return (
     <nav className="left-0 right-0 bg-white/90 backdrop-blur-sm z-50 sticky border-b border-gray-100 shadow-sm">
-      <div className="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 md:h-20 h-16">
+      <div className="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 md:h-16 h-16">
         {/* Logo */}
         <div>
           <Link to="/" className="block">

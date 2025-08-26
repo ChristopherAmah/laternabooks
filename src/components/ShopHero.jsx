@@ -44,11 +44,11 @@ const childVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-const Hero = () => {
+const ShopHero = () => {
   const [animationKey, setAnimationKey] = useState(0);
 
   return (
-    <div className="carousel relative h-[80vh]">
+    <div className="carousel relative h-[90vh]">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -78,7 +78,8 @@ const Hero = () => {
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
+                className="absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 pt-10" // Adjusted to justify-start and added pt-10
+                style={{ transform: "translateY(5%)" }} // Slight upward shift
               >
                 <motion.h2
                   variants={childVariants}
@@ -107,4 +108,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default ShopHero;

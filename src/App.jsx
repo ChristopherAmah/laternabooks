@@ -1,24 +1,24 @@
-import { useState } from 'react'
 import './App.css'
-import Navbar from './components/Navbar'
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Hero from './components/Hero'
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Shop from './pages/Shop'
+import Gallery from './pages/Gallery'
+import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import NewsSection from './components/NewsSection'
-import BlogSection from './components/BlogSection';
-import CompanyLogo from './components/CompanyLogo';
 import Topbar from './components/Topbar';
 
 function App() {
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
       <div className='overflow-hidden'>
-          <Topbar />
-          <Navbar />
-          <Hero />
-        <NewsSection />
-        <BlogSection />
-        <CompanyLogo />
+        <Topbar />
+        <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/gallery" element={<Gallery />} />
+          </Routes>
         <Footer />
       </div>
     </main>

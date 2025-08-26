@@ -229,7 +229,7 @@ const NewsSection = () => {
                     { icon: 'fa-play', label: 'Multimedia', bg: 'bg-gray-500', link: '/' },
                     { icon: 'fa-gift', label: 'Gift Items', bg: 'bg-orange-500', link: '/' },
                     { icon: 'fa-spray-can-sparkles', label: 'Fragrances', bg: 'bg-gray-500', link: '/' },
-                    { icon: 'fa-shop', label: 'All Items', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-shop', label: 'Shop', bg: 'bg-orange-500', link: '/' },
                   ].map((cat, idx) => (
                     <Link
                       key={idx}
