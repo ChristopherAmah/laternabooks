@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const tabs = [
   { id: 1, label: "LATEST BOOKS" },
   { id: 2, label: "BEST SELLING BOOKS" },
-  { id: 3, label: "RECENT BOOKS" },
 ];
 
 const cards = [
