@@ -22,7 +22,7 @@ const Navbar = () => {
   const [mobileDropdown, setMobileDropdown] = useState(null);
 
   // Updated navLinks with routes for dropdowns (replace '/' with actual routes)
-  const navLinks = [
+    const navLinks = [
     { to: '/', label: 'HOME' },
     {
       label: 'BOOKS',
@@ -180,12 +180,7 @@ const Navbar = () => {
 
               {/* Multi-column Dropdown */}
               {link.dropdownContent && link.dropdownContent.type === 'multi-column' && (
-                <div
-                  className="absolute left-0 top-full mt-0 bg-white shadow-lg rounded-md hidden group-hover:grid z-20 w-auto gap-6 p-6 border border-gray-100"
-                  style={{
-                    gridTemplateColumns: `repeat(${link.dropdownContent.columns.length}, minmax(0, 250px))`,
-                  }}
-                >
+                <div className="absolute left-0 top-full mt-0 bg-white shadow-lg rounded-md hidden group-hover:grid z-20 w-[800px] grid-cols-4 gap-4 p-6 border border-gray-100">
                   {link.dropdownContent.columns.map((column, colIndex) => (
                     <div key={colIndex}>
                       <h4 className="font-bold text-gray-800 mb-3 border-b pb-2 border-gray-200">
