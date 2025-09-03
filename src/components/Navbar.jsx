@@ -32,27 +32,21 @@ const Navbar = () => {
           {
             title: 'Categories',
             items: [
-              { label: 'Business', href: '/' }, // Update to '/books/business'
-              { label: 'Computer', href: '/' }, // Update to '/books/computer'
-              { label: 'Crime Books', href: '/' }, // Update to '/books/crime'
-              { label: 'Cooking & Food', href: '/' }, // Update to '/books/cooking'
-              { label: 'Love & Romance', href: '/' }, // Update to '/books/romance'
+              { label: 'AUDIO BOOKS', href: '/' },
+              { label: 'BIBLE REFERENCES', href: '/' },
+              { label: 'BIBLES', href: '/' },
+              { label: 'BUSINESS BOOKS', href: '/' },
+              { label: 'CHRISTIAN BOOKS', href: '/' },
+              { label: 'CHRISTIAN MOVIES', href: '/' },
+              { label: 'EDUCATIONAL BOOKS', href: '/' },
+              { label: 'JOURNALS', href: '/' },
             ],
-          },
-          {
-            title: 'Top Rated Products',
-            items: [
-              { title: 'Zero Oil Cook', originalPrice: '$100.00', salePrice: '$80.00', href: '/' }, // Update href
-              { title: 'Corporate', originalPrice: '$120.00', salePrice: '$90.00', href: '/' }, // Update href
-              { title: 'Web Designing', originalPrice: '$150.00', salePrice: '$100.00', href: '/' }, // Update href
-            ],
-            type: 'product-list',
           },
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Just Listen', image: dreamCount, href: '/' }, // Update href
-              { title: 'Downloadable Prod', image: dreamCount, href: '/' }, // Update href
+              { title: 'Just Listen', image: dreamCount, href: '/' },
+              { title: 'Downloadable Prod', image: dreamCount, href: '/' },
             ],
             type: 'image-list',
           },
@@ -60,42 +54,87 @@ const Navbar = () => {
       },
     },
     {
-      label: 'MULTIMEDIA',
+      label: 'LIFESTYLE',
       dropdownContent: {
         type: 'multi-column',
         columns: [
           {
             title: 'Categories',
             items: [
-              { label: 'Audio', href: '/' }, // Update to '/multimedia/audio'
-              { label: 'Music & Video', href: '/' }, // Update to '/multimedia/video'
+              { label: 'CHRISTIAN MOVIES', href: '/' },
+              { label: 'FRAGRANCES', href: '/' },
+              { label: 'LIFE & STYLE', href: '/' },
             ],
-          },
-          {
-            title: 'Top Rated Products',
-            items: [
-              { title: 'Guitar', originalPrice: '$100.00', salePrice: '$80.00', href: '/' }, // Update href
-              { title: 'Grand Piano', originalPrice: '$120.00', salePrice: '$90.00', href: '/' }, // Update href
-              { title: 'Art of War (Audio)', originalPrice: '$150.00', salePrice: '$100.00', href: '/' }, // Update href
-            ],
-            type: 'product-list',
           },
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Guitar', image: guitar, href: '/' }, // Update href
-              { title: 'Art of War (Audio)', image: dreamCount, href: '/' }, // Update href
+              { title: 'Guitar', image: guitar, href: '/' },
+              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
             ],
             type: 'image-list',
           },
         ],
       },
     },
-    { to: '/', label: 'GIFT ITEMS' }, // Update to '/gift-items'
-    { to: '/', label: 'FRAGRANCES' }, // Update to '/fragrances'
+    {
+      label: 'GIFT ITEMS',
+      dropdownContent: {
+        type: 'multi-column',
+        columns: [
+          {
+            title: 'Categories',
+            items: [
+              { label: 'CHRISTMAS DECORATIONS', href: '/' },
+              { label: 'EDUCATIONAL TOYS', href: '/' },
+              { label: 'GIFT ITEMS', href: '/' },
+              { label: 'GIFT WRAP', href: '/' },
+              { label: 'GREETING CARDS', href: '/' },
+              { label: 'PENCIL CASES', href: '/' },
+              { label: 'STATIONERY & OFFICE SUPPLIES', href: '/' },
+              { label: 'WALL DECOR', href: '/' },
+            ],
+          },
+          {
+            title: 'Best Selling Products',
+            items: [
+              { title: 'Guitar', image: guitar, href: '/' },
+              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+            ],
+            type: 'image-list',
+          },
+        ],
+      },
+    },
+    {
+      label: 'AUDIO-VISUALS',
+      dropdownContent: {
+        type: 'multi-column',
+        columns: [
+          {
+            title: 'Categories',
+            items: [
+              { label: 'BLUETOOTH DEVICE & ACCESSORIES', href: '/' },
+              { label: 'MOVIES', href: '/' },
+              { label: 'MESSAGES', href: '/' },
+              { label: 'MUSIC & VIDEOS', href: '/' },
+              { label: 'MUSICAL INSTRUMENTS', href: '/' },
+            ],
+          },
+          {
+            title: 'Best Selling Products',
+            items: [
+              { title: 'Guitar', image: guitar, href: '/' },
+              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+            ],
+            type: 'image-list',
+          },
+        ],
+      },
+    },
     { to: '/shop', label: 'SHOP' },
-    { to: '/', label: 'ABOUT' }, // Update to '/about'
-    { to: '/', label: 'CONTACT' }, // Update to '/contact'
+    { to: '/', label: 'ABOUT' },
+    { to: '/', label: 'CONTACT' },
   ];
 
   return (
@@ -141,7 +180,12 @@ const Navbar = () => {
 
               {/* Multi-column Dropdown */}
               {link.dropdownContent && link.dropdownContent.type === 'multi-column' && (
-                <div className="absolute left-0 top-full mt-0 bg-white shadow-lg rounded-md hidden group-hover:grid z-20 w-[800px] grid-cols-4 gap-4 p-6 border border-gray-100">
+                <div
+                  className="absolute left-0 top-full mt-0 bg-white shadow-lg rounded-md hidden group-hover:grid z-20 w-auto gap-6 p-6 border border-gray-100"
+                  style={{
+                    gridTemplateColumns: `repeat(${link.dropdownContent.columns.length}, minmax(0, 250px))`,
+                  }}
+                >
                   {link.dropdownContent.columns.map((column, colIndex) => (
                     <div key={colIndex}>
                       <h4 className="font-bold text-gray-800 mb-3 border-b pb-2 border-gray-200">

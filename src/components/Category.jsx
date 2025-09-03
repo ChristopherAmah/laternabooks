@@ -1,49 +1,48 @@
 import React, { useRef } from 'react';
-// If using react-router-dom, replace <a> with <Link> and import Link.
 import dreamcount from '../assets/dreamcount.jpeg';
 import guitar from '../assets/guitar.jpg';
 
 const App = () => {
   const categories = [
     {
-      title: "Discover pre-loved designer jewelry",
+      title: "Discover Great Books",
       items: [
-        { name: "Cartier", img: dreamcount },
-        { name: "Van Cleef", img: guitar },
-        { name: "Hermès", img: dreamcount },
-        { name: "Chanel", img: guitar },
+        { name: "Audio Books", img: dreamcount },
+        { name: "Bibles", img: guitar },
+        { name: "Bible references", img: dreamcount },
+        { name: "Business Books", img: guitar },
       ],
-      link: "Shop Luxury Stores",
+      link: "Shop Books",
     },
     {
-      title: "Save 15% on designer handbags",
+      title: "Save 15% on Gift Items",
       items: [
-        { name: "Louis Vuitton", img: dreamcount },
-        { name: "Hermès", img: dreamcount },
-        { name: "Dior", img: dreamcount},
-        { name: "Saint Laurent", img: dreamcount},
+        { name: "Gift Wraps", img: dreamcount },
+        { name: "Greeting cards", img: dreamcount },
+        { name: "Journals ", img: dreamcount},
+        { name: "Wall Decor", img: dreamcount},
       ],
-      link: "Shop the pre-loved sale",
+      link: "Shop Gift Items",
     },
     {
-      title: "Trending: Fall Beauty",
+      title: "Trending: Lifestyle",
       items: [
-        { name: "Velvet skin", img: dreamcount },
-        { name: "Healthy hair", img: dreamcount },
-        { name: "Luxe body care", img: dreamcount },
+        { name: "Christioan Movies", img: dreamcount },
+        { name: "Fragrances", img: dreamcount },
+        { name: "Life & Style", img: dreamcount },
         { name: "Metallic hues", img: dreamcount },
       ],
-      link: "Shop more beauty",
+      link: "Shop Lifestyle",
     },
     {
-      title: "Discover Everyday Essentials",
+      title: "Discover Audio-Visuals",
       items: [
-        { name: "Wellness", img: guitar },
-        { name: "Cleaning supplies", img: guitar },
-        { name: "Fall flavors", img: guitar },
-        { name: "All deals", img: guitar },
+        { name: "Movies", img: guitar },
+        { name: "Messages", img: guitar },
+        { name: "Music & Videos", img: guitar },
+        { name: "Musical Instruments", img: guitar },
       ],
-      link: "Shop more everyday essentials",
+      link: "Shop more Audio-Visuals",
     },
   ];
 
@@ -52,11 +51,11 @@ const App = () => {
     { name: "HP Printer", img: guitar, badge: "3 MONTHS INSTANT INK INCLUDED" },
     { name: "Epson EcoTank Printer", img: guitar },
     { name: "Epson Ink Bottles", img: guitar },
-    { name: "PaperNano Film", img: guitar, badge: "PencilTip Friendly" },
+    { name: "Stationery", img: guitar, badge: "PencilTip Friendly" },
     { name: "iPad with Pencil", img: guitar },
     { name: "Samsung 990 EVO Plus 2TB", img: guitar },
     { name: "Wireless Mouse", img: guitar },
-    { name: "External Hard Drive", img: guitar },
+    { name: "Guitar", img: guitar },
     { name: "Keyboard", img: guitar},
   ];
 

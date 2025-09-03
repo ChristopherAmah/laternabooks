@@ -225,11 +225,11 @@ const NewsSection = () => {
                 {/* Categories */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 text-white shadow-lg">
                   {[
-                    { icon: 'fa-book', label: 'Books', bg: 'bg-orange-500', link: '/' },
-                    { icon: 'fa-play', label: 'Multimedia', bg: 'bg-gray-500', link: '/' },
-                    { icon: 'fa-gift', label: 'Gift Items', bg: 'bg-orange-500', link: '/' },
-                    { icon: 'fa-spray-can-sparkles', label: 'Fragrances', bg: 'bg-gray-500', link: '/' },
-                    { icon: 'fa-shop', label: 'Shop', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-book', label: 'BOOKS', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-spray-can-sparkles', label: 'LIFESTYLE', bg: 'bg-gray-500', link: '/' },
+                    { icon: 'fa-gift', label: 'GIFT ITEMS', bg: 'bg-orange-500', link: '/' },
+                    { icon: 'fa-play', label: 'AUDIO-VISUALS', bg: 'bg-gray-500', link: '/' },
+                    { icon: 'fa-shop', label: 'SHOP', bg: 'bg-orange-500', link: '/' },
                   ].map((cat, idx) => (
                     <Link
                       key={idx}

@@ -11,7 +11,7 @@ import Topbar from './components/Topbar';
 function App() {
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
-      <div className='overflow-hidden'>
+      <div>
         <Topbar />
         <Navbar />
           <Routes>
