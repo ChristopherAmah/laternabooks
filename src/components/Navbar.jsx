@@ -45,8 +45,8 @@ const Navbar = () => {
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Just Listen', image: dreamCount, href: '/' },
-              { title: 'Downloadable Prod', image: dreamCount, href: '/' },
+              { title: 'Dream count', image: dreamCount, href: '/' },
+              { title: 'Art of War', image: dreamCount, href: '/' },
             ],
             type: 'image-list',
           },
@@ -69,8 +69,8 @@ const Navbar = () => {
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Guitar', image: guitar, href: '/' },
-              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+              { title: 'Movie', image: guitar, href: '/' },
+              { title: '212 Men', image: dreamCount, href: '/' },
             ],
             type: 'image-list',
           },
@@ -98,8 +98,8 @@ const Navbar = () => {
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Guitar', image: guitar, href: '/' },
-              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+              { title: 'Confetti', image: guitar, href: '/' },
+              { title: 'Toy car', image: dreamCount, href: '/' },
             ],
             type: 'image-list',
           },
@@ -133,8 +133,8 @@ const Navbar = () => {
       },
     },
     { to: '/shop', label: 'SHOP' },
-    { to: '/', label: 'ABOUT' },
-    { to: '/', label: 'CONTACT' },
+    { to: '/about', label: 'ABOUT' },
+    { to: '/contact', label: 'CONTACT' },
   ];
 
   return (
