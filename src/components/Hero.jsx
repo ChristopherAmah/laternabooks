@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import library from '../assets/library.jpg';
 import book from '../assets/books.jpg';
+import bookshop from '../assets/bookshop.jpg';
+import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -21,7 +23,7 @@ const slides = [
     buttonText: "Browse Collection",
   },
   {
-    image: library,
+    image: bookshop,
     title: "Build Your Library",
     subtitle: "Curate your personal collection today",
     buttonText: "Start Reading",
@@ -80,25 +82,22 @@ const Hero = () => {
                 animate="visible"
                 className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
               >
-                <motion.h2
-                  variants={childVariants}
-                  className="text-white text-3xl md:text-5xl font-bold mb-3"
-                >
+                <motion.h2 variants={childVariants} className="text-white text-3xl md:text-5xl font-bold mb-3">
                   {slide.title}
                 </motion.h2>
-                <motion.p
-                  variants={childVariants}
-                  className="text-white text-base md:text-lg mb-5 max-w-xl"
-                >
+                <motion.p variants={childVariants} className="text-white text-base md:text-lg mb-5 max-w-xl">
                   {slide.subtitle}
                 </motion.p>
-                <motion.button
-                  variants={childVariants}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition"
-                >
-                  {slide.buttonText}
-                </motion.button>
+                <motion.div variants={childVariants}>
+                  <Link
+                    to="/categories"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition inline-block"
+                  >
+                    {slide.buttonText}
+                  </Link>
+                </motion.div>
               </motion.div>
+
             </div>
           </SwiperSlide>
         ))}

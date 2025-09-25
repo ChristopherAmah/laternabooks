@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import LaternaLogo from '../assets/laterna.png';
+import allinonall from '../assets/allinonall.jpeg';
+import egoistheenemy from '../assets/egoistheenemy.jpeg';
+import airpure from '../assets/airpure.jpeg';
+import firedearth from '../assets/firedearth.jpg';
 import {
   FaTwitter,
   FaFacebookF,
@@ -21,8 +25,15 @@ const Navbar = () => {
   const [activeLink, setActiveLink] = useState('/');
   const [mobileDropdown, setMobileDropdown] = useState(null);
 
-  // Updated navLinks with routes for dropdowns (replace '/' with actual routes)
-    const navLinks = [
+  // Cart drawer state
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems] = useState([
+    { id: 1, title: 'Dream Count', image: dreamCount, price: '₦5,000' },
+    { id: 2, title: 'Guitar', image: guitar, price: '₦15,000' },
+  ]); // mock data
+
+  // Updated navLinks
+  const navLinks = [
     { to: '/', label: 'HOME' },
     {
       label: 'BOOKS',
@@ -45,8 +56,8 @@ const Navbar = () => {
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Dream count', image: dreamCount, href: '/' },
-              { title: 'Art of War', image: dreamCount, href: '/' },
+              { title: 'All in on all', image: allinonall, href: '/' },
+              { title: 'Ego is the enemy', image: egoistheenemy, href: '/' },
             ],
             type: 'image-list',
           },
@@ -69,8 +80,8 @@ const Navbar = () => {
           {
             title: 'Best Selling Products',
             items: [
-              { title: 'Movie', image: guitar, href: '/' },
-              { title: '212 Men', image: dreamCount, href: '/' },
+              { title: 'Air Pure', image: airpure, href: '/' },
+              { title: 'Fired Earth', image: firedearth, href: '/' },
             ],
             type: 'image-list',
           },
@@ -242,14 +253,81 @@ const Navbar = () => {
           <span className="bg-orange-500 p-3 rounded-full text-white">
             <FaSearch className="cursor-pointer hover:text-orange-700" />
           </span>
-          <span className="bg-orange-500 p-3 rounded-full text-white">
-            <FaShoppingCart className="cursor-pointer hover:text-orange-700" />
+
+          {/* Cart with badge */}
+          <span
+            className="bg-orange-500 p-3 rounded-full text-white relative cursor-pointer"
+            onClick={() => setCartOpen(true)}
+          >
+            <FaShoppingCart className="hover:text-orange-700" />
+            {cartItems.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {cartItems.length}
+              </span>
+            )}
           </span>
+
           <span className="bg-orange-500 p-3 rounded-full text-white">
             <FaHeart className="cursor-pointer hover:text-orange-700" />
           </span>
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <>
+        {/* Overlay */}
+        <div
+          className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+            cartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={() => setCartOpen(false)}
+        ></div>
+
+        {/* Drawer */}
+        <div
+          className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-50 p-5 flex flex-col transform transition-transform duration-300 ${
+            cartOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center border-b pb-3 mb-4">
+            <h2 className="text-lg font-bold text-gray-800">Your Cart</h2>
+            <button onClick={() => setCartOpen(false)}>
+              <HiX className="text-2xl text-gray-600 hover:text-red-600" />
+            </button>
+          </div>
+
+          {/* Cart Items */}
+          <div className="flex-1 overflow-y-auto space-y-4">
+            {cartItems.length > 0 ? (
+              cartItems.map((item) => (
+                <div key={item.id} className="flex items-center gap-3 border-b pb-3">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-gray-800">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-orange-600">{item.price}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">Your cart is empty.</p>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-4">
+            <button className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700">
+              Checkout
+            </button>
+          </div>
+        </div>
+      </>
 
       {/* Mobile menu items */}
       {isMenuOpen && (

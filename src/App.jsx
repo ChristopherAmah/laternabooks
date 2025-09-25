@@ -7,6 +7,8 @@ import Products from './pages/Products'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Topbar from './components/Topbar';
+import CategoriesPage from "./pages/CategoriesPage";
+import ProductDetails from './pages/ProductDetails';
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/productdetail" element={<ProductDetails />} />
           </Routes>
         <Footer />
       </div>

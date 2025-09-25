@@ -5,6 +5,16 @@ import perfume from '../assets/perfume.jpg'
 import bible from '../assets/bible.jpg'
 import business from '../assets/business.jpg'
 import { Link } from "react-router-dom";
+import rashford from '../assets/rashford.jpeg'
+import bananas from '../assets/bananas.jpeg'
+import beyondorder from '../assets/beyondorder.jpeg'
+import egoistheenemy from '../assets/egoistheenemy.jpeg'
+import financialfreedom from '../assets/financialfreedom.jpeg'
+import jbl from '../assets/jbl.jpeg'
+import allinonall from '../assets/allinonall.jpeg'
+import change from '../assets/change.jpeg'
+import giveup from '../assets/giveup.jpeg'
+import tyranny from '../assets/tyranny.jpeg'
 
 const books = [
     { title: "Vintage - The Art of Poster", image: dreamCount },
@@ -25,70 +35,70 @@ const collection = [
     description: 'Inspiring book on purpose',
     oldPrice: '$500.00',
     price: '$350.00',
-    image: dreamCount, // import your image
+    image: business, // import your image
   },
   {
     title: 'Mindset Shift',
     description: 'Reframe your thoughts',
     oldPrice: '$300.00',
     price: '$250.00',
-    image:dreamCount, // another image
+    image:bananas, // another image
   },
   {
     title: 'Wealth Within',
     description: 'Financial intelligence guide',
     oldPrice: '$400.00',
     price: '$320.00',
-    image: dreamCount,
+    image: beyondorder,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: egoistheenemy,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: financialfreedom,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: jbl,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: allinonall,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: change,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: giveup,
   },
   {
     title: 'The Creative Spark',
     description: 'Unlock your inner genius',
     oldPrice: '$250.00',
     price: '$200.00',
-    image: dreamCount,
+    image: tyranny,
   },
   // Add more book objects here...
 ];
@@ -261,7 +271,7 @@ const NewsSection = () => {
                         {/* Left Image */}
                         <div className="relative flex justify-center items-center min-64 md:w-1/2">
                             <img
-                                src={dreamCount}
+                                src={rashford}
                                 alt="New Book Sales"
                                 className="w-64 h-auto justify-center items-center"
                             />
@@ -318,42 +328,59 @@ const NewsSection = () => {
 
 
             {/* Book Collection */}
-            <div className="flex flex-col items-center justify-center py-6 px-6" style={{ backgroundColor: '#FEEFE9' }}>
+            <div
+              className="flex flex-col items-center justify-center py-6 px-6"
+              style={{ backgroundColor: "#FEEFE9" }}
+            >
               <h2 className="text-2xl font-semibold text-gray-700">Book Collection</h2>
               <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
                 {collection.map((book, index) => (
-                <div
-                  key={index}
-                  className="relative shadow-lg rounded overflow-hidden group cursor-pointer"
-                  onClick={() => handleBookClick(index)}
-                >
-                  <img src={book.image} alt={book.title} className="w-full h-auto object-cover" />
-                  
                   <div
-                    className={`
-                      absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                      transition-opacity duration-300 ease-in-out
-                      ${activeIndex === index ? 'opacity-100' : 'opacity-0'}
-                      lg:group-hover:opacity-100
-                    `}
+                    key={index}
+                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer"
+                    onClick={() => handleBookClick(index)}
                   >
-                    <a href="#" className="text-lg font-bold text-gray-800 hover:text-orange-500 text-center">
-                      {book.title}
-                    </a>
-                    <p className="text-lg font-semibold text-gray-800 text-center">{book.description}</p>
-                    <p className="text-sm text-gray-600 line-through mt-2">{book.oldPrice}</p>
-                    <p className="text-xl font-bold text-orange-500">{book.price}</p>
-                    <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                      Add to cart
-                    </button>
-                  </div>
-                </div>
-              ))}
+                    {/* FIXED HEIGHT IMAGE WRAPPER */}
+                    <div className="w-full h-60 overflow-hidden">
+                      <img
+                        src={book.image}
+                        alt={book.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
 
+                    <div
+                      className={`
+                        absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
+                        transition-opacity duration-300 ease-in-out
+                        ${activeIndex === index ? "opacity-100" : "opacity-0"}
+                        lg:group-hover:opacity-100
+                      `}
+                    >
+                      <a
+                        href="#"
+                        className="text-lg font-bold text-gray-800 hover:text-orange-500 text-center"
+                      >
+                        {book.title}
+                      </a>
+                      <p className="text-lg font-semibold text-gray-800 text-center">
+                        {book.description}
+                      </p>
+                      <p className="text-sm text-gray-600 line-through mt-2">
+                        {book.oldPrice}
+                      </p>
+                      <p className="text-xl font-bold text-orange-500">{book.price}</p>
+                      <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                        Add to cart
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+
 
 
 
