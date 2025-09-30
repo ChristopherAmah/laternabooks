@@ -7,6 +7,7 @@ import {
   FaLinkedinIn,
   FaInstagram,
 } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Topbar = () => {
   return (
@@ -26,7 +27,9 @@ const Topbar = () => {
         {/* Right Section */}
         <div className="relative z-10 flex space-x-4 text-white">
           <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">REGISTER</button>
+          <Link to={'/login'}>
           <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">LOG IN</button>
+          </Link>
         </div>
 
         {/* Background Orange Slant - Hidden on small screens */}

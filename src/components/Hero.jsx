@@ -1,32 +1,32 @@
 import React, { useState } from "react";
-import library from '../assets/library.jpg';
-import book from '../assets/books.jpg';
-import bookshop from '../assets/bookshop.jpg';
+import hero1 from "../assets/hero1.jpg";
+import hero2 from "../assets/hero2.jpg";
+import hero3 from "../assets/hero3.jpg";
+import hero4 from "../assets/hero4.jpg";
+import hero5 from "../assets/hero5.jpg";
+import hero6 from "../assets/hero6.jpg";
+import hero7 from "../assets/hero7.jpg";
+import hero8 from "../assets/hero8.jpg";
+import hero9 from "../assets/hero9.jpg";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { motion } from "framer-motion";
 
 const slides = [
   {
-    image: library,
-    title: "Explore the World of Books",
-    subtitle: "Discover stories that inspire and transform",
-    buttonText: "Shop Now",
+    images: [hero1, hero2, hero3],
+    title: "Welcome to LaternaBooks",
   },
   {
-    image: book,
-    title: "Read, Learn, Grow",
-    subtitle: "Fuel your mind with endless knowledge",
-    buttonText: "Browse Collection",
+    images: [hero4, hero9, hero6],
+    title: "Discover Your Next Read",
   },
   {
-    image: bookshop,
-    title: "Build Your Library",
-    subtitle: "Curate your personal collection today",
-    buttonText: "Start Reading",
+    images: [hero7, hero8, hero5],
+    title: "Explore Our Collection",
   },
 ];
 
@@ -34,10 +34,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.3, delayChildren: 0.2 },
   },
 };
 
@@ -50,7 +47,7 @@ const Hero = () => {
   const [animationKey, setAnimationKey] = useState(0);
 
   return (
-    <div className="carousel relative h-[80vh]">
+    <div className="relative h-[80vh] w-full overflow-hidden">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -60,44 +57,43 @@ const Hero = () => {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <div className="relative w-full h-full">
-              {/* Image */}
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative w-full h-full flex">
+              {/* Images side by side */}
+              {slide.images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`LaternaBooks-${i}`}
+                  className="w-1/3 h-full object-cover"
+                />
+              ))}
 
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-black/40 hover:bg-black/60 transition duration-500"></div>
+              {/* Dark overlay */}
+              <div className="absolute inset-0 bg-black/50"></div>
 
-              {/* Gradient fade to white at the bottom */}
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white to-transparent z-10"></div>
-
-              {/* Animated Text */}
+              {/* Text + Button */}
               <motion.div
                 key={animationKey}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
+                className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
               >
-                <motion.h2 variants={childVariants} className="text-white text-3xl md:text-5xl font-bold mb-3">
+                <motion.h1
+                  variants={childVariants}
+                  className="text-white text-4xl md:text-6xl font-bold mb-6"
+                >
                   {slide.title}
-                </motion.h2>
-                <motion.p variants={childVariants} className="text-white text-base md:text-lg mb-5 max-w-xl">
-                  {slide.subtitle}
-                </motion.p>
+                </motion.h1>
                 <motion.div variants={childVariants}>
                   <Link
-                    to="/categories"
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition inline-block"
+                    to="/shop"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-sans px-6 py-4 rounded-full shadow-lg transition inline-block"
                   >
-                    {slide.buttonText}
+                    Shop Categories
                   </Link>
                 </motion.div>
               </motion.div>
-
             </div>
           </SwiperSlide>
         ))}

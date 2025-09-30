@@ -1,18 +1,18 @@
 import React from 'react'
-import Products from '../components/Products';
+import Category from '../components/Categories';
 import CompanyLogo from '../components/CompanyLogo';
 import ShopHero from '../components/ShopHero'
 
-const Shop = () => {
+const Categories = () => {
   return (
     <>
         <ShopHero />
         <div className="relative z-30 -mt-70 px-6">
-          <Products />
+          <Category />
         </div>
         <CompanyLogo />
     </>
   )
 }
 
-export default Shop
+export default Categories

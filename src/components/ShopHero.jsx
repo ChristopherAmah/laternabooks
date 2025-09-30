@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import library from '../assets/library.jpg';
-import book from '../assets/books.jpg';
+import hero1 from "../assets/hero1.jpg";
+import hero2 from "../assets/hero2.jpg";
+import hero3 from "../assets/hero3.jpg";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -9,22 +10,16 @@ import { motion } from "framer-motion";
 
 const slides = [
   {
-    image: library,
-    title: "Explore the World of Books",
-    subtitle: "Discover stories that inspire and transform",
-    buttonText: "Shop Now",
+    images: [hero1, hero2, hero3], // 3 images in slide 1
+    title: "",
   },
   {
-    image: book,
-    title: "Read, Learn, Grow",
-    subtitle: "Fuel your mind with endless knowledge",
-    buttonText: "Browse Collection",
+    images: [hero3, hero1, hero2], // 3 images in slide 2
+    title: "",
   },
   {
-    image: library,
-    title: "Build Your Library",
-    subtitle: "Curate your personal collection today",
-    buttonText: "Start Reading",
+    images: [hero2, hero3, hero1], // 3 images in slide 3
+    title: "",
   },
 ];
 
@@ -32,10 +27,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.3, delayChildren: 0.2 },
   },
 };
 
@@ -48,7 +40,7 @@ const ShopHero = () => {
   const [animationKey, setAnimationKey] = useState(0);
 
   return (
-    <div className="carousel relative h-[90vh]">
+    <div className="carousel relative h-[90vh] overflow-hidden">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -58,28 +50,30 @@ const ShopHero = () => {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <div className="relative w-full h-full">
-              {/* Image */}
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative w-full h-full flex">
+              {/* 3 images side by side */}
+              {slide.images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`${slide.title}-${i}`}
+                  className="w-1/3 h-full object-cover"
+                />
+              ))}
 
-              {/* Overlay on hover */}
+              {/* Overlay */}
               <div className="absolute inset-0 bg-black/40 hover:bg-black/60 transition duration-500"></div>
 
-              {/* Gradient fade to white at the bottom */}
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white to-transparent z-10"></div>
+              {/* Gradient fade */}
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent z-10"></div>
 
-              {/* Animated Text */}
+              {/* Centered Text */}
               <motion.div
                 key={animationKey}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 pt-10" // Adjusted to justify-start and added pt-10
-                style={{ transform: "translateY(5%)" }} // Slight upward shift
+                className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4"
               >
                 <motion.h2
                   variants={childVariants}
@@ -87,18 +81,6 @@ const ShopHero = () => {
                 >
                   {slide.title}
                 </motion.h2>
-                <motion.p
-                  variants={childVariants}
-                  className="text-white text-base md:text-lg mb-5 max-w-xl"
-                >
-                  {slide.subtitle}
-                </motion.p>
-                <motion.button
-                  variants={childVariants}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition"
-                >
-                  {slide.buttonText}
-                </motion.button>
               </motion.div>
             </div>
           </SwiperSlide>

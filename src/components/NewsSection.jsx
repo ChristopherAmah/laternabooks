@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dreamCount from '../assets/dreamcount.jpeg'
 import guitar from '../assets/guitar.jpg'
 import perfume from '../assets/perfume.jpg'
@@ -35,14 +35,14 @@ const collection = [
     description: 'Inspiring book on purpose',
     oldPrice: '$500.00',
     price: '$350.00',
-    image: business, // import your image
+    image: business,
   },
   {
     title: 'Mindset Shift',
     description: 'Reframe your thoughts',
     oldPrice: '$300.00',
     price: '$250.00',
-    image:bananas, // another image
+    image:bananas,
   },
   {
     title: 'Wealth Within',
@@ -100,14 +100,12 @@ const collection = [
     price: '$200.00',
     image: tyranny,
   },
-  // Add more book objects here...
 ];
-
 
 const products = [
   {
     id: 1,
-    image: dreamCount, // Placeholder for Vintage poster
+    image: dreamCount,
     title: 'Corporate',
     rating: 5,
     originalPrice: '$100.00',
@@ -116,16 +114,16 @@ const products = [
   },
   {
     id: 2,
-    image: guitar, // Placeholder for Habbits poster
+    image: guitar,
     title: 'Guitar',
     rating: 5,
     originalPrice: '$100.00',
-    salePrice: null, // Not on sale
+    salePrice: null,
     onSale: false,
   },
   {
     id: 3,
-    image: perfume, // Placeholder for The Devils poster
+    image: perfume,
     title: 'Chanel No 5',
     rating: 5,
     originalPrice: '$400.00',
@@ -134,11 +132,11 @@ const products = [
   },
   {
     id: 4,
-    image: bible, // Placeholder for The Secret poster
+    image: bible,
     title: 'The Bible',
     rating: 5,
     originalPrice: '$80.00',
-    salePrice: '$120.00', // Assuming this is a price range or a typo in the image
+    salePrice: '$120.00',
     onSale: true,
   },
 ];
@@ -165,15 +163,11 @@ const StarRating = ({ rating }) => {
 const ProductCard = ({ product }) => {
     return (
         <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
-            {/* Sale Badge */}
             {product.onSale && (
                 <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
                     Sale!
                 </span>
             )}
-
-            {/* Image Container with Hover Effect */}
-            {/* The image in the example has a slight border/shadow and a hover effect */}
             <div className="w-full max-h-72 sm:max-h-80 md:max-h-96 rounded-md mb-3 border border-gray-200 shadow-sm bg-gray-100">
               <img
                   src={product.image}
@@ -186,16 +180,10 @@ const ProductCard = ({ product }) => {
                   }}
               />
           </div>
-
-            {/* Product Title */}
             <h3 className="text-sm sm:text-base font-semibold text-center text-gray-800 mb-1">
                 {product.title}
             </h3>
-
-            {/* Star Rating */}
             <StarRating rating={product.rating} />
-
-            {/* Price Section */}
             <div className="flex items-center mt-1 sm:mt-2">
                 {product.originalPrice && product.salePrice && (
                     <span className="text-xs sm:text-sm text-gray-500 line-through mr-2">
@@ -203,11 +191,10 @@ const ProductCard = ({ product }) => {
                     </span>
                 )}
                 {product.salePrice && (
-                    <span className="text-sm sm:text-base text-orange-500 font-bold"> {/* Removed rounded-full here */}
+                    <span className="text-sm sm:text-base text-orange-500 font-bold">
                         {product.salePrice}
                     </span>
                 )}
-                {/* Display original price if not on sale */}
                 {!product.onSale && product.originalPrice && (
                     <span className="text-sm sm:text-base text-orange-500 font-bold">
                         {product.originalPrice}
@@ -218,46 +205,142 @@ const ProductCard = ({ product }) => {
     );
 };
 
-
-
-
 const NewsSection = () => {
- const [activeIndex, setActiveIndex] = useState(null); // store the index of the clicked book
+ const [activeIndex, setActiveIndex] = useState(null);
+ const [categories, setCategories] = useState([]);
+ const [catsLoading, setCatsLoading] = useState(false);
+ const [catsError, setCatsError] = useState(null);
 
-  const handleBookClick = (index) => {
-    setActiveIndex(prevIndex => (prevIndex === index ? null : index)); // toggle logic
-  };
+ useEffect(() => {
+   const fetchCategories = async () => {
+     setCatsLoading(true);
+     setCatsError(null);
+     try {
+       const res = await fetch("http://41.78.157.87:32771/api/v1/categories");
+       const data = await res.json();
 
-  return (
+       // Handle various possible shapes from backend:
+       // - { categories: [...] }
+       // - { data: [...] }
+       // - [...] (array directly)
+       // - { results: [...] }
+       let cats = [];
+       if (Array.isArray(data)) {
+         cats = data;
+       } else if (Array.isArray(data.categories)) {
+         cats = data.categories;
+       } else if (Array.isArray(data.data)) {
+         cats = data.data;
+       } else if (Array.isArray(data.results)) {
+         cats = data.results;
+       } else {
+         // if the API returned a single object or empty, fall back to empty array
+         cats = [];
+       }
+
+       // Normalize each category to have id, name, link, image_url (if possible)
+       const normalized = cats.map((c, i) => ({
+         id: c.id ?? c.category_id ?? i,
+         name: c.name ?? c.label ?? c.title ?? `Category ${i + 1}`,
+         link: c.link ?? `/shop/${c.id ?? i}`,
+         image_url: c.image_url ?? c.image ?? c.icon_url ?? null,
+         raw: c,
+       }));
+
+       // fallback: if no categories found, keep empty and let UI show default cats
+       setCategories(normalized);
+     } catch (error) {
+       console.error("Error fetching categories:", error);
+       setCatsError("Failed to load categories");
+       setCategories([]); // ensure it's an array
+     } finally {
+       setCatsLoading(false);
+     }
+   };
+   fetchCategories();
+ }, []);
+
+ const handleBookClick = (index) => {
+   setActiveIndex(prevIndex => (prevIndex === index ? null : index));
+ };
+
+ // Fallback static categories (used if API returns no categories)
+ const fallbackCats = [
+   { id: 'books', name: 'BOOKS', color: 'bg-orange-500', link: '/' },
+   { id: 'lifestyle', name: 'LIFESTYLE', color: 'bg-gray-500', link: '/' },
+   { id: 'gifts', name: 'GIFT ITEMS', color: 'bg-orange-500', link: '/' },
+   { id: 'audio', name: 'AUDIO-VISUALS', color: 'bg-gray-500', link: '/' },
+   { id: 'shop', name: 'SHOP', color: 'bg-orange-500', link: '/' },
+ ];
+
+ // choose categories to render: API ones (if available) else fallback
+ const catsToRender = categories.length > 0 ? categories : fallbackCats;
+
+ return (
     <section className="md:px-4 md:shadow-lg">   
         <div className="sm:px-6 md:px-4">
             <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg ">
+                {/* Categories (updated) */}
                 {/* Categories */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 text-white shadow-lg">
-                  {[
-                    { icon: 'fa-book', label: 'BOOKS', bg: 'bg-orange-500', link: '/' },
-                    { icon: 'fa-spray-can-sparkles', label: 'LIFESTYLE', bg: 'bg-gray-500', link: '/' },
-                    { icon: 'fa-gift', label: 'GIFT ITEMS', bg: 'bg-orange-500', link: '/' },
-                    { icon: 'fa-play', label: 'AUDIO-VISUALS', bg: 'bg-gray-500', link: '/' },
-                    { icon: 'fa-shop', label: 'SHOP', bg: 'bg-orange-500', link: '/' },
-                  ].map((cat, idx) => (
-                    <Link
-                      key={idx}
-                      to={cat.link}
-                      className={`text-center py-8 px-4 transition-colors duration-300 ${cat.bg}`}
-                    >
-                      <i
-                        className={`fas ${cat.icon} text-4xl p-4 mb-2 block transition-transform duration-500 hover:rotate-[360deg]`}
-                      />
-                      <p className="font-semibold">{cat.label}</p>
-                    </Link>
-                  ))}
-                </div>
+<div className="overflow-x-auto bg-white shadow-lg scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-transparent">
+  <div className="flex space-x-6 px-4 py-6 min-w-max items-center">
+    {catsLoading ? (
+      Array.from({ length: 6 }).map((_, idx) => (
+        <div key={idx} className="w-36 h-24 rounded-md bg-gray-100 animate-pulse" />
+      ))
+    ) : (
+      catsToRender.map((cat, idx) => (
+        <Link
+          key={cat.id ?? idx}
+          to={cat.link || "/"}
+          className="flex flex-col items-center justify-center px-6 py-4 rounded-md text-center min-w-[120px] hover:bg-orange-50 transition"
+        >
+          {cat.image_url ? (
+            <div className="w-14 h-14 mb-2 rounded-full overflow-hidden bg-gray-100 shadow-sm">
+              <img
+                src={cat.image_url}
+                alt={cat.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://placehold.co/80x80/CCCCCC/000000?text=?';
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              className="w-14 h-14 mb-2 rounded-full flex items-center justify-center text-white font-bold shadow-sm"
+              style={{ backgroundColor: "#F97316" }}
+            >
+              {String(cat.name || "C").charAt(0).toUpperCase()}
+            </div>
+          )}
+          <p className="font-semibold text-sm text-gray-700">{cat.name}</p>
+        </Link>
+      ))
+    )}
+  </div>
+</div>
 
-
-
-
-
+{/* Custom thin scrollbar */}
+<style>
+  {`
+    .scrollbar-thin::-webkit-scrollbar {
+      height: 4px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #f97316; /* Tailwind orange-500 */
+      border-radius: 4px;
+    }
+    .scrollbar-thin {
+      scrollbar-color: #f97316 transparent; /* Firefox support */
+      scrollbar-width: thin;
+    }
+  `}
+</style>
 
 
                 {/* Latest News */} 
@@ -268,7 +351,6 @@ const NewsSection = () => {
                     <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
 
                     <div className="flex flex-col md:flex-row justify-center items-center md:gap-8 gap-8">
-                        {/* Left Image */}
                         <div className="relative flex justify-center items-center min-64 md:w-1/2">
                             <img
                                 src={rashford}
@@ -281,7 +363,6 @@ const NewsSection = () => {
                             </div>
                         </div>
 
-                        {/* Right News List */}
                         <div className="md:w-1/2 w-full flex flex-col gap-6 p-2">
                         {[
                             {
@@ -320,12 +401,8 @@ const NewsSection = () => {
                         ))}
                         </div>
                     </div>
-                
                 </div>
             </div>
-
-
-
 
             {/* Book Collection */}
             <div
@@ -342,7 +419,6 @@ const NewsSection = () => {
                     className="relative shadow-lg rounded overflow-hidden group cursor-pointer"
                     onClick={() => handleBookClick(index)}
                   >
-                    {/* FIXED HEIGHT IMAGE WRAPPER */}
                     <div className="w-full h-60 overflow-hidden">
                       <img
                         src={book.image}
@@ -380,10 +456,6 @@ const NewsSection = () => {
                 ))}
               </div>
             </div>
-
-
-
-
 
             {/* Featured Products */}
             <div className="min-h-screen p-8 bg-white">

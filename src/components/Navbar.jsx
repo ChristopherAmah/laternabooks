@@ -6,6 +6,7 @@ import allinonall from '../assets/allinonall.jpeg';
 import egoistheenemy from '../assets/egoistheenemy.jpeg';
 import airpure from '../assets/airpure.jpeg';
 import firedearth from '../assets/firedearth.jpg';
+import { useNavigate } from "react-router-dom";
 import {
   FaTwitter,
   FaFacebookF,
@@ -25,6 +26,10 @@ const Navbar = () => {
   const [activeLink, setActiveLink] = useState('/');
   const [mobileDropdown, setMobileDropdown] = useState(null);
 
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
   // Cart drawer state
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems] = useState([
@@ -35,115 +40,116 @@ const Navbar = () => {
   // Updated navLinks
   const navLinks = [
     { to: '/', label: 'HOME' },
-    {
-      label: 'BOOKS',
-      dropdownContent: {
-        type: 'multi-column',
-        columns: [
-          {
-            title: 'Categories',
-            items: [
-              { label: 'AUDIO BOOKS', href: '/' },
-              { label: 'BIBLE REFERENCES', href: '/' },
-              { label: 'BIBLES', href: '/' },
-              { label: 'BUSINESS BOOKS', href: '/' },
-              { label: 'CHRISTIAN BOOKS', href: '/' },
-              { label: 'CHRISTIAN MOVIES', href: '/' },
-              { label: 'EDUCATIONAL BOOKS', href: '/' },
-              { label: 'JOURNALS', href: '/' },
-            ],
-          },
-          {
-            title: 'Best Selling Products',
-            items: [
-              { title: 'All in on all', image: allinonall, href: '/' },
-              { title: 'Ego is the enemy', image: egoistheenemy, href: '/' },
-            ],
-            type: 'image-list',
-          },
-        ],
-      },
-    },
-    {
-      label: 'LIFESTYLE',
-      dropdownContent: {
-        type: 'multi-column',
-        columns: [
-          {
-            title: 'Categories',
-            items: [
-              { label: 'CHRISTIAN MOVIES', href: '/' },
-              { label: 'FRAGRANCES', href: '/' },
-              { label: 'LIFE & STYLE', href: '/' },
-            ],
-          },
-          {
-            title: 'Best Selling Products',
-            items: [
-              { title: 'Air Pure', image: airpure, href: '/' },
-              { title: 'Fired Earth', image: firedearth, href: '/' },
-            ],
-            type: 'image-list',
-          },
-        ],
-      },
-    },
-    {
-      label: 'GIFT ITEMS',
-      dropdownContent: {
-        type: 'multi-column',
-        columns: [
-          {
-            title: 'Categories',
-            items: [
-              { label: 'CHRISTMAS DECORATIONS', href: '/' },
-              { label: 'EDUCATIONAL TOYS', href: '/' },
-              { label: 'GIFT ITEMS', href: '/' },
-              { label: 'GIFT WRAP', href: '/' },
-              { label: 'GREETING CARDS', href: '/' },
-              { label: 'PENCIL CASES', href: '/' },
-              { label: 'STATIONERY & OFFICE SUPPLIES', href: '/' },
-              { label: 'WALL DECOR', href: '/' },
-            ],
-          },
-          {
-            title: 'Best Selling Products',
-            items: [
-              { title: 'Confetti', image: guitar, href: '/' },
-              { title: 'Toy car', image: dreamCount, href: '/' },
-            ],
-            type: 'image-list',
-          },
-        ],
-      },
-    },
-    {
-      label: 'AUDIO-VISUALS',
-      dropdownContent: {
-        type: 'multi-column',
-        columns: [
-          {
-            title: 'Categories',
-            items: [
-              { label: 'BLUETOOTH DEVICE & ACCESSORIES', href: '/' },
-              { label: 'MOVIES', href: '/' },
-              { label: 'MESSAGES', href: '/' },
-              { label: 'MUSIC & VIDEOS', href: '/' },
-              { label: 'MUSICAL INSTRUMENTS', href: '/' },
-            ],
-          },
-          {
-            title: 'Best Selling Products',
-            items: [
-              { title: 'Guitar', image: guitar, href: '/' },
-              { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
-            ],
-            type: 'image-list',
-          },
-        ],
-      },
-    },
-    { to: '/shop', label: 'SHOP' },
+    // {
+    //   label: 'BOOKS',
+    //   dropdownContent: {
+    //     type: 'multi-column',
+    //     columns: [
+    //       {
+    //         title: 'Categories',
+    //         items: [
+    //           { label: 'AUDIO BOOKS', href: '/' },
+    //           { label: 'BIBLE REFERENCES', href: '/' },
+    //           { label: 'BIBLES', href: '/' },
+    //           { label: 'BUSINESS BOOKS', href: '/' },
+    //           { label: 'CHRISTIAN BOOKS', href: '/' },
+    //           { label: 'CHRISTIAN MOVIES', href: '/' },
+    //           { label: 'EDUCATIONAL BOOKS', href: '/' },
+    //           { label: 'JOURNALS', href: '/' },
+    //         ],
+    //       },
+    //       {
+    //         title: 'Best Selling Products',
+    //         items: [
+    //           { title: 'All in on all', image: allinonall, href: '/' },
+    //           { title: 'Ego is the enemy', image: egoistheenemy, href: '/' },
+    //         ],
+    //         type: 'image-list',
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   label: 'LIFESTYLE',
+    //   dropdownContent: {
+    //     type: 'multi-column',
+    //     columns: [
+    //       {
+    //         title: 'Categories',
+    //         items: [
+    //           { label: 'CHRISTIAN MOVIES', href: '/' },
+    //           { label: 'FRAGRANCES', href: '/' },
+    //           { label: 'LIFE & STYLE', href: '/' },
+    //         ],
+    //       },
+    //       {
+    //         title: 'Best Selling Products',
+    //         items: [
+    //           { title: 'Air Pure', image: airpure, href: '/' },
+    //           { title: 'Fired Earth', image: firedearth, href: '/' },
+    //         ],
+    //         type: 'image-list',
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   label: 'GIFT ITEMS',
+    //   dropdownContent: {
+    //     type: 'multi-column',
+    //     columns: [
+    //       {
+    //         title: 'Categories',
+    //         items: [
+    //           { label: 'CHRISTMAS DECORATIONS', href: '/' },
+    //           { label: 'EDUCATIONAL TOYS', href: '/' },
+    //           { label: 'GIFT ITEMS', href: '/' },
+    //           { label: 'GIFT WRAP', href: '/' },
+    //           { label: 'GREETING CARDS', href: '/' },
+    //           { label: 'PENCIL CASES', href: '/' },
+    //           { label: 'STATIONERY & OFFICE SUPPLIES', href: '/' },
+    //           { label: 'WALL DECOR', href: '/' },
+    //         ],
+    //       },
+    //       {
+    //         title: 'Best Selling Products',
+    //         items: [
+    //           { title: 'Confetti', image: guitar, href: '/' },
+    //           { title: 'Toy car', image: dreamCount, href: '/' },
+    //         ],
+    //         type: 'image-list',
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   label: 'AUDIO-VISUALS',
+    //   dropdownContent: {
+    //     type: 'multi-column',
+    //     columns: [
+    //       {
+    //         title: 'Categories',
+    //         items: [
+    //           { label: 'BLUETOOTH DEVICE & ACCESSORIES', href: '/' },
+    //           { label: 'MOVIES', href: '/' },
+    //           { label: 'MESSAGES', href: '/' },
+    //           { label: 'MUSIC & VIDEOS', href: '/' },
+    //           { label: 'MUSICAL INSTRUMENTS', href: '/' },
+    //         ],
+    //       },
+    //       {
+    //         title: 'Best Selling Products',
+    //         items: [
+    //           { title: 'Guitar', image: guitar, href: '/' },
+    //           { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
+    //         ],
+    //         type: 'image-list',
+    //       },
+    //     ],
+    //   },
+    // },
+    { to: '/category', label: 'CATEGORIES' },
+    { to: '/products', label: 'SHOP' },
     { to: '/about', label: 'ABOUT' },
     { to: '/contact', label: 'CONTACT' },
   ];
@@ -250,9 +256,34 @@ const Navbar = () => {
 
         {/* Get in touch buttons */}
         <div className="hidden md:flex items-center space-x-3">
-          <span className="bg-orange-500 p-3 rounded-full text-white">
-            <FaSearch className="cursor-pointer hover:text-orange-700" />
-          </span>
+          {/* Search Button + Input */}
+          
+            <span
+              className="bg-orange-500 p-3 rounded-full text-white cursor-pointer"
+              onClick={() => setSearchOpen(!searchOpen)}
+            >
+              <FaSearch className="hover:text-orange-700" />
+            </span>
+
+            {searchOpen && (
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && searchQuery.trim()) {
+                    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+                    setSearchOpen(false);
+                    setSearchQuery("");
+                  }
+                }}
+                placeholder="Search products..."
+                className="absolute bg-white right-0 top-12 w-64 px-3 py-2 mt-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                autoFocus
+              />
+            )}
+          
+
 
           {/* Cart with badge */}
           <span
