@@ -1,101 +1,142 @@
-import React from 'react'
-import { BiCategory } from 'react-icons/bi';
-import {FaFacebookF} from 'react-icons/fa';
-import {FaTwitter} from 'react-icons/fa';
-import {FaLinkedin} from 'react-icons/fa';
-import LaternaLogo from '../assets/laterna.png';
+import React from "react";
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube } from "react-icons/fa";
+import LaternaLogo from "../assets/laterna.png";
+import paystack from "../assets/paystack.png";
+import verve from "../assets/verve.png";
 
-
-const footerLinks = {
-'SHOPPING GUIDE': [
-    { name: 'FAQs', href: '#' },
-    { name: 'How To Buy', href: '#' },
-    { name: 'Terms and Conditions', href: '#' },
-    { name: 'Shipping method', href: '#' },
-    { name: 'My Account', href: '#' },
-    { name: 'Shop', href: '#' },
-    { name: 'Cart', href: '#' },
-    { name: 'Checkout', href: '#' },
-],
-'RECENT POSTS': [
-    { name: 'How to start a business', href: '#' },
-    { name: 'Small businesses', href: '#' },
-    { name: 'Micro businesses', href: '#' },
-    { name: 'Fintechs', href: '#' },
-],
-'CATEGORIES': [
-    { name: 'Books', href: '#' },
-    { name: 'Multimedia', href: '#' },
-    { name: 'Gift Items', href: '#' },
-    { name: 'Fragrances', href: '#' },
-    { name: 'Devices', href: '#' },
-],
-'RECENT COMMENTS': [
-    { name: 'FAQs', href: '#' },
-    { name: 'Support Center', href: '#' },
-    { name: 'How To Videos', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Whistleblower', href: '#' },
-    { name: 'Squad Assets', href: '#' },
-],
-
-}
 const Footer = () => {
   return (
-    <footer id='contact' className='bg-gray-700'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-8'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12'>
-                {/* brand column */}
-                <div className='lg:col-span-4 '>
-                    <div>
-                        <img src={LaternaLogo} alt="logo"className='rounded-lg relative z-10 hover:scale-[1.02]
-                        transition-transfom duration-300' />
-                    </div>
-                    {/* <p className='md:w-3/4'></p> */}
-                    {/* <p className='mb-6 md:w-3/4'>HabariPay is licensed by the Central Bank of Nigeria.</p> */}
-                    <div className='flex gap-4 mt-6'>
-                        <a href="#" className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-orange-600
-                        hover:text-white transition-all duration-200'><FaFacebookF className='size-5'/></a>
-
-                        <a href="#" className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-orange-600
-                        hover:text-white transition-all duration-200'><FaTwitter className='size-5'/></a>
-
-                        <a href="#" className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-orange-600
-                        hover:text-white transition-all duration-200'><FaLinkedin className='size-5'/></a>
-                    </div>
-                </div>
-
-                {/* footer nav items */}
-                <div className='lg:col-span-8'>
-                    <div className='grid grid-cols-2 md:grid-cols-4 gap-8'style={{ color: '#F05A22' }}>
-                        {Object.entries(footerLinks).map(([category, links]) => (
-                            <div key={category}>
-                            <h3 className='text-lg font-medium mb-4'>{category}</h3>
-                            <ul className='space-y-3'>
-                                {links.map((link) => (
-                                <li key={link.name}>
-                                    <a href={link.href} className='text-white hover:text-orange-500'>{link.name}</a>
-                                </li>
-                                ))}
-                            </ul>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-            </div>
-
-
-            {/* footer bottom */}
-            <div className='border-t border-gray-200 mt-12 pt-8'>
-                <div className='grid grid-col md:flex-row justify-center items-center gap-4'>
-                    {/* <p className='text-gray-600 text-lg md:w-3/4'>Squad is a complete payment solution made for businesses in Africa. It is a reliable, secure, and affordable payment platform that makes receiving in-person and online payments simpler.</p> */}
-                    <p className='text-center text-white text-sm'>Copyright &copy; {new Date().getFullYear()} Laternabooks. All Rights Reserved</p>
-                </div>
-            </div>
+    <footer className="bg-white border-t border-gray-200 pt-10 pb-6 lg:px-12 text-gray-700">
+      {/* Top Section */}
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 align-center justify-center gap-10">
+        {/* Logo & Delivery Info */}
+        <div className="space-y-4">
+          <img
+            src={LaternaLogo}
+            alt="LaternaBooks Logo"
+            className="w-44 object-contain"
+          />
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              DELIVERY INFORMATION
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-600">
+              Same day delivery for orders placed before 10am in Victoria Island, Ikoyi and Lagos Island.
+              <br />
+              Next business day delivery for orders placed in Lagos.
+              <br />
+              2–3 working days delivery for orders placed Nationwide.
+            </p>
+          </div>
         </div>
-    </footer>
-  )
-}
 
-export default Footer
+        {/* Contact Info */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">CONTACT US</h2>
+          <div className="space-y-2 text-sm">
+            <p>
+              <strong>CALL US NOW:</strong> <br />
+              (+234) 810 023 4441
+            </p>
+            <p>
+              <strong>E-MAIL ADDRESS:</strong> <br />
+              <a
+                href="mailto:info@laternabooks.ng"
+                className="text-orange-600 hover:underline"
+              >
+                info@laternabooks.ng
+              </a>
+            </p>
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex gap-4 mt-3">
+            <a href="#" className="hover:text-orange-600 transition">
+              <FaFacebookF size={18} />
+            </a>
+            <a href="#" className="hover:text-orange-600 transition">
+              <FaTwitter size={18} />
+            </a>
+            <a href="#" className="hover:text-orange-600 transition">
+              <FaLinkedinIn size={18} />
+            </a>
+            <a href="#" className="hover:text-orange-600 transition">
+              <FaInstagram size={18} />
+            </a>
+            <a href="#" className="hover:text-orange-600 transition">
+              <FaYoutube size={18} />
+            </a>
+          </div>
+        </div>
+
+        {/* Quick Links */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Quick Links</h2>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a href="#" className="hover:text-orange-600 transition">
+                About Us
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-orange-600 transition">
+                Contact Us
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-orange-600 transition">
+                Return Policy
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-orange-600 transition">
+                Terms & Conditions
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-orange-600 transition">
+                Join Book Club
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-gray-200 my-8"></div>
+
+      {/* Bottom Section */}
+      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-sm text-gray-600 text-center md:text-left">
+          LaternaBooks. © {new Date().getFullYear()} All Rights Reserved
+        </p>
+
+        {/* Payment Icons */}
+        <div className="flex items-center gap-4 flex-wrap justify-center">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png"
+            alt="Mastercard"
+            className="h-5 object-contain"
+          />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
+            alt="Visa"
+            className="h-5 object-contain"
+          />
+          <img
+            src={verve}
+            alt="Verve"
+            className="h-5 object-contain"
+          />
+          <img
+            src={paystack}
+            alt="Paystack"
+            className="h-5 object-contain"
+          />
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

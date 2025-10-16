@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
   FaTwitter,
   FaFacebookF,
@@ -6,15 +6,29 @@ import {
   FaPinterestP,
   FaLinkedinIn,
   FaInstagram,
-} from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+} from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const Topbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) setIsLoggedIn(true);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <section className="bg-white/90 backdrop-blur-sm shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 flex flex-col md:flex-row items-center justify-between relative">
-
-        {/* Left Section: Social Icons */}
+        {/* Social Icons */}
         <div className="flex flex-wrap justify-center md:justify-start space-x-4 text-sm text-orange-500 mb-2 md:mb-0 z-10">
           <a href="#" className="hover:text-orange-600"><FaTwitter /></a>
           <a href="#" className="hover:text-orange-600"><FaFacebookF /></a>
@@ -24,15 +38,29 @@ const Topbar = () => {
           <a href="#" className="hover:text-orange-600"><FaInstagram /></a>
         </div>
 
-        {/* Right Section */}
+        {/* Auth Buttons */}
         <div className="relative z-10 flex space-x-4 text-white">
-          <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">REGISTER</button>
-          <Link to={'/login'}>
-          <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">LOG IN</button>
-          </Link>
+          {!isLoggedIn ? (
+            <>
+              <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">
+                REGISTER
+              </button>
+              <Link to="/login">
+                <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">
+                  LOG IN
+                </button>
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition"
+            >
+              LOG OUT
+            </button>
+          )}
         </div>
 
-        {/* Background Orange Slant - Hidden on small screens */}
         <div className="hidden md:block absolute top-0 right-0 w-1/2 h-full bg-orange-500 clip-path-slant z-0" />
       </div>
     </section>

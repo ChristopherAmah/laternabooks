@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
-import LaternaLogo from '../assets/laterna.png';
-import allinonall from '../assets/allinonall.jpeg';
-import egoistheenemy from '../assets/egoistheenemy.jpeg';
-import airpure from '../assets/airpure.jpeg';
-import firedearth from '../assets/firedearth.jpg';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FaTwitter,
   FaFacebookF,
@@ -18,10 +12,15 @@ import {
   FaShoppingCart,
   FaHeart,
 } from 'react-icons/fa';
-import dreamCount from '../assets/dreamcount.jpeg';
-import guitar from '../assets/guitar.jpg';
+
+// NOTE: Assuming this path is correct based on context
+import LaternaLogo from '../assets/laterna.png'; 
+import { useStore } from '../context/StoreContext'; 
 
 const Navbar = () => {
+  // Destructure state from the global store
+  const { cartCount, wishlistCount } = useStore(); 
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('/');
   const [mobileDropdown, setMobileDropdown] = useState(null);
@@ -29,130 +28,29 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-
-  // Cart drawer state
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems] = useState([
-    { id: 1, title: 'Dream Count', image: dreamCount, price: '₦5,000' },
-    { id: 2, title: 'Guitar', image: guitar, price: '₦15,000' },
-  ]); // mock data
-
-  // Updated navLinks
+  
   const navLinks = [
     { to: '/', label: 'HOME' },
-    // {
-    //   label: 'BOOKS',
-    //   dropdownContent: {
-    //     type: 'multi-column',
-    //     columns: [
-    //       {
-    //         title: 'Categories',
-    //         items: [
-    //           { label: 'AUDIO BOOKS', href: '/' },
-    //           { label: 'BIBLE REFERENCES', href: '/' },
-    //           { label: 'BIBLES', href: '/' },
-    //           { label: 'BUSINESS BOOKS', href: '/' },
-    //           { label: 'CHRISTIAN BOOKS', href: '/' },
-    //           { label: 'CHRISTIAN MOVIES', href: '/' },
-    //           { label: 'EDUCATIONAL BOOKS', href: '/' },
-    //           { label: 'JOURNALS', href: '/' },
-    //         ],
-    //       },
-    //       {
-    //         title: 'Best Selling Products',
-    //         items: [
-    //           { title: 'All in on all', image: allinonall, href: '/' },
-    //           { title: 'Ego is the enemy', image: egoistheenemy, href: '/' },
-    //         ],
-    //         type: 'image-list',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   label: 'LIFESTYLE',
-    //   dropdownContent: {
-    //     type: 'multi-column',
-    //     columns: [
-    //       {
-    //         title: 'Categories',
-    //         items: [
-    //           { label: 'CHRISTIAN MOVIES', href: '/' },
-    //           { label: 'FRAGRANCES', href: '/' },
-    //           { label: 'LIFE & STYLE', href: '/' },
-    //         ],
-    //       },
-    //       {
-    //         title: 'Best Selling Products',
-    //         items: [
-    //           { title: 'Air Pure', image: airpure, href: '/' },
-    //           { title: 'Fired Earth', image: firedearth, href: '/' },
-    //         ],
-    //         type: 'image-list',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   label: 'GIFT ITEMS',
-    //   dropdownContent: {
-    //     type: 'multi-column',
-    //     columns: [
-    //       {
-    //         title: 'Categories',
-    //         items: [
-    //           { label: 'CHRISTMAS DECORATIONS', href: '/' },
-    //           { label: 'EDUCATIONAL TOYS', href: '/' },
-    //           { label: 'GIFT ITEMS', href: '/' },
-    //           { label: 'GIFT WRAP', href: '/' },
-    //           { label: 'GREETING CARDS', href: '/' },
-    //           { label: 'PENCIL CASES', href: '/' },
-    //           { label: 'STATIONERY & OFFICE SUPPLIES', href: '/' },
-    //           { label: 'WALL DECOR', href: '/' },
-    //         ],
-    //       },
-    //       {
-    //         title: 'Best Selling Products',
-    //         items: [
-    //           { title: 'Confetti', image: guitar, href: '/' },
-    //           { title: 'Toy car', image: dreamCount, href: '/' },
-    //         ],
-    //         type: 'image-list',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   label: 'AUDIO-VISUALS',
-    //   dropdownContent: {
-    //     type: 'multi-column',
-    //     columns: [
-    //       {
-    //         title: 'Categories',
-    //         items: [
-    //           { label: 'BLUETOOTH DEVICE & ACCESSORIES', href: '/' },
-    //           { label: 'MOVIES', href: '/' },
-    //           { label: 'MESSAGES', href: '/' },
-    //           { label: 'MUSIC & VIDEOS', href: '/' },
-    //           { label: 'MUSICAL INSTRUMENTS', href: '/' },
-    //         ],
-    //       },
-    //       {
-    //         title: 'Best Selling Products',
-    //         items: [
-    //           { title: 'Guitar', image: guitar, href: '/' },
-    //           { title: 'Art of War (Audio)', image: dreamCount, href: '/' },
-    //         ],
-    //         type: 'image-list',
-    //       },
-    //     ],
-    //   },
-    // },
     { to: '/category', label: 'CATEGORIES' },
     { to: '/products', label: 'SHOP' },
-    { to: '/about', label: 'ABOUT' },
-    { to: '/contact', label: 'CONTACT' },
+    { to: '/aboutus', label: 'ABOUT' },
+    { to: '/contactus', 'label': 'CONTACT' },
   ];
+
+  // Helper to close the menu after navigation on mobile
+  const handleNavClick = (to) => {
+    setActiveLink(to);
+    setIsMenuOpen(false); // Close menu on click
+  };
+  
+  // Mobile search submit handler
+  const handleMobileSearch = () => {
+    if (searchQuery.trim()) {
+        navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+        setSearchQuery("");
+        setIsMenuOpen(false); // Close menu after searching
+    }
+  };
 
   return (
     <nav className="left-0 right-0 bg-white/90 backdrop-blur-sm z-50 sticky border-b border-gray-100 shadow-sm">
@@ -168,8 +66,11 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
+        {/* Mobile menu button (always visible below md) */}
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)} 
+          className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition"
+        >
           {isMenuOpen ? <HiX className="size-6" /> : <HiMenu className="size-6" />}
         </button>
 
@@ -194,275 +95,139 @@ const Navbar = () => {
                   {link.label}
                 </span>
               )}
-
-              {/* Multi-column Dropdown */}
-              {link.dropdownContent && link.dropdownContent.type === 'multi-column' && (
-                <div className="absolute left-0 top-full mt-0 bg-white shadow-lg rounded-md hidden group-hover:grid z-20 w-[800px] grid-cols-4 gap-4 p-6 border border-gray-100">
-                  {link.dropdownContent.columns.map((column, colIndex) => (
-                    <div key={colIndex}>
-                      <h4 className="font-bold text-gray-800 mb-3 border-b pb-2 border-gray-200">
-                        {column.title}
-                      </h4>
-                      {column.type === 'product-list' ? (
-                        <ul className="space-y-2 text-sm">
-                          {column.items.map((item, itemIndex) => (
-                            <li key={itemIndex} className="flex justify-between items-center text-gray-700">
-                              <Link to={item.href} className="hover:text-orange-600">
-                                {item.title}
-                              </Link>
-                              <span className="text-gray-500 line-through text-xs">{item.originalPrice}</span>
-                              <span className="text-orange-600 font-semibold">{item.salePrice}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : column.type === 'image-list' ? (
-                        <div className="space-y-3">
-                          {column.items.map((item, itemIndex) => (
-                            <Link
-                              key={itemIndex}
-                              to={item.href}
-                              className="flex items-center gap-2 hover:text-orange-600"
-                            >
-                              <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-16 h-auto object-cover rounded"
-                              />
-                              <span className="text-sm text-gray-700">{item.title}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      ) : (
-                        <ul className="space-y-2 text-sm">
-                          {column.items.map((item, itemIndex) => (
-                            <li key={itemIndex}>
-                              <Link
-                                to={item.href}
-                                className="block text-gray-700 hover:text-orange-600"
-                              >
-                                {item.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
 
-        {/* Get in touch buttons */}
+        {/* Action Icons (Desktop Only) */}
         <div className="hidden md:flex items-center space-x-3">
           {/* Search Button + Input */}
-          
-            <span
-              className="bg-orange-500 p-3 rounded-full text-white cursor-pointer"
-              onClick={() => setSearchOpen(!searchOpen)}
-            >
-              <FaSearch className="hover:text-orange-700" />
-            </span>
-
-            {searchOpen && (
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && searchQuery.trim()) {
-                    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-                    setSearchOpen(false);
-                    setSearchQuery("");
-                  }
-                }}
-                placeholder="Search products..."
-                className="absolute bg-white right-0 top-12 w-64 px-3 py-2 mt-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                autoFocus
-              />
-            )}
-          
-
-
-          {/* Cart with badge */}
           <span
-            className="bg-orange-500 p-3 rounded-full text-white relative cursor-pointer"
-            onClick={() => setCartOpen(true)}
+            className="bg-orange-500 p-3 rounded-full text-white cursor-pointer"
+            onClick={() => setSearchOpen(!searchOpen)}
           >
-            <FaShoppingCart className="hover:text-orange-700" />
-            {cartItems.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                {cartItems.length}
-              </span>
-            )}
+            <FaSearch className="hover:text-orange-700" />
           </span>
 
-          <span className="bg-orange-500 p-3 rounded-full text-white">
+          {searchOpen && (
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                }
+              }}
+              placeholder="Search products..."
+              className="absolute bg-white right-0 top-12 w-64 px-3 py-2 mt-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              autoFocus
+            />
+          )}
+
+          {/* Cart Link (Navigates to /cart) */}
+          <Link
+            to="/cart" 
+            className="bg-orange-500 p-3 rounded-full text-white relative cursor-pointer"
+          >
+            <FaShoppingCart className="hover:text-orange-700" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {cartCount} 
+              </span>
+            )}
+          </Link>
+
+          {/* Wishlist with dynamic badge */}
+          <span className="bg-orange-500 p-3 rounded-full text-white relative">
             <FaHeart className="cursor-pointer hover:text-orange-700" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {wishlistCount}
+              </span>
+            )}
           </span>
         </div>
       </div>
 
-      {/* Cart Drawer */}
-      <>
-        {/* Overlay */}
-        <div
-          className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
-            cartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-          onClick={() => setCartOpen(false)}
-        ></div>
-
-        {/* Drawer */}
-        <div
-          className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-50 p-5 flex flex-col transform transition-transform duration-300 ${
-            cartOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          {/* Header */}
-          <div className="flex justify-between items-center border-b pb-3 mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Your Cart</h2>
-            <button onClick={() => setCartOpen(false)}>
-              <HiX className="text-2xl text-gray-600 hover:text-red-600" />
-            </button>
-          </div>
-
-          {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto space-y-4">
-            {cartItems.length > 0 ? (
-              cartItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 border-b pb-3">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                  <div className="flex-1">
-                    <h4 className="text-sm font-semibold text-gray-800">
-                      {item.title}
-                    </h4>
-                    <p className="text-sm text-orange-600">{item.price}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 text-sm">Your cart is empty.</p>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="mt-4">
-            <button className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700">
-              Checkout
-            </button>
-          </div>
-        </div>
-      </>
-
-      {/* Mobile menu items */}
+      {/* Mobile menu items - This section displays when isMenuOpen is true on mobile */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 py-4">
-          <div className="container mx-auto px-4 space-y-3">
-            {navLinks.map((link, index) => (
-              <div key={index}>
-                {link.to ? (
-                  <Link
-                    to={link.to}
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      setActiveLink(link.to);
-                    }}
-                    className="w-full text-left text-sm font-medium text-gray-700 flex justify-between items-center py-2"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <button
-                    className="w-full text-left text-sm font-medium text-gray-700 flex justify-between items-center py-2"
-                    onClick={() =>
-                      link.dropdownContent && link.dropdownContent.type === 'multi-column'
-                        ? setMobileDropdown(mobileDropdown === link.label ? null : link.label)
-                        : null
-                    }
-                    aria-expanded={link.dropdownContent ? mobileDropdown === link.label : undefined}
-                    aria-controls={link.dropdownContent ? `dropdown-${index}` : undefined}
-                  >
-                    {link.label}
-                    {link.dropdownContent && (
-                      <span className="text-gray-500 text-xs">
-                        {mobileDropdown === link.label ? '▲' : '▼'}
-                      </span>
-                    )}
-                  </button>
-                )}
+        <div className="md:hidden bg-white border-t border-gray-100 py-4 px-4 sm:px-6 shadow-xl transition-all duration-300">
+            {/* Mobile Search Bar (Integrated) */}
+            <div className="flex items-center space-x-2 mb-4 p-2 bg-gray-100 rounded-lg">
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleMobileSearch()}
+                    placeholder="Search products..."
+                    className="flex-grow p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 border border-gray-200"
+                />
+                <button 
+                    onClick={handleMobileSearch}
+                    className="p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+                >
+                    <FaSearch size={16} />
+                </button>
+            </div>
+            
+            {/* Mobile Navigation Links */}
+            <div className="flex flex-col space-y-1 border-b border-gray-200 pb-3 mb-3">
+                {navLinks.map((link, index) => (
+                    <Link
+                        key={index}
+                        to={link.to}
+                        onClick={() => handleNavClick(link.to)}
+                        className={`block text-lg font-medium py-3 px-2 rounded-lg transition-colors ${
+                            activeLink === link.to
+                                ? 'bg-orange-100 text-orange-700'
+                                : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                        {link.label}
+                    </Link>
+                ))}
+            </div>
 
-                {/* Mobile Dropdown */}
-                {link.dropdownContent &&
-                  link.dropdownContent.type === 'multi-column' &&
-                  mobileDropdown === link.label && (
-                    <div id={`dropdown-${index}`} className="pl-4 border-l border-gray-200 ml-2">
-                      {link.dropdownContent.columns.map((column, colIndex) => (
-                        <div key={colIndex} className="mb-4 last:mb-0">
-                          <h5 className="font-bold text-gray-800 text-sm mb-2">{column.title}</h5>
-                          {column.type === 'product-list' ? (
-                            <ul className="space-y-1 text-xs">
-                              {column.items.map((item, itemIndex) => (
-                                <li key={itemIndex} className="flex justify-between items-center text-gray-700">
-                                  <Link
-                                    to={item.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="hover:text-orange-600"
-                                  >
-                                    {item.title}
-                                  </Link>
-                                  <span className="text-gray-500 line-through text-[10px]">
-                                    {item.originalPrice}
-                                  </span>
-                                  <span className="text-orange-600 font-semibold">{item.salePrice}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : column.type === 'image-list' ? (
-                            <div className="space-y-2">
-                              {column.items.map((item, itemIndex) => (
-                                <Link
-                                  key={itemIndex}
-                                  to={item.href}
-                                  onClick={() => setIsMenuOpen(false)}
-                                  className="flex items-center gap-2 hover:text-orange-600"
-                                >
-                                  <img
-                                    src={item.image}
-                                    alt={item.title}
-                                    className="w-12 h-auto object-cover rounded"
-                                  />
-                                  <span className="text-xs text-gray-700">{item.title}</span>
-                                </Link>
-                              ))}
-                            </div>
-                          ) : (
-                            <ul className="space-y-1 text-xs">
-                              {column.items.map((item, itemIndex) => (
-                                <li key={itemIndex}>
-                                  <Link
-                                    to={item.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="block text-gray-600 hover:text-orange-600"
-                                  >
-                                    {item.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-              </div>
-            ))}
-          </div>
+            {/* Mobile Action Icons (Cart and Wishlist) */}
+            <div className="flex justify-around pt-3">
+                {/* Cart Link */}
+                <Link
+                    to="/cart"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-5/12 justify-center relative shadow-lg"
+                >
+                    <FaShoppingCart size={20} />
+                    <span className="font-bold">Cart</span>
+                    {cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                            {cartCount} 
+                        </span>
+                    )}
+                </Link>
+
+                {/* Wishlist Link (Uses <span> since it's not a Link object) */}
+                <span className="flex items-center space-x-2 p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition w-5/12 justify-center relative shadow-lg">
+                    <FaHeart size={20} />
+                    <span className="font-bold">Wishlist</span>
+                    {wishlistCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                            {wishlistCount}
+                        </span>
+                    )}
+                </span>
+            </div>
+
+             {/* Social Icons (For full mobile experience) */}
+            <div className="flex justify-center space-x-6 mt-8 border-t pt-4">
+                <FaTwitter className="text-gray-500 hover:text-blue-400 cursor-pointer transition" size={20} />
+                <FaFacebookF className="text-gray-500 hover:text-blue-600 cursor-pointer transition" size={20} />
+                <FaInstagram className="text-gray-500 hover:text-pink-600 cursor-pointer transition" size={20} />
+                <FaLinkedinIn className="text-gray-500 hover:text-blue-800 cursor-pointer transition" size={20} />
+            </div>
+
         </div>
       )}
 

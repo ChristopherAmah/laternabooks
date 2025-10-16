@@ -87,7 +87,7 @@ const Hero = () => {
                 </motion.h1>
                 <motion.div variants={childVariants}>
                   <Link
-                    to="/shop"
+                    to="/category"
                     className="bg-orange-500 hover:bg-orange-600 text-white font-sans px-6 py-4 rounded-full shadow-lg transition inline-block"
                   >
                     Shop Categories

@@ -1,33 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import dreamCount from '../assets/dreamcount.jpeg'
-import guitar from '../assets/guitar.jpg'
-import perfume from '../assets/perfume.jpg'
-import bible from '../assets/bible.jpg'
-import business from '../assets/business.jpg'
+import dreamCount from '../assets/dreamcount.jpeg';
+import guitar from '../assets/guitar.jpg';
+import perfume from '../assets/perfume.jpg';
+import bible from '../assets/bible.jpg';
+import business from '../assets/business.jpg';
 import { Link } from "react-router-dom";
-import rashford from '../assets/rashford.jpeg'
-import bananas from '../assets/bananas.jpeg'
-import beyondorder from '../assets/beyondorder.jpeg'
-import egoistheenemy from '../assets/egoistheenemy.jpeg'
-import financialfreedom from '../assets/financialfreedom.jpeg'
-import jbl from '../assets/jbl.jpeg'
-import allinonall from '../assets/allinonall.jpeg'
-import change from '../assets/change.jpeg'
-import giveup from '../assets/giveup.jpeg'
-import tyranny from '../assets/tyranny.jpeg'
-
-const books = [
-    { title: "Vintage - The Art of Poster", image: dreamCount },
-    { title: "Lorem Ipsum", image: dreamCount },
-    { title: "Organization", image: dreamCount },
-    { title: "Recipes", image: dreamCount },
-    { title: "Vintage - The Art of Poster", image: dreamCount },
-    { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
-    { title: "Your Next!", image: dreamCount },
-    { title: "Opportunities", image: dreamCount },
-    { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
-    { title: "Bloodstorm - Heart of Vampire", image: dreamCount },
-];
+import rashford from '../assets/rashford.jpeg';
+import bananas from '../assets/bananas.jpeg';
+import beyondorder from '../assets/beyondorder.jpeg';
+import egoistheenemy from '../assets/egoistheenemy.jpeg';
+import financialfreedom from '../assets/financialfreedom.jpeg';
+import jbl from '../assets/jbl.jpeg';
+import allinonall from '../assets/allinonall.jpeg';
+import change from '../assets/change.jpeg';
+import giveup from '../assets/giveup.jpeg';
+import tyranny from '../assets/tyranny.jpeg';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const collection = [
   {
@@ -42,7 +30,7 @@ const collection = [
     description: 'Reframe your thoughts',
     oldPrice: '$300.00',
     price: '$250.00',
-    image:bananas,
+    image: bananas,
   },
   {
     title: 'Wealth Within',
@@ -59,45 +47,45 @@ const collection = [
     image: egoistheenemy,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'Financial Freedom',
+    description: 'Steps to wealth building',
+    oldPrice: '$400.00',
+    price: '$280.00',
     image: financialfreedom,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'JBL Audio',
+    description: 'Premium sound system',
+    oldPrice: '$600.00',
+    price: '$450.00',
     image: jbl,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'All in One',
+    description: 'Complete guide to success',
+    oldPrice: '$350.00',
+    price: '$270.00',
     image: allinonall,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'Change',
+    description: 'Transform your mindset',
+    oldPrice: '$200.00',
+    price: '$150.00',
     image: change,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'Never Give Up',
+    description: 'Motivation to keep going',
+    oldPrice: '$180.00',
+    price: '$140.00',
     image: giveup,
   },
   {
-    title: 'The Creative Spark',
-    description: 'Unlock your inner genius',
-    oldPrice: '$250.00',
-    price: '$200.00',
+    title: 'Tyranny of Habit',
+    description: 'Break old patterns',
+    oldPrice: '$220.00',
+    price: '$170.00',
     image: tyranny,
   },
 ];
@@ -141,7 +129,7 @@ const products = [
   },
 ];
 
-// Star Rating Component
+// ⭐ Star Rating Component
 const StarRating = ({ rating }) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {
@@ -159,318 +147,295 @@ const StarRating = ({ rating }) => {
   return <div className="flex">{stars}</div>;
 };
 
-// Product Card Component
-const ProductCard = ({ product }) => {
-    return (
-        <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
-            {product.onSale && (
-                <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
-                    Sale!
-                </span>
-            )}
-            <div className="w-full max-h-72 sm:max-h-80 md:max-h-96 rounded-md mb-3 border border-gray-200 shadow-sm bg-gray-100">
-              <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-full h-full object-contain transition duration-300 ease-in-out hover:brightness-90 hover:scale-105"
-                  onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                          'https://placehold.co/300x400/CCCCCC/000000?text=Image+Error';
-                  }}
-              />
-          </div>
-            <h3 className="text-sm sm:text-base font-semibold text-center text-gray-800 mb-1">
-                {product.title}
-            </h3>
-            <StarRating rating={product.rating} />
-            <div className="flex items-center mt-1 sm:mt-2">
-                {product.originalPrice && product.salePrice && (
-                    <span className="text-xs sm:text-sm text-gray-500 line-through mr-2">
-                        {product.originalPrice}
-                    </span>
-                )}
-                {product.salePrice && (
-                    <span className="text-sm sm:text-base text-orange-500 font-bold">
-                        {product.salePrice}
-                    </span>
-                )}
-                {!product.onSale && product.originalPrice && (
-                    <span className="text-sm sm:text-base text-orange-500 font-bold">
-                        {product.originalPrice}
-                    </span>
-                )}
-            </div>
-        </div>
-    );
-};
+// 🛍️ Product Card
+const ProductCard = ({ product }) => (
+  <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
+    {product.onSale && (
+      <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
+        Sale!
+      </span>
+    )}
+    <div className="w-full max-h-72 sm:max-h-80 md:max-h-96 rounded-md mb-3 border border-gray-200 shadow-sm bg-gray-100">
+      <img
+        src={product.image}
+        alt={product.title}
+        className="w-full h-full object-contain transition duration-300 ease-in-out hover:brightness-90 hover:scale-105"
+      />
+    </div>
+    <h3 className="text-sm sm:text-base font-semibold text-center text-gray-800 mb-1">
+      {product.title}
+    </h3>
+    <StarRating rating={product.rating} />
+    <div className="flex items-center mt-1 sm:mt-2">
+      {product.salePrice ? (
+        <>
+          <span className="text-xs sm:text-sm text-gray-500 line-through mr-2">
+            {product.originalPrice}
+          </span>
+          <span className="text-sm sm:text-base text-orange-500 font-bold">
+            {product.salePrice}
+          </span>
+        </>
+      ) : (
+        <span className="text-sm sm:text-base text-orange-500 font-bold">
+          {product.originalPrice}
+        </span>
+      )}
+    </div>
+  </div>
+);
 
 const NewsSection = () => {
- const [activeIndex, setActiveIndex] = useState(null);
- const [categories, setCategories] = useState([]);
- const [catsLoading, setCatsLoading] = useState(false);
- const [catsError, setCatsError] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const scrollRef = React.useRef(null);
 
- useEffect(() => {
-   const fetchCategories = async () => {
-     setCatsLoading(true);
-     setCatsError(null);
-     try {
-       const res = await fetch("http://41.78.157.87:32771/api/v1/categories");
-       const data = await res.json();
+  const handleBookClick = (index) => {
+    setActiveIndex(prevIndex => (prevIndex === index ? null : index));
+  };
 
-       // Handle various possible shapes from backend:
-       // - { categories: [...] }
-       // - { data: [...] }
-       // - [...] (array directly)
-       // - { results: [...] }
-       let cats = [];
-       if (Array.isArray(data)) {
-         cats = data;
-       } else if (Array.isArray(data.categories)) {
-         cats = data.categories;
-       } else if (Array.isArray(data.data)) {
-         cats = data.data;
-       } else if (Array.isArray(data.results)) {
-         cats = data.results;
-       } else {
-         // if the API returned a single object or empty, fall back to empty array
-         cats = [];
-       }
+    const scrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+  };
 
-       // Normalize each category to have id, name, link, image_url (if possible)
-       const normalized = cats.map((c, i) => ({
-         id: c.id ?? c.category_id ?? i,
-         name: c.name ?? c.label ?? c.title ?? `Category ${i + 1}`,
-         link: c.link ?? `/shop/${c.id ?? i}`,
-         image_url: c.image_url ?? c.image ?? c.icon_url ?? null,
-         raw: c,
-       }));
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  };
 
-       // fallback: if no categories found, keep empty and let UI show default cats
-       setCategories(normalized);
-     } catch (error) {
-       console.error("Error fetching categories:", error);
-       setCatsError("Failed to load categories");
-       setCategories([]); // ensure it's an array
-     } finally {
-       setCatsLoading(false);
-     }
-   };
-   fetchCategories();
- }, []);
+  return (
+    <section className="md:px-4 md:shadow-lg">
+      <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg">
 
- const handleBookClick = (index) => {
-   setActiveIndex(prevIndex => (prevIndex === index ? null : index));
- };
+        {/* 🆕 Latest Products Section */}
+        <div className="py-16 bg-gray-50 relative">
+          {/* Section Title */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-semibold text-gray-700">Latest Products</h2>
+            <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
+          </div>
 
- // Fallback static categories (used if API returns no categories)
- const fallbackCats = [
-   { id: 'books', name: 'BOOKS', color: 'bg-orange-500', link: '/' },
-   { id: 'lifestyle', name: 'LIFESTYLE', color: 'bg-gray-500', link: '/' },
-   { id: 'gifts', name: 'GIFT ITEMS', color: 'bg-orange-500', link: '/' },
-   { id: 'audio', name: 'AUDIO-VISUALS', color: 'bg-gray-500', link: '/' },
-   { id: 'shop', name: 'SHOP', color: 'bg-orange-500', link: '/' },
- ];
-
- // choose categories to render: API ones (if available) else fallback
- const catsToRender = categories.length > 0 ? categories : fallbackCats;
-
- return (
-    <section className="md:px-4 md:shadow-lg">   
-        <div className="sm:px-6 md:px-4">
-            <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg ">
-                {/* Categories (updated) */}
-                {/* Categories */}
-<div className="overflow-x-auto bg-white shadow-lg scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-transparent">
-  <div className="flex space-x-6 px-4 py-6 min-w-max items-center">
-    {catsLoading ? (
-      Array.from({ length: 6 }).map((_, idx) => (
-        <div key={idx} className="w-36 h-24 rounded-md bg-gray-100 animate-pulse" />
-      ))
-    ) : (
-      catsToRender.map((cat, idx) => (
-        <Link
-          key={cat.id ?? idx}
-          to={cat.link || "/"}
-          className="flex flex-col items-center justify-center px-6 py-4 rounded-md text-center min-w-[120px] hover:bg-orange-50 transition"
-        >
-          {cat.image_url ? (
-            <div className="w-14 h-14 mb-2 rounded-full overflow-hidden bg-gray-100 shadow-sm">
-              <img
-                src={cat.image_url}
-                alt={cat.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'https://placehold.co/80x80/CCCCCC/000000?text=?';
-                }}
-              />
-            </div>
-          ) : (
-            <div
-              className="w-14 h-14 mb-2 rounded-full flex items-center justify-center text-white font-bold shadow-sm"
-              style={{ backgroundColor: "#F97316" }}
+          {/* Horizontal Scroll Container */}
+          <div className="relative group">
+            {/* Scroll Buttons */}
+            <button
+              onClick={scrollLeft}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-orange-50 text-orange-500 hidden md:group-hover:flex z-10"
             >
-              {String(cat.name || "C").charAt(0).toUpperCase()}
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-orange-50 text-orange-500 hidden md:group-hover:flex z-10"
+            >
+              <ChevronRight size={22} />
+            </button>
+
+            {/* Scrollable Row */}
+            <div
+              ref={scrollRef}
+              className="overflow-x-auto scroll-smooth px-6 scrollbar-thin scrollbar-thumb-orange-400 scrollbar-track-gray-100"
+            >
+              <div className="flex space-x-6 md:space-x-8 w-max pb-4">
+                {/* Product 1 */}
+                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
+                    alt="Atomic Habits"
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="text-gray-800 font-semibold text-sm">Atomic Habits</h3>
+                  <p className="text-gray-500 text-xs">James Clear</p>
+                  <span className="text-orange-500 text-sm font-bold mt-1 block">₦10,000</span>
+                </div>
+
+                {/* Product 2 */}
+                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"
+                    alt="The Purpose Driven Life"
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="text-gray-800 font-semibold text-sm">
+                    The Purpose Driven Life
+                  </h3>
+                  <p className="text-gray-500 text-xs">Rick Warren</p>
+                  <span className="text-orange-500 text-sm font-bold mt-1 block">₦24,000</span>
+                </div>
+
+                {/* Product 3 */}
+                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1589998059171-988d887df646"
+                    alt="Creative Journal Set"
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="text-gray-800 font-semibold text-sm">Creative Journal Set</h3>
+                  <p className="text-gray-500 text-xs">Stationery Pack</p>
+                  <span className="text-orange-500 text-sm font-bold mt-1 block">₦8,900</span>
+                </div>
+
+                {/* Product 4 */}
+                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1581090700227-1e37b190418e"
+                    alt="Wireless Earbuds"
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="text-gray-800 font-semibold text-sm">Wireless Earbuds</h3>
+                  <p className="text-gray-500 text-xs">Tech Accessory</p>
+                  <span className="text-orange-500 text-sm font-bold mt-1 block">₦22,000</span>
+                </div>
+
+                {/* Product 5 */}
+                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"
+                    alt="Reading Lamp"
+                    className="w-full h-48 object-cover rounded-lg mb-3"
+                  />
+                  <h3 className="text-gray-800 font-semibold text-sm">Reading Lamp</h3>
+                  <p className="text-gray-500 text-xs">Home & Lifestyle</p>
+                  <span className="text-orange-500 text-sm font-bold mt-1 block">₦15,500</span>
+                </div>
+              </div>
             </div>
-          )}
-          <p className="font-semibold text-sm text-gray-700">{cat.name}</p>
-        </Link>
-      ))
-    )}
+          </div>
+        </div>
+
+
+
+        {/* 📚 Book Collection */}
+<div className="flex flex-col items-center justify-center py-16 px-6 bg-gradient-to-b from-[#FFF8F5] to-[#FFF3EC]">
+  {/* Section Title */}
+  <h2 className="text-3xl font-bold text-gray-800 tracking-wide">
+    Best Sellers
+  </h2>
+  <div className="w-20 border-t-4 border-orange-400 mx-auto mt-3"></div>
+  <p className="text-gray-600 text-center mt-2">
+    Discover the top-rated books and products users can’t get enough of
+  </p>
+
+  {/* Book Grid */}
+  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-10 mt-12 w-full max-w-7xl">
+    {collection.map((book, index) => (
+      <div
+        key={index}
+        className="relative bg-white shadow-md hover:shadow-2xl rounded-2xl overflow-hidden group transition-all duration-300 hover:-translate-y-2"
+        onClick={() => handleBookClick(index)}
+      >
+        {/* 🔥 Bestseller Badge */}
+        <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md z-10">
+          🔥 Bestseller
+        </div>
+
+        {/* Image */}
+        <div className="w-full h-64 bg-gray-50 flex items-center justify-center overflow-hidden">
+          <img
+            src={book.image}
+            alt={book.title}
+            className="w-full h-full object-contain p-4 transform group-hover:scale-105 transition duration-500"
+          />
+        </div>
+
+        {/* Info Section */}
+        <div className="p-4 flex flex-col items-center">
+          <a
+            href="#"
+            className="text-lg font-semibold text-gray-800 text-center hover:text-orange-500 transition"
+          >
+            {book.title}
+          </a>
+          <p className="text-sm text-gray-500 text-center mt-1 line-clamp-2">
+            {book.description}
+          </p>
+
+          <div className="flex items-center gap-2 mt-3">
+            {book.oldPrice && (
+              <p className="text-sm text-gray-400 line-through">
+                {book.oldPrice}
+              </p>
+            )}
+            <p className="text-lg font-bold text-orange-500">{book.price}</p>
+          </div>
+
+          <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-5 rounded-lg shadow transition">
+            Add to Cart
+          </button>
+        </div>
+
+        {/* Hover Overlay (optional detail layer) */}
+        <div
+          className={`absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center transition-opacity duration-300 ${
+            activeIndex === index ? "opacity-100" : "opacity-0"
+          } lg:group-hover:opacity-100`}
+        >
+          <h3 className="text-lg font-bold text-gray-800 mb-1">
+            {book.title}
+          </h3>
+          <p className="text-sm text-gray-600 mb-3 line-clamp-3">{book.description}</p>
+          <p className="text-orange-500 font-bold text-xl mb-3">{book.price}</p>
+          <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    ))}
   </div>
 </div>
 
-{/* Custom thin scrollbar */}
-<style>
-  {`
-    .scrollbar-thin::-webkit-scrollbar {
-      height: 4px;
-    }
-    .scrollbar-thin::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-      background-color: #f97316; /* Tailwind orange-500 */
-      border-radius: 4px;
-    }
-    .scrollbar-thin {
-      scrollbar-color: #f97316 transparent; /* Firefox support */
-      scrollbar-width: thin;
-    }
-  `}
-</style>
 
 
-                {/* Latest News */} 
-                <div className="py-8">
-                    <h2 className="text-center text-2xl font-semibold text-gray-700">
-                        Latest News
-                    </h2>
-                    <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
+        {/* 🌟 Featured Products */}
+<div className="min-h-screen py-16 px-6 bg-gradient-to-b from-white to-orange-50">
+  <header className="text-center mb-14">
+    <h2 className="text-3xl font-bold text-gray-800 mb-3">Special Deals</h2>
+    <div className="w-20 border-t-4 border-orange-400 mx-auto mb-4"></div>
+    <p className="text-gray-500">Grab these limited-time offers before they’re gone!</p>
+  </header>
 
-                    <div className="flex flex-col md:flex-row justify-center items-center md:gap-8 gap-8">
-                        <div className="relative flex justify-center items-center min-64 md:w-1/2">
-                            <img
-                                src={rashford}
-                                alt="New Book Sales"
-                                className="w-64 h-auto justify-center items-center"
-                            />
-                            <div className="absolute bottom-4 left-1/3 w-64 bg-black/80 text-white px-4 py-4">
-                                <h3 className="text-lg font-semibold uppercase">New Book Sales</h3>
-                                <p className="text-sm">Get new books for half of the price</p>
-                            </div>
-                        </div>
-
-                        <div className="md:w-1/2 w-full flex flex-col gap-6 p-2">
-                        {[
-                            {
-                            date: ['Jul', '19'],
-                            title: 'The Art of the Short Story',
-                            meta: 'Design / Fiction / Marketing / Photography',
-                            excerpt:
-                                'ac pretium tellus erat at sapien. Duis vitae vehicula libero...',
-                            },
-                            {
-                            date: ['Mar', '31'],
-                            title: 'Novels that sharpen your mind',
-                            meta: 'Design / Fiction / Marketing / Photography',
-                            excerpt:
-                                'Nulla eleifend vel risus eget . Praesent sed tortor...',
-                            },
-                            {
-                            date: ['Mar', '31'],
-                            title: 'Collection of Poems',
-                            meta: 'Design / Fiction / Marketing',
-                            excerpt:
-                                'Nulla eleifend vel risus eget ultricies. Praesent sed tortor...',
-                            },
-                        ].map((news, idx) => (
-                            <div key={idx} className="flex gap-4">
-                            <div className="min-w-[60px] bg-orange-600 text-white rounded-md px-3 py-2 text-center font-bold">
-                                <p className="text-sm">{news.date[0]}</p>
-                                <p className="text-lg leading-tight">{news.date[1]}</p>
-                            </div>
-                            <div>
-                                <h4 className="text-gray-800 font-semibold text-base sm:text-lg">{news.title}</h4>
-                                <p className="text-sm text-gray-500">{news.meta}</p>
-                                <p className="text-sm text-gray-600 mt-1">{news.excerpt}</p>
-                            </div>
-                            </div>
-                        ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Book Collection */}
-            <div
-              className="flex flex-col items-center justify-center py-6 px-6"
-              style={{ backgroundColor: "#FEEFE9" }}
-            >
-              <h2 className="text-2xl font-semibold text-gray-700">Book Collection</h2>
-              <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-6">
-                {collection.map((book, index) => (
-                  <div
-                    key={index}
-                    className="relative shadow-lg rounded overflow-hidden group cursor-pointer"
-                    onClick={() => handleBookClick(index)}
-                  >
-                    <div className="w-full h-60 overflow-hidden">
-                      <img
-                        src={book.image}
-                        alt={book.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-
-                    <div
-                      className={`
-                        absolute inset-0 bg-white/90 flex flex-col items-center justify-center p-4
-                        transition-opacity duration-300 ease-in-out
-                        ${activeIndex === index ? "opacity-100" : "opacity-0"}
-                        lg:group-hover:opacity-100
-                      `}
-                    >
-                      <a
-                        href="#"
-                        className="text-lg font-bold text-gray-800 hover:text-orange-500 text-center"
-                      >
-                        {book.title}
-                      </a>
-                      <p className="text-lg font-semibold text-gray-800 text-center">
-                        {book.description}
-                      </p>
-                      <p className="text-sm text-gray-600 line-through mt-2">
-                        {book.oldPrice}
-                      </p>
-                      <p className="text-xl font-bold text-orange-500">{book.price}</p>
-                      <button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-                        Add to cart
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Featured Products */}
-            <div className="min-h-screen p-8 bg-white">
-                <header className="text-center mb-12">
-                    <h2 className="text-2xl font-semibold text-gray-700 mb-2">Featured Products</h2>
-                    <div className="w-16 border-t-2 border-orange-300 mx-auto my-3"></div>
-                </header>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                    {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                    ))}
-                </div>
-            </div>           
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 max-w-7xl mx-auto">
+    {products.map((product) => (
+      <div
+        key={product.id}
+        className="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300"
+      >
+        <div className="w-full h-56 bg-gray-100 flex items-center justify-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-contain p-4"
+          />
         </div>
+
+        <div className="p-4 text-center">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            {product.name}
+          </h3>
+          <p className="text-gray-500 text-sm mb-3">{product.category}</p>
+          <p className="text-orange-600 font-bold text-lg">₦ 2,000{product.price}</p>
+        </div>
+
+        <div className="px-4 pb-4 text-center">
+          <button className="w-full bg-orange-500 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition">
+            View Product
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* ➡️ Link to All Products */}
+  <div className="text-center mt-14">
+    <Link
+      to="/category"
+      className="inline-flex items-center text-orange-600 font-semibold hover:text-orange-700 transition"
+    >
+      View All Categories
+      <span className="ml-2 text-xl">→</span>
+    </Link>
+  </div>
+</div>
+
+      </div>
     </section>
   );
 };

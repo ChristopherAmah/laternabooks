@@ -1,70 +1,46 @@
-import React, { useState } from "react";
-
-const tabs = [
-  { id: 1, label: "LATEST BOOKS" },
-  { id: 2, label: "BEST SELLING BOOKS" },
-];
+import React from "react";
 
 const cards = [
   {
-    image: "https://images.unsplash.com/photo-1464983953574-0892a716854b", // Replace with your actual image
-    title: "The Art Of The Short Story",
-    desc: "ac pretium tellus erat at sapien. Duis vitae vehicula libero. Vivamus vitae scelerisque ante. Etiam facilisis iaculis rutrum. Quisque id volutpat...",
+    image:
+      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80",
+    title: "Adult Book Clubs",
+    desc: "Join a group that explores literature, devotionals, and faith-based discussions every Sunday.",
   },
   {
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794", // Replace with your actual image
-    title: "Nouels That Sharpen Your Mind",
-    desc: "Nulla eleifend vel risus eget ultricies. Praesent sed tortor sem. Vestibulum elementum;",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794", // Replace with your actual image
-    title: "Boost Your Creatvie Process",
-    desc: "Nulla eleifend vel risus eget ultricies. Praesent sed tortor sem. Vestibulum elementum;",
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    title: "Children Book Clubs",
+    desc: "Dive into imaginative worlds and discuss your favorite fiction with like-minded readers every weekend.",
   },
 ];
 
 function BlogSection() {
-  const [selectedTab, setSelectedTab] = useState(1);
-
   return (
-    <div className="bg-white">
-      <h2 className="text-2xl font-semibold text-center mb-6">
-        Latest From Our Blog
-      </h2>
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setSelectedTab(tab.id)}
-            className={`px-4 py-2 text-gray-700 font-semibold focus:outline-none transition
-              ${
-                selectedTab === tab.id
-                  ? "border-b-2 border-orange-500 text-black"
-                  : "text-gray-600"
-              }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col md:flex-row justify-center items-center gap-6 px-4">
+    <div className="bg-white py-12 px-4">
+      <h2 className="text-2xl text-center font-semibold text-gray-700">Book Clubs</h2>
+          <div className="w-16 border-t-2 border-orange-300 mx-auto mb-5 my-3"></div>
+
+      <div className="flex flex-col md:flex-row justify-center items-center gap-8">
         {cards.map((card, idx) => (
           <div
             key={idx}
-            className="bg-white border-none shadow rounded-md max-w-xs w-full flex flex-col hover:shadow-lg transition duration-300"
+            className="bg-white border border-gray-100 shadow-sm rounded-lg max-w-sm w-full flex flex-col hover:shadow-lg transition duration-300"
           >
             <div className="overflow-hidden">
-                <img
-              src={card.image}
-              alt={card.title}
-              className="h-48 w-full object-cover rounded-t-md transition-transform duration-300 hover:scale-110"
-            />
+              <img
+                src={card.image}
+                alt={card.title}
+                className="h-56 w-full object-cover rounded-t-lg transition-transform duration-300 hover:scale-110"
+              />
             </div>
             <div className="p-6 flex flex-col justify-between flex-1">
-              <h3 className="text-lg font-semibold mb-3">{card.title}</h3>
+              <h3 className="text-lg font-semibold text-orange-500 mb-3">
+                {card.title}
+              </h3>
               <p className="text-gray-600 text-sm mb-6">{card.desc}</p>
               <button className="mt-auto bg-orange-500 text-white px-5 py-2 rounded transition hover:bg-orange-600">
-                Read more
+                Join Our Book Club
               </button>
             </div>
           </div>
