@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Routes, Route, useLocation } from 'react-router-dom' // Import useLocation
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import Categories from './pages/Categories'
 import Products from './pages/Shop'
 import Navbar from './components/Navbar'
@@ -23,7 +24,7 @@ function App() {
 
   // 2. Define the path where the layout should be hidden
   // You can add more paths here if needed (e.g., '/register', '/forgot-password')
-  const hideLayout = location.pathname === '/login';
+  const hideLayout = location.pathname === '/login'|| location.pathname === '/register';
 
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
@@ -38,6 +39,7 @@ function App() {
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/category" element={<Categories />} />
           <Route path="/categories/:id" element={<SubCategories />} />
           <Route path="/categories" element={<CategoriesPage />} />

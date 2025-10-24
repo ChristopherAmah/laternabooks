@@ -18,11 +18,33 @@ const Topbar = () => {
     if (user) setIsLoggedIn(true);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    navigate("/");
-    window.location.reload();
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token"); // assuming you stored JWT token on login
+
+    try {
+      const response = await fetch("http://41.78.157.87:32771/api/v1/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // send auth token
+        },
+      });
+
+      if (response.ok) {
+        // logout success
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        navigate("/");
+        window.location.reload();
+      } else {
+        console.error("Logout failed:", await response.text());
+        alert("Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+      alert("Network error. Please check your connection.");
+    }
   };
 
   return (
@@ -42,9 +64,12 @@ const Topbar = () => {
         <div className="relative z-10 flex space-x-4 text-white">
           {!isLoggedIn ? (
             <>
-              <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">
-                REGISTER
-              </button>
+              <Link to="/register">
+                <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">
+                  REGISTER
+                </button>
+              </Link>
+
               <Link to="/login">
                 <button className="py-1 px-3 bg-orange-500 rounded hover:bg-orange-600 transition">
                   LOG IN

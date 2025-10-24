@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import laterna from '../assets/laterna.png'
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [login, setLogin] = useState("");
@@ -112,9 +113,12 @@ const Login = () => {
         
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account? 
-          <a href="#" className="ml-1 font-medium text-orange-600 hover:text-orange-500">
-            Sign Up
+          <Link to="/register">
+            <a href="#" className="ml-1 font-medium text-orange-600 hover:text-orange-500">
+            Register
           </a>
+          </Link>
+          
         </p>
       </form>
     </div>

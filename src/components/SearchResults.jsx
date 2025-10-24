@@ -1,7 +1,7 @@
 // src/pages/SearchResults.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { FiHeart, FiShoppingCart, FiEye } from "react-icons/fi"; // icons for actions
+import { FiHeart, FiShoppingCart } from "react-icons/fi";
 
 const SearchResults = () => {
   const [products, setProducts] = useState([]);
@@ -17,72 +17,92 @@ const SearchResults = () => {
     }
   }, [query]);
 
-  // Dummy handlers (replace with your cart/wishlist logic)
   const handleAddToCart = (product) => {
     console.log("Added to cart:", product);
-    // TODO: integrate with CartContext or backend
   };
 
   const handleAddToWishlist = (product) => {
     console.log("Added to wishlist:", product);
-    // TODO: integrate with WishlistContext or backend
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">
-        Search results for: <span className="text-orange-600">{query}</span>
-      </h1>
+    <div className="min-h-screen bg-gray-50 py-12 px-6 md:px-12 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800">
+          Search results for:{" "}
+          <span className="text-orange-600">{query}</span>
+        </h1>
 
-      {products.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="border p-4 rounded-lg shadow hover:shadow-lg transition bg-white flex flex-col"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-40 object-cover mb-3 rounded"
-              />
-              <h2 className="font-semibold text-gray-800">{product.name}</h2>
-              <p className="text-orange-600 font-bold mb-3">
-                ₦{product.price}
-              </p>
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="group bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col"
+              >
+                {/* Product Image + Wishlist Button */}
+                <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
 
-              {/* Action buttons */}
-              <div className="flex justify-between items-center mt-auto space-x-2">
-                {/* View Details */}
-                <Link
-                  to={`/products/${product.id}`}
-                  className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
-                >
-                  <FiEye /> Details
-                </Link>
+                  {/* Wishlist button */}
+                  <button
+                    onClick={() => handleAddToWishlist(product)}
+                    className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-pink-50 transition"
+                  >
+                    <FiHeart
+                      size={18}
+                      className="text-pink-600 hover:text-pink-700"
+                    />
+                  </button>
+                </div>
 
-                {/* Add to Wishlist */}
-                <button
-                  onClick={() => handleAddToWishlist(product)}
-                  className="flex items-center gap-1 text-sm text-pink-600 hover:underline"
-                >
-                  <FiHeart /> Wishlist
-                </button>
+                {/* Product Details */}
+                <div className="flex flex-col flex-grow p-4">
+                  <h2 className="font-semibold text-gray-800 text-sm md:text-base mb-1 line-clamp-2">
+                    {product.name}
+                  </h2>
+                  <p className="text-orange-600 font-bold mb-3">
+                    ₦{product.price}
+                  </p>
 
-                {/* Add to Cart */}
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="flex items-center gap-1 text-sm text-green-600 hover:underline"
-                >
-                  <FiShoppingCart /> Cart
-                </button>
+                  {/* Action buttons */}
+                  <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100 text-sm text-gray-600">
+                    <Link
+                      to={`/products/${product.id}`}
+                      className="hover:text-orange-600 transition font-medium"
+                    >
+                      Details
+                    </Link>
+
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="flex items-center gap-1 hover:text-green-600 transition"
+                    >
+                      <FiShoppingCart size={16} /> Add
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-gray-600">No products found.</p>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24">
+            <img
+              src="/no-results.svg"
+              alt="No results"
+              className="w-48 mb-6 opacity-80"
+            />
+            <p className="text-gray-600 text-lg">
+              No products found for{" "}
+              <span className="text-orange-600 font-medium">"{query}"</span>.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
