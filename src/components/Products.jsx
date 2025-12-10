@@ -1,34 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import placeholderImg from "../assets/guitar.jpg";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 
+const API_BASE_URL = "http://41.78.157.87:32771";
+
 const Products = () => {
   const { addToCart, addToWishlist } = useStore();
 
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
+  const [products, setProducts] = useState([]); // Base list of products
+  // Removed filteredProducts state, as it will be derived.
   const [loading, setLoading] = useState(false);
 
-  // Filters
   const [search, setSearch] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 100000]);
   const [inStock, setInStock] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [searchActive, setSearchActive] = useState(false);
+  const [stockActive, setStockActive] = useState(false);
 
-  // Fetch Categories
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // --- Category Fetch ---
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://41.78.157.87:32771/api/v1/categories");
+        const res = await fetch(`${API_BASE_URL}/api/v1/categories`);
         const data = await res.json();
-        if (data.categories) {
-          setCategories(data.categories);
-        }
+        if (data.categories) setCategories(data.categories);
       } catch (err) {
         console.error("Error fetching categories:", err);
       }
@@ -36,74 +38,78 @@ const Products = () => {
     fetchCategories();
   }, []);
 
-  // Fetch Products
+  // --- Product Fetch ---
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
+      
+      // Note: You had a 'http://localhost:3001' URL used when a category was selected.
+      // I am assuming the category endpoint should also point to your API_BASE_URL (41.78...)
+      // I've kept the original URL structure for now but you may need to adjust the category URL.
+      let apiUrl = selectedCategoryId
+        ? `http://localhost:3001/api/category?category_id=${selectedCategoryId}&page=${page}`
+        : `${API_BASE_URL}/api/v2/products?page=${page}`;
+
       try {
-        const categoryQuery =
-          selectedCategories.length > 0
-            ? `&category=${selectedCategories.join(",")}`
-            : "";
-
-        const res = await fetch(
-          `http://41.78.157.87:32771/api/v1/products?page=${page}${categoryQuery}`
-        );
+        const res = await fetch(apiUrl);
         const data = await res.json();
-        const prods = data.products || [];
 
-        const structuredProds = prods.map((p) => ({
+        // Ensure data.products exists and is an array before mapping
+        const rawProducts = data.products || [];
+
+        const structured = rawProducts.map((p) => ({
           id: p.id,
           name: p.name || "Unknown Product",
           price: p.price || 0,
           image_url: p.image_url || placeholderImg,
-          description: p.description || "",
-          stock: p.stock || 0,
+          description: p.description || "No description",
+          // Use a reasonable stock check
+          inStock: p.stock > 0 || p.in_stock === true, 
         }));
 
-        setProducts(structuredProds);
-        setPages(data.pages || 1);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+        setProducts(structured); // Set the base list of products
+        if (data.pages) setTotalPages(data.pages);
+      } catch (err) {
+        console.error("Error fetching products:", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProducts();
-  }, [page, selectedCategories]);
+  }, [selectedCategoryId, page]);
 
-  // Filtering Logic
-  useEffect(() => {
-    let filtered = [...products];
 
-    if (search) {
-      filtered = filtered.filter((p) =>
+  // --- Filtering Logic (Derived State) ---
+  // Use useMemo to calculate the filtered list only when dependencies change, 
+  // preventing the infinite loop and optimizing performance.
+  const derivedFilteredProducts = useMemo(() => {
+    let filteredList = products; // Start with the fetched products
+
+    // 1. Apply Search Filter
+    if (searchActive && search) {
+      filteredList = filteredList.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    filtered = filtered.filter(
-      (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
-    );
-
-    if (inStock) {
-      filtered = filtered.filter((p) => p.stock > 0);
+    // 2. Apply Stock Filter
+    if (stockActive && inStock) {
+      filteredList = filteredList.filter((p) => p.inStock);
     }
 
-    setFilteredProducts(filtered);
-  }, [products, search, priceRange, inStock]);
+    return filteredList;
+  }, [search, searchActive, inStock, stockActive, products]); // Dependencies: only the filters and the base list
 
+  
   const toggleCategory = (cat) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat)
-        ? prev.filter((c) => c !== cat)
-        : [...prev, cat]
-    );
+    setSelectedCategoryId(selectedCategoryId === cat.id ? null : cat.id);
+    setPage(1);
   };
+  
+  // Use derivedFilteredProducts for rendering
+  const productsToDisplay = derivedFilteredProducts;
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= pages) setPage(newPage);
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -112,27 +118,24 @@ const Products = () => {
       </h1>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Sidebar Filters */}
+        {/* Sidebar */}
         <div className="bg-white p-5 rounded-xl shadow-md w-full md:w-1/4 space-y-6">
-          {/* Category Filter */}
+          {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Category</h3>
             {categories.length === 0 ? (
               <p className="text-gray-400 text-sm">Loading categories...</p>
             ) : (
               categories.map((cat) => (
-                <div key={cat.id || cat.name} className="flex items-center">
+                <div key={cat.id} className="flex items-center">
                   <input
                     type="checkbox"
                     id={cat.name}
-                    checked={selectedCategories.includes(cat.name)}
-                    onChange={() => toggleCategory(cat.name)}
+                    checked={selectedCategoryId === cat.id}
+                    onChange={() => toggleCategory(cat)}
                     className="rounded text-orange-600 focus:ring-orange-500"
                   />
-                  <label
-                    htmlFor={cat.name}
-                    className="ml-2 text-sm text-gray-600"
-                  >
+                  <label htmlFor={cat.name} className="ml-2 text-sm text-gray-600">
                     {cat.name}
                   </label>
                 </div>
@@ -147,12 +150,15 @@ const Products = () => {
               type="text"
               placeholder="Search by name..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setSearchActive(true);
+              }}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500"
             />
           </div>
 
-          {/* In Stock */}
+          {/* Stock filter */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Status</h3>
             <div className="flex items-center">
@@ -160,7 +166,10 @@ const Products = () => {
                 type="checkbox"
                 id="inStock"
                 checked={inStock}
-                onChange={(e) => setInStock(e.target.checked)}
+                onChange={(e) => {
+                  setInStock(e.target.checked);
+                  setStockActive(true);
+                }}
                 className="rounded text-orange-600 focus:ring-orange-500"
               />
               <label htmlFor="inStock" className="ml-2 text-sm text-gray-600">
@@ -174,90 +183,84 @@ const Products = () => {
         <div className="w-full md:w-3/4">
           {loading ? (
             <p className="text-center text-gray-500">Loading...</p>
-          ) : filteredProducts.length === 0 ? (
-            <p className="text-center text-gray-500">
-              No products found matching filters.
-            </p>
+          ) : productsToDisplay.length === 0 ? (
+            <p className="text-center text-gray-500">No products found matching filters.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 transition-all duration-300">
-              {filteredProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col overflow-hidden"
-                >
-                  {/* Image + Wishlist */}
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={product.image_url || placeholderImg}
-                      alt={product.name}
-                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
-                      onError={(e) => (e.target.src = placeholderImg)}
-                    />
-                    <button
-                      onClick={() => addToWishlist(product)}
-                      className="absolute top-2 right-2 p-2 bg-white bg-opacity-75 rounded-full shadow-md text-gray-400 hover:text-red-500 hover:bg-opacity-100 transition-all duration-300 z-10"
-                      title="Add to Wishlist"
-                    >
-                      <FaHeart size={18} />
-                    </button>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="p-4 flex-1 flex flex-col">
-                    <h2 className="text-md font-semibold text-gray-800 line-clamp-2">
-                      {product.name}
-                    </h2>
-                    <p className="text-sm text-gray-500 flex-1 line-clamp-3 mt-1">
-                      {product.description || "No description"}
-                    </p>
-
-                    {/* Price + Add to Cart */}
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="font-bold text-orange-600 text-lg">
-                        ₦{product.price?.toLocaleString()}
-                      </p>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 transition-all duration-300">
+                {productsToDisplay.map((product) => (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col overflow-hidden"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={product.image_url || placeholderImg}
+                        alt={product.name}
+                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                        onError={(e) => (e.target.src = placeholderImg)}
+                      />
                       <button
-                        onClick={() => addToCart(product)}
-                        className="p-2 bg-orange-500 text-white rounded-full shadow-lg hover:bg-orange-600 transition"
-                        title="Add to Cart"
+                        onClick={() => addToWishlist(product)}
+                        className="absolute top-2 right-2 p-2 bg-white bg-opacity-75 rounded-full shadow-md text-gray-400 hover:text-red-500 hover:bg-opacity-100 transition-all duration-300 z-10"
+                        title="Add to Wishlist"
                       >
-                        <FaShoppingCart size={18} />
+                        <FaHeart size={18} />
                       </button>
                     </div>
 
-                    {/* Details */}
-                    <Link to={`/productdetail/${product.id}`}>
-                      <button className="mt-4 w-full py-2 bg-orange-100 text-orange-700 rounded-lg font-medium hover:bg-orange-200 transition-colors duration-200 border border-orange-200">
-                        See Details
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                    <div className="p-4 flex-1 flex flex-col">
+                      <h2 className="text-md font-semibold text-gray-800 line-clamp-2">{product.name}</h2>
+                      <p className="text-sm text-gray-500 flex-1 line-clamp-3 mt-1">
+                        {product.description || "No description"}
+                      </p>
 
-          {/* Pagination */}
-          {pages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-8">
-              <button
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Prev
-              </button>
-              <span className="text-gray-700 font-medium">
-                Page {page} of {pages}
-              </span>
-              <button
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page === pages}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="font-bold text-orange-600 text-lg">
+                          ₦{product.price?.toLocaleString()}
+                        </p>
+                        <button
+                          onClick={() => addToCart(product)}
+                          className="p-2 bg-orange-500 text-white rounded-full shadow-lg hover:bg-orange-600 transition"
+                          title="Add to Cart"
+                        >
+                          <FaShoppingCart size={18} />
+                        </button>
+                      </div>
+
+                      <Link to={`/productdetail/${product.id}`}>
+                        <button className="mt-4 w-full py-2 bg-orange-100 text-orange-700 rounded-lg font-medium hover:bg-orange-200 transition-colors duration-200 border border-orange-200">
+                          See Details
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="flex justify-center gap-4 mt-6">
+                <button
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={page === 1}
+                  className="px-4 py-2 bg-orange-200 rounded disabled:opacity-50"
+                >
+                  Previous
+                </button>
+
+                <span className="px-4 py-2">
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={page === totalPages}
+                  className="px-4 py-2 bg-orange-200 rounded disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

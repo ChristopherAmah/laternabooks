@@ -10,7 +10,7 @@ const CategoriesPage = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get("http://41.78.157.87:32771/api/v1/categories"); 
-        // 👆 use proxy (`vercel.json`) so you don’t get mixed-content issues
+        
         console.log("API response:", res.data);
 
         if (res.data && Array.isArray(res.data)) {

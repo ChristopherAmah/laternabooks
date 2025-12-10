@@ -16,7 +16,8 @@ import SubCategories from "./components/SubCategory";
 import CartPage from './components/CartPage';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
-// import SubCategoryProducts from './components/SubCategoryProducts';
+import SubCategoryProducts from './components/SubCategoryProducts';
+import Profile from './pages/Profile';
 
 function App() {
   // 1. Get the current location object
@@ -40,13 +41,14 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Categories />} />
           <Route path="/categories/:id" element={<SubCategories />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/productdetail" element={<ProductDetails />} />
+          <Route path="/productdetail/:productId" element={<ProductDetails />} />
           <Route path="/search" element={<SearchResults />} />
-          {/* <Route path="/products/:subcategoryId" element={<SubCategoryProducts />} /> */}
+          <Route path="/products/:subcategoryId" element={<SubCategoryProducts />} />
         </Routes>
 
         {/* 4. Conditionally render Footer */}

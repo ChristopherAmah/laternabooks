@@ -1,68 +1,5 @@
-// import React, { useEffect, useState } from "react";
-// import { useParams, Link } from "react-router-dom";
-// import placeholderImg from "../assets/guitar.jpg"; // fallback image
-
-// const SubCategories = () => {
-//   const { id } = useParams(); // category id from URL
-//   const [subCategories, setSubCategories] = useState([]);
-
-//   useEffect(() => {
-//     const fetchSubCategories = async () => {
-//       try {
-//         const res = await fetch("http://41.78.157.87:32771/api/subcategories");
-//         const data = await res.json();
-
-//         // ✅ filter by category id if your API doesn’t auto-filter
-//         const filtered = id
-//           ? data.filter((sub) => sub.category_id === parseInt(id))
-//           : data;
-
-//         setSubCategories(filtered);
-//       } catch (error) {
-//         console.error("Error fetching subcategories:", error);
-//       }
-//     };
-
-//     fetchSubCategories();
-//   }, [id]);
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-6">
-//       <h1 className="text-2xl font-bold text-orange-500 text-center mb-6">
-//         SUB-CATEGORIES
-//       </h1>
-
-//       {subCategories.length === 0 ? (
-//         <p className="text-center text-gray-600">No subcategories found.</p>
-//       ) : (
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-//           {subCategories.map((sub) => (
-//             <Link
-//               key={sub.id}
-//               to={`/subcategories/${sub.id}`} // ✅ link to products later
-//               className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
-//             >
-//               <img
-//                 src={sub.image_url || placeholderImg} // ✅ show image if API has it
-//                 alt={sub.name}
-//                 className="w-full h-32 object-cover rounded-md mb-3"
-//               />
-//               <h2 className="text-lg font-semibold text-orange-500">
-//                 {sub.name}
-//               </h2>
-//             </Link>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default SubCategories;
-
-
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import placeholderImg from "../assets/guitar.jpg";
 
 const SubCategories = () => {
@@ -117,8 +54,9 @@ const SubCategories = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {subCategories.map((sub) => (
-            <div
+            <Link 
               key={sub.id}
+              to={`/products/${sub.id}`}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden text-center p-5"
             >
               <img
@@ -130,7 +68,7 @@ const SubCategories = () => {
               <h2 className="text-lg font-semibold text-orange-500">
                 {sub.name}
               </h2>
-            </div>
+            </Link>
           ))}
         </div>
       )}

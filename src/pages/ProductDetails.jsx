@@ -1,203 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaStar, FaShoppingCart, FaHeart } from 'react-icons/fa';
-import { useStore } from '../context/StoreContext';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import placeholderImg from "../assets/guitar.jpg";
+import { FaShoppingCart, FaArrowLeft } from "react-icons/fa";
+import { useStore } from "../context/StoreContext";
 
-// --- Constants ---
-const PLACEHOLDER_IMAGE = "https://placehold.co/600x800/F97316/FFFFFF?text=Product+Image";
+const API_BASE_URL = "http://localhost:3001/api/product_details";
 
-const ProductDetail = () => {
+const ProductDetails = () => {
   const { productId } = useParams();
-  const { addToCart } = useStore(); 
+  const navigate = useNavigate();
+  const { addToCart } = useStore();
+
   const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // --- Fetch Product from API ---
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductDetails = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setIsLoading(true);
+        const res = await fetch(`${API_BASE_URL}/${productId}`);
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
-        const response = await fetch(`http://41.78.157.87:32771/api/product_details/${productId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            jsonrpc: "2.0",
-            method: "call",
-            params: {}
-          }),
+        const data = await res.json();
+        if (!data.result) throw new Error("Invalid API response format");
+
+        const p = data.result;
+        setProduct({
+          id: p.id,
+          name: p.name || "Unknown Product",
+          base_price: p.base_price || 0,
+          description: p.description || "No description",
+          image_url: p.image_url ? `http://41.78.157.87:32771${p.image_url}` : placeholderImg,
+          inStock: p.in_stock !== false,
+          attributes: p.attributes || [],
         });
-
-        const data = await response.json();
-
-        if (data.result) {
-          // Format product data to fit UI
-          const p = data.result;
-          setProduct({
-            id: p.id,
-            name: p.name,
-            price: p.base_price || 0,
-            description: p.description || "No description available.",
-            image_url: p.image_url || PLACEHOLDER_IMAGE,
-            in_stock: p.in_stock,
-            attributes: p.attributes || [],
-            website_url: p.website_url,
-            rating: 4.5, // Mocked, since API doesn't return this
-            reviews: 25, // Mocked
-          });
-        } else {
-          setProduct(null);
-        }
-
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setProduct(null);
+      } catch (err) {
+        console.error("❌ Error fetching product details:", err);
+        setError("Failed to load product details. Please try again.");
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchProduct();
+    if (productId) fetchProductDetails();
   }, [productId]);
 
-  const handleQuantityChange = (type) => {
-    setQuantity(prev => {
-      if (type === 'increment') return prev + 1;
-      if (type === 'decrement' && prev > 1) return prev - 1;
-      return prev;
-    });
-  };
+  if (loading) return <div className="text-center p-10 text-xl">Loading...</div>;
+  if (error) return <div className="text-center p-10 text-red-600">{error}</div>;
+  if (!product) return <div className="text-center p-10">Product not found.</div>;
 
-  const handleAddToCart = () => {
-    if (!product) return;
-
-    const itemToAdd = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image_url: product.image_url,
-      quantity,
-    };
-
-    addToCart(itemToAdd);
-    console.log("Added to cart:", itemToAdd);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-20 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-        <p className="mt-4 text-lg text-gray-700">Loading product details...</p>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="container mx-auto py-20 text-center">
-        <h2 className="text-2xl font-bold text-red-600">Product Not Found</h2>
-        <p className="text-gray-600 mt-2">The product you are looking for does not exist.</p>
-      </div>
-    );
-  }
+  const handleAddToCart = () => addToCart(product);
 
   return (
-    <div className="container mx-auto px-4 py-8 lg:py-12">
-      <div className="bg-white rounded-xl shadow-2xl p-6 lg:p-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-orange-600 hover:text-orange-800 transition mb-6"
+        >
+          <FaArrowLeft className="mr-2" /> Back
+        </button>
 
-          {/* Image */}
-          <div className="flex justify-center items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="overflow-hidden rounded-lg shadow-lg">
             <img
-              src={product.image_url || PLACEHOLDER_IMAGE}
+              src={product.image_url}
               alt={product.name}
-              className="w-full h-auto max-h-[80vh] object-contain rounded-xl shadow-xl border border-gray-100"
-              onError={(e) => { e.target.src = PLACEHOLDER_IMAGE; }}
+              className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
+              onError={(e) => (e.target.src = placeholderImg)}
             />
           </div>
 
-          {/* Details */}
-          <div className="flex flex-col space-y-6">
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-2">{product.name}</h1>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <div className="flex text-yellow-500">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className={i < Math.floor(product.rating) ? '' : 'text-gray-300'} size={14} />
-                  ))}
-                </div>
-                <span>{product.rating} / 5</span>
-                <span className="text-gray-400">|</span>
-                <span className="text-orange-600 font-medium cursor-pointer hover:underline">
-                  {product.reviews} reviews
-                </span>
-              </div>
-            </div>
-
-            {/* Price */}
-            <div className="border-b pb-4">
-              <span className="text-4xl font-extrabold text-orange-600">
-                ₦{product.price ? product.price.toLocaleString() : 'N/A'}
+          <div className="space-y-6">
+            <h1 className="text-4xl font-extrabold text-gray-800 border-b pb-4">{product.name}</h1>
+            <div className="flex items-center justify-between">
+              <p className="text-3xl font-bold text-orange-600">
+                ₦{product.base_price.toLocaleString()}
+              </p>
+              <span className={`px-3 py-1 text-sm font-semibold rounded-full ${product.inStock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                {product.inStock ? "In Stock" : "Out of Stock"}
               </span>
-              <p className="text-sm text-gray-500 mt-1">Inclusive of all taxes.</p>
             </div>
 
-            {/* Stock Status */}
             <div>
-              {product.in_stock ? (
-                <span className="text-green-600 font-semibold">In Stock</span>
-              ) : (
-                <span className="text-red-600 font-semibold">Out of Stock</span>
-              )}
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">Description</h3>
+              <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.description}</p>
             </div>
 
-            {/* Quantity + Add to Cart */}
-            <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-              <div className="flex items-center border border-gray-300 rounded-full w-full sm:w-auto overflow-hidden shadow-sm">
-                <button
-                  onClick={() => handleQuantityChange('decrement')}
-                  className="p-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition rounded-l-full"
-                >
-                  –
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-12 text-center text-lg font-semibold border-none focus:ring-0"
-                />
-                <button
-                  onClick={() => handleQuantityChange('increment')}
-                  className="p-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition rounded-r-full"
-                >
-                  +
-                </button>
+            {product.attributes.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">Key Features</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                  {product.attributes.map((attr, idx) => (
+                    <li key={idx}>
+                      <span className="font-medium">{attr.name}:</span> {attr.value}
+                    </li>
+                  ))}
+                </ul>
               </div>
+            )}
 
+            <div className="pt-4">
               <button
                 onClick={handleAddToCart}
-                className="flex items-center justify-center gap-3 bg-orange-600 text-white text-lg font-bold py-3 px-6 rounded-full shadow-lg hover:bg-orange-700 transition duration-300 w-full sm:flex-grow disabled:bg-gray-400"
-                disabled={!product.in_stock}
+                disabled={!product.inStock}
+                className={`w-full py-3 flex items-center justify-center text-white font-bold rounded-lg shadow-md transition-all duration-300 ${product.inStock ? "bg-orange-500 hover:bg-orange-600" : "bg-gray-400 cursor-not-allowed"}`}
               >
-                <FaShoppingCart /> Add to Cart
+                <FaShoppingCart className="mr-3" size={20} />
+                {product.inStock ? "Add to Cart" : "Currently Unavailable"}
               </button>
-
-              <button
-                title="Add to Wishlist"
-                className="p-3 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition duration-300 shadow-md sm:w-16 sm:h-16 flex items-center justify-center"
-              >
-                <FaHeart size={20} />
-              </button>
-            </div>
-
-            {/* Description */}
-            <div className="pt-4 mt-6 border-t border-gray-100">
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Product Description</h3>
-              <p className="text-gray-600 leading-relaxed">
-                {product.description || "No description available."}
-              </p>
             </div>
           </div>
         </div>
@@ -206,4 +120,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetails;
