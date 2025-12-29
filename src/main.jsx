@@ -4,10 +4,12 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from './context/StoreContext';
+import CartToast from "./components/CartToast";
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <StoreProvider>
+      <CartToast />
       <App />
     </StoreProvider>
   </BrowserRouter>

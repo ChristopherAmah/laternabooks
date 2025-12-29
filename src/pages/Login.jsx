@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import hero from '../assets/hero2.jpg';
 import laterna from '../assets/laterna.png';
 
 const Login = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -15,159 +17,143 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // ⭐ Use proxy instead of backend to bypass CORS
       const API_URL = "http://localhost:3001/api/login";
-
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ login, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ login, password, keepLoggedIn }),
       });
 
       const data = await res.json();
 
       if (res.ok && data.result && data.result.status === "success") {
-        // Retrieve JWT token
-        const authToken =
-          data.result.token || data.result.session_token;
-
+        const authToken = data.result.token || data.result.session_token;
         if (authToken) {
           localStorage.setItem("authToken", authToken);
           localStorage.setItem("user", JSON.stringify(data.result));
         }
-
-        navigate("/profile");
+        navigate("/products");
       } else {
-        const errorMessage =
-          data?.result?.message ||
-          data?.result?.error ||
-          data?.error ||
-          "Login failed. Check your credentials.";
-
-        setError(errorMessage);
+        setError(data?.result?.message || data?.error || "Login failed.");
       }
     } catch (err) {
-      console.error("Network or Fetch Error:", err);
-      setError("Cannot connect to the server. Try again later.");
+      setError("Cannot connect to the server.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-xl hover:shadow-2xl transition duration-300 rounded-xl p-8 md:p-10 w-full max-w-sm border border-gray-200"
-      >
-        <div className="flex justify-center mb-5">
-          <img src={laterna} alt="App Logo" className="h-12" />
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      {/* Main Card Container */}
+      <div className="flex w-full overflow-hidden bg-white border border-gray-100  min-h-[70vh]">
+        
+        {/* Left Panel (Hero Image) */}
+        <div className="hidden lg:block w-1/2 relative bg-blue-50">
+          <div className="absolute z-10"></div>
+          <img 
+            src={hero} 
+            alt="Pet Food Hero" 
+            className="w-full h-full object-cover"
+          />
+          {/* Brand Overlay */}
+          {/* <div className="absolute top-10 left-10 z-20">
+             <img src={laterna} alt="Logo" className="h-10 brightness-0 invert" />
+          </div> */}
         </div>
 
-        <h2 className="text-3xl font-extrabold text-center mb-8 text-orange-600 tracking-tight">
-          Welcome Back
-        </h2>
+        {/* Right Panel (Login Form) */}
+        <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+          <div className="max-w-sm mx-auto w-full">
+            <h2 className="text-4xl font-bold text-orange-500 mb-2 uppercase tracking-tight">
+              Login
+            </h2>
+            <p className="mb-10 text-gray-500 font-medium">
+              Not a member yet?{" "}
+              <Link to="/register" className="text-orange-600 hover:text-orange-700 underline underline-offset-4 transition">
+                Register now
+              </Link>
+            </p>
 
-        {error && (
-          <p className="bg-red-100 text-red-700 p-3 rounded-lg text-sm text-center mb-5 border border-red-200 font-medium">
-            ⚠️ {error}
-          </p>
-        )}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm border border-red-100 flex items-center gap-2 animate-pulse">
+                  <span>⚠️</span> {error}
+                </div>
+              )}
 
-        <div className="space-y-5">
-          <div>
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              htmlFor="login-input"
-            >
-              Email or Username
-            </label>
-            <input
-              id="login-input"
-              type="text"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-800 transition duration-150 ease-in-out focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none"
-              placeholder="e.g., john.doe@example.com"
-              disabled={loading}
-            />
-          </div>
+              {/* Email/Username Input */}
+              <div className="relative group">
+                <input
+                  type="text"
+                  value={login}
+                  onChange={(e) => setLogin(e.target.value)}
+                  required
+                  placeholder="Email or Username"
+                  disabled={loading}
+                  className="w-full px-5 py-4 border border-gray-200 rounded-2xl bg-gray-50/50 text-gray-800 transition focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 outline-none"
+                />
+              </div>
 
-          <div>
-            <label
-              className="block text-sm font-medium text-gray-700 mb-2"
-              htmlFor="password-input"
-            >
-              Password
-            </label>
-            <input
-              id="password-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-800 transition duration-150 ease-in-out focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none"
-              placeholder="••••••••"
-              disabled={loading}
-            />
-            <div className="text-right mt-1">
-              <a
-                href="#"
-                className="text-sm text-orange-600 hover:text-orange-500 font-medium"
+              {/* Password Input */}
+              <div className="relative group">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Password"
+                  disabled={loading}
+                  className="w-full px-5 py-4 border border-gray-200 rounded-2xl bg-gray-50/50 text-gray-800 transition focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 outline-none"
+                />
+              </div>
+              
+              {/* Actions Row */}
+              <div className="flex items-center justify-between px-1">
+                <label className="flex items-center cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={keepLoggedIn}
+                    onChange={(e) => setKeepLoggedIn(e.target.checked)}
+                    className="h-4 w-4 text-orange-600 border-gray-300 rounded-md focus:ring-orange-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-600 group-hover:text-gray-900 transition">Keep me logged in</span>
+                </label>
+                <a href="#" className="text-sm font-semibold text-gray-400 hover:text-orange-600 transition">
+                  Forgot Password?
+                </a>
+              </div>
+              
+              {/* Login Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold tracking-widest uppercase hover:bg-orange-700 transition shadow-lg shadow-orange-600/20 disabled:bg-gray-300 flex items-center justify-center gap-2"
               >
-                Forgot password?
-              </a>
-            </div>
+                {loading ? (
+                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  "Login"
+                )}
+              </button>
+
+              {/* Divider */}
+              <div className="relative py-4">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100"></div></div>
+                <div className="relative flex justify-center text-xs uppercase tracking-tighter"><span className="px-4 bg-white text-gray-400 font-bold">Or start shopping</span></div>
+              </div>
+
+              {/* Brand Link */}
+              <div className="flex justify-center transition-transform hover:scale-105">
+                <Link to='/products'>
+                  <img src={laterna} alt="Laterna" className="h-8 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+                </Link>
+              </div>
+            </form>
           </div>
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-orange-600 text-white py-3 mt-8 rounded-lg font-semibold tracking-wide hover:bg-orange-700 transition duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Signing In...
-            </>
-          ) : (
-            "Sign In"
-          )}
-        </button>
-
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?
-          <Link
-            to="/register"
-            className="ml-1 font-medium text-orange-600 hover:text-orange-500"
-          >
-            Register
-          </Link>
-        </p>
-      </form>
+      </div>
     </div>
   );
 };

@@ -18,6 +18,8 @@ import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import SubCategoryProducts from './components/SubCategoryProducts';
 import Profile from './pages/Profile';
+import Overview from './pages/Overview';
+import CheckoutPage from './pages/Checkout';
 
 function App() {
   // 1. Get the current location object
@@ -25,7 +27,7 @@ function App() {
 
   // 2. Define the path where the layout should be hidden
   // You can add more paths here if needed (e.g., '/register', '/forgot-password')
-  const hideLayout = location.pathname === '/login'|| location.pathname === '/register';
+  const hideLayout = location.pathname === '/login'|| location.pathname === '/register' || location.pathname === '/';
 
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
@@ -35,10 +37,12 @@ function App() {
         {!hideLayout && <Navbar />}
         
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Overview />} />
           <Route path="/aboutus" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />

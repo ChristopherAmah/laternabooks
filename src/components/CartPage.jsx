@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext'; 
 import { FaShoppingCart, FaTrashAlt, FaPlus, FaMinus, FaTag } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+// 💡 IMPORTANT: Add useNavigate for state passing
+import { Link, useNavigate } from 'react-router-dom';
 
 // Placeholder image URL for cart items
 const PLACEHOLDER_IMAGE = "https://placehold.co/80x80/F97316/FFFFFF?text=Item";
@@ -24,11 +25,17 @@ const CartPage = () => {
         decrementQuantity, 
     } = useStore(); 
 
+    // Initialize useNavigate hook
+    const navigate = useNavigate();
+
     // Calculate total price
     const cartTotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const shipping = 2500;
+    const shipping = 2500; // Fixed shipping fee
+    // Assuming 5% tax for simplicity on the cart total
+    const estimatedTaxRate = 0.05; 
+    const estimatedTax = cartTotal * estimatedTaxRate; 
 
-    // Coupon code logic
+    // Coupon code logic (as before)
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [couponMessage, setCouponMessage] = useState('');
@@ -37,15 +44,14 @@ const CartPage = () => {
         const code = couponCode.trim().toUpperCase();
         let discountAmount = 0;
 
-        // Example coupon codes
         if (code === 'DISCOUNT10') {
-            discountAmount = cartTotal * 0.1; // 10% off
+            discountAmount = cartTotal * 0.1; 
             setCouponMessage('✅ 10% discount applied!');
         } else if (code === 'FREESHIP') {
-            discountAmount = shipping; // Remove shipping fee
+            discountAmount = shipping; // Removes shipping fee
             setCouponMessage('✅ Free shipping applied!');
         } else if (code === 'SAVE500') {
-            discountAmount = 500; // Flat ₦500 off
+            discountAmount = 500; 
             setCouponMessage('✅ ₦500 discount applied!');
         } else if (code === '') {
             setCouponMessage('Please enter a coupon code.');
@@ -56,11 +62,63 @@ const CartPage = () => {
         setDiscount(discountAmount);
     };
 
-    const totalAfterDiscount = Math.max(cartTotal + shipping - discount, 0);
+    const totalAfterDiscount = Math.max(cartTotal + shipping + estimatedTax - discount, 0);
+
+
+    // 1. --- FUNCTION TO HANDLE CHECKOUT NAVIGATION AND DATA PACKAGING ---
+    const handleProceedToCheckout = () => {
+        // Prepare the 'lines' structure for the CheckoutPage
+        const cartLines = cartItems.map(item => ({
+            id: item.id,
+            
+            // Keys used for DISPLAY in CheckoutPage
+            product_name: item.name,    
+            quantity: item.quantity,    
+            
+            // Keys required by the CheckoutPage's API payload (to match the backend format)
+            product_id: item.id,       
+            qty: item.quantity,         // <-- Added/Confirmed for API payload
+            price_unit: item.price,     // <-- Added/Confirmed for API payload
+            
+            subtotal: item.price * item.quantity,
+        }));
+        
+        // 2. Prepare the final data object (matches the CheckoutPage prop structure)
+        const finalCartData = {
+            cart: {
+                // You might need a way to generate a real order ID here
+                order_id: Math.floor(Math.random() * 1000000), // Placeholder ID
+                name: `ORDER-${new Date().getTime()}`,
+                amount_total: totalAfterDiscount,
+                amount_tax: estimatedTax,
+                amount_untaxed: cartTotal, // Total before tax/shipping/discount
+                amount_shipping: shipping, // Total shipping before potential discount
+                amount_discount: discount,
+                currency: {
+                    name: "NGN",
+                    symbol: "₦"
+                },
+                lines: cartLines,
+            },
+            // Note: You may need a separate mechanism to fetch available countries, 
+            // or include them in the global context/route data.
+            available_countries: [
+                { id: 163, name: "Nigeria", code: "NG" },
+                { id: 233, name: "United States", code: "US" },
+                { id: 75, name: "France", code: "FR" },
+                { id: 13, name: "Australia", code: "AU" },
+            ],
+        };
+        
+        // 3. Navigate and pass the state
+        navigate('/checkout', { state: { cartData: finalCartData } });
+    };
+    // ------------------------------------------------------------------
+
 
     const CartItemRow = ({ item }) => (
         <div className="flex flex-col sm:flex-row items-start sm:items-center py-4 border-b border-gray-100 hover:bg-orange-50/50 transition duration-150 rounded-lg p-2">
-            {/* Image and Name */}
+            {/* ... Item details (omitted for brevity) ... */}
             <div className="flex items-center flex-grow mb-3 sm:mb-0 sm:w-2/5">
                 <img
                     src={getSecureImageUrl(item.image_url)}
@@ -135,6 +193,7 @@ const CartPage = () => {
 
     return (
         <div className="container mx-auto px-4 py-12">
+            {/* ... Cart Header (omitted for brevity) ... */}
             <h1 className="text-3xl font-extrabold text-gray-900 mb-8 flex items-center">
                 <FaShoppingCart className="mr-3 text-orange-600" />
                 Your Shopping Cart 
@@ -165,7 +224,7 @@ const CartPage = () => {
                     <div className="sticky top-20 bg-gray-50 p-6 rounded-2xl shadow-xl border border-gray-200">
                         <h2 className="text-2xl font-bold text-gray-800 border-b pb-3 mb-4">Order Summary</h2>
                         
-                        {/* Coupon Code Input */}
+                        {/* Coupon Code Input (omitted for brevity) */}
                         <div className="mb-4">
                             <label className="flex items-center font-semibold text-gray-700 mb-2">
                                 <FaTag className="text-orange-500 mr-2" /> Coupon Code
@@ -202,6 +261,12 @@ const CartPage = () => {
                                 <span>Shipping</span>
                                 <span>₦{shipping.toLocaleString()}</span>
                             </div>
+                            {estimatedTax > 0 && (
+                                <div className="flex justify-between text-gray-600">
+                                    <span>Estimated Tax ({estimatedTaxRate * 100}%)</span>
+                                    <span>₦{estimatedTax.toLocaleString()}</span>
+                                </div>
+                            )}
                             {discount > 0 && (
                                 <div className="flex justify-between text-green-600 font-semibold border-b pb-2">
                                     <span>Discount</span>
@@ -214,15 +279,16 @@ const CartPage = () => {
                             </div>
                         </div>
 
+                        {/* 4. Update button to call the navigation function */}
                         <button 
                             className="w-full mt-6 py-4 rounded-xl font-bold text-white bg-orange-600 hover:bg-orange-700 transition-all shadow-md shadow-orange-300"
-                            onClick={() => console.log('Proceeding to Checkout with total: ', totalAfterDiscount)}
+                            onClick={handleProceedToCheckout}
                         >
                             Proceed to Checkout
                         </button>
 
                         <p className="text-center text-xs text-gray-400 mt-4">
-                            Taxes calculated at checkout.
+                            Taxes and final shipping calculated at checkout.
                         </p>
                     </div>
                 </div>

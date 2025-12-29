@@ -77,9 +77,9 @@ const ShopHero = () => {
               >
                 <motion.h2
                   variants={childVariants}
-                  className="text-white text-3xl md:text-5xl font-bold mb-3"
+                  className="text-white -mt-30 text-3xl md:text-[500px] font-bold mb-3"
                 >
-                  {slide.title}
+                  
                 </motion.h2>
               </motion.div>
             </div>

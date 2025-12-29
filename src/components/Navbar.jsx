@@ -24,7 +24,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const navLinks = [
-    { to: '/', label: 'HOME' },
+    { to: '/home', label: 'HOME' },
     { to: '/category', label: 'CATEGORIES' },
     { to: '/products', label: 'SHOP' },
     { to: '/aboutus', label: 'ABOUT' },
@@ -49,7 +49,7 @@ const Navbar = () => {
       <div className="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 md:h-16 h-16">
         {/* Logo */}
         <div>
-          <Link to="/" className="block">
+          <Link to="/home" className="block">
             <img
               src={LaternaLogo}
               alt="logo"
@@ -77,7 +77,7 @@ const Navbar = () => {
                   className={`text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-orange-600 py-3 px-2 after:transition-all ${
                     activeLink === link.to
                       ? 'text-orange-600 after:w-full'
-                      : 'text-gray-500 hover:text-gray-900'
+                      : 'text-gray-500 hover:text-orange-700'
                   }`}
                 >
                   {link.label}

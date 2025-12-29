@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import placeholderImg from "../assets/guitar.jpg";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 
@@ -113,13 +114,13 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-orange-500 text-center mb-8 tracking-wide">
+      {/* <h1 className="text-3xl font-bold text-orange-500 text-center mb-8 tracking-wide">
         PRODUCTS
-      </h1>
+      </h1> */}
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Sidebar */}
-        <div className="bg-white p-5 rounded-xl shadow-md w-full md:w-1/4 space-y-6">
+        <div className="bg-transparent p-5 w-full md:w-1/4 space-y-6">
           {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Category</h3>
@@ -191,7 +192,7 @@ const Products = () => {
                 {productsToDisplay.map((product) => (
                   <div
                     key={product.id}
-                    className="bg-white rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col overflow-hidden"
+                    className="bg-white rounded-xl  hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col overflow-hidden"
                   >
                     <div className="relative overflow-hidden">
                       <img
@@ -221,15 +222,15 @@ const Products = () => {
                         </p>
                         <button
                           onClick={() => addToCart(product)}
-                          className="p-2 bg-orange-500 text-white rounded-full shadow-lg hover:bg-orange-600 transition"
+                          className="p-2 bg-orange-500 cursor-pointer text-white rounded-full shadow-lg hover:bg-orange-600 transition"
                           title="Add to Cart"
                         >
-                          <FaShoppingCart size={18} />
+                          <FaCartPlus size={16} />
                         </button>
                       </div>
 
                       <Link to={`/productdetail/${product.id}`}>
-                        <button className="mt-4 w-full py-2 bg-orange-100 text-orange-700 rounded-lg font-medium hover:bg-orange-200 transition-colors duration-200 border border-orange-200">
+                        <button className="mt-4 w-full py-2 cursor-pointer bg-orange-100 text-orange-700 rounded-lg font-medium hover:bg-orange-200 transition-colors duration-200 border border-orange-200">
                           See Details
                         </button>
                       </Link>

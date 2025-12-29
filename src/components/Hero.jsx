@@ -81,14 +81,14 @@ const Hero = () => {
               >
                 <motion.h1
                   variants={childVariants}
-                  className="text-white text-4xl md:text-6xl font-bold mb-6"
+                  className="text-white text-4xl md:text-[90px] font-bold mb-6"
                 >
                   {slide.title}
                 </motion.h1>
                 <motion.div variants={childVariants}>
                   <Link
                     to="/category"
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-sans px-6 py-4 rounded-full shadow-lg transition inline-block"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-sans px-5 py-2 rounded-full shadow-lg transition inline-block"
                   >
                     Shop Categories
                   </Link>
