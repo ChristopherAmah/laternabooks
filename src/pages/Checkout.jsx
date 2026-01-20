@@ -227,7 +227,7 @@ const CheckoutPage = () => {
 
                     {/* ORDER SUMMARY */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-xl shadow-lg sticky top-4 border border-gray-100">
+                        <div className="bg-white p-6 rounded-xl shadow-md sticky top-4 border border-gray-100">
                             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Order Summary</h2>
                             <div className="space-y-4 mb-6 max-h-60 overflow-y-auto">
                                 {cart.lines.map((line, index) => (
