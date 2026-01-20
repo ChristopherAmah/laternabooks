@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   FaTwitter,
   FaFacebookF,
-  FaGooglePlusG,
-  FaPinterestP,
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
@@ -14,41 +12,57 @@ const Topbar = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 1. Check Login Status on Mount
+  /**
+   * 1. CHECK AUTH STATUS ON PAGE LOAD
+   * - Requires BOTH token and user
+   * - Prevents showing LOG OUT when user is not logged in
+   */
   useEffect(() => {
-    // 💡 FIX: Check for the presence of the AUTH TOKEN, as it is the primary indicator of a logged-in state needed for authorized API calls.
-    const token = localStorage.getItem("authToken"); 
-    if (token) setIsLoggedIn(true);
+    const token = localStorage.getItem("authToken");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
   }, []);
 
-  // 2. Handle Logout Logic
+  /**
+   * 2. LOCAL LOGOUT (SAFE CLEANUP)
+   */
+  const handleLocalLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
+  /**
+   * 3. LOGOUT HANDLER (API + LOCAL FALLBACK)
+   */
   const handleLogout = async () => {
     setLoading(true);
 
-    // 💡 FIX: Use the correct keys stored in localStorage by the Login component.
     const token = localStorage.getItem("authToken");
-    
-    // We attempt to retrieve the user object to get the email/login if needed by the API
     let userEmail = null;
+
     try {
-        const userJson = localStorage.getItem("user");
-        if (userJson) {
-            const userObj = JSON.parse(userJson);
-            // Assuming the login field is 'email' in the stored user object
-            userEmail = userObj.email; 
-        }
-    } catch (e) {
-        console.error("Error parsing user data:", e);
+      const userJson = localStorage.getItem("user");
+      if (userJson) {
+        const userObj = JSON.parse(userJson);
+        userEmail = userObj.email;
+      }
+    } catch (err) {
+      console.error("Failed to parse user data", err);
     }
-    
+
+    // If token is missing, just log out locally
     if (!token) {
-        // If no token, we can just clear local storage and log out locally.
-        console.warn("No authentication token found. Performing local logout.");
-        handleLocalLogout();
-        return;
+      handleLocalLogout();
+      return;
     }
-    
-    // 💡 API CALL: Logout
+
     try {
       const response = await fetch(
         "http://41.78.157.87:32771/api/v1/auth/logout",
@@ -56,58 +70,50 @@ const Topbar = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // 💡 Use authToken from local storage
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
-          // 💡 Conditional body: Only send the email if your API requires it for logout
-          body: JSON.stringify({ email: userEmail }), 
+          body: JSON.stringify({ email: userEmail }),
         }
       );
 
-      if (response.ok) {
-        // Successful API logout (server revokes token)
-        handleLocalLogout();
-      } else {
-        const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
-        console.error("Logout failed:", errorData);
-        // Even if API fails (e.g., token already expired), for UX, we perform local cleanup.
-        if (response.status === 401) {
-            alert("Session expired. Logging out locally.");
-            handleLocalLogout();
-        } else {
-            alert(`Logout failed on server: ${errorData.message || response.statusText}. Logging out locally.`);
-            handleLocalLogout();
-        }
-      }
+      // Even if API fails, log out locally for UX & safety
+      handleLocalLogout();
+
     } catch (error) {
-      console.error("Network error during logout:", error);
-      alert("Network error. Logging out locally for safety.");
-      handleLocalLogout(); // Force local logout on network error
+      console.error("Logout network error:", error);
+      handleLocalLogout();
     } finally {
       setLoading(false);
     }
   };
 
-  // 3. Centralized Local Cleanup Function
-  const handleLocalLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("authToken"); // 💡 Use the correct key: 'authToken'
-    setIsLoggedIn(false);
-    navigate("/"); // Redirect to home
-  }
-
-
   return (
-    <section className="bg-white/90 backdrop-blur-sm shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 flex flex-col md:flex-row items-center justify-between relative">
-        {/* Social Icons (No Change) */}
-        <div className="flex flex-wrap justify-center md:justify-start space-x-4 text-sm text-orange-500 mb-2 md:mb-0 z-10">
-          <a href="#" className="hover:text-orange-600"><FaTwitter /></a>
-          <a href="#" className="hover:text-orange-600"><FaFacebookF /></a>
-          <a href="#" className="hover:text-orange-600"><FaGooglePlusG /></a>
-          <a href="#" className="hover:text-orange-600"><FaPinterestP /></a>
-          <a href="#" className="hover:text-orange-600"><FaLinkedinIn /></a>
-          <a href="#" className="hover:text-orange-600"><FaInstagram /></a>
+    <section className="bg-white">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-1 flex flex-row items-center justify-between relative">
+
+        {/* Social Icons */}
+        <div className="flex space-x-4 text-sm text-orange-500 z-10">
+          <a href="https://x.com/laternabooks" className="hover:text-orange-600">
+            <FaTwitter />
+          </a>
+          <a
+            href="https://www.facebook.com/laterna.ventures"
+            className="hover:text-orange-600"
+          >
+            <FaFacebookF />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/laterna-ventures-ltd/"
+            className="hover:text-orange-600"
+          >
+            <FaLinkedinIn />
+          </a>
+          <a
+            href="https://www.instagram.com/laternabooks/"
+            className="hover:text-orange-600"
+          >
+            <FaInstagram />
+          </a>
         </div>
 
         {/* Auth Buttons */}

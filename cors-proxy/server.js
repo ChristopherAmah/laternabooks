@@ -211,13 +211,91 @@ app.get("/api/category", async (req, res) => {
   res.json(result.data);
 });
 
+
 // =========================================================
-// 🟥 PRODUCT DETAILS
+// 🟥 PRODUCT DETAILS (GET)
 // =========================================================
 app.get("/api/product_details/:id", async (req, res) => {
-  const url = `${EXTERNAL_BASE_URL}/api/v1/product_details/${req.params.id}`;
-  const result = await safeFetch(url);
-  if (!result.ok) return res.status(result.status).json(result);
+  try {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ error: "Product ID is required" });
+
+    // Use the exact URL that worked in Postman
+    const externalUrl = `${EXTERNAL_BASE_URL}/api/v1/product_details/${id}`;
+
+    console.log(`📡 Sending GET to: ${externalUrl}`);
+
+    // We use standard fetch here to bypass any safeFetch defaults 
+    // that might be causing the 'type=json' error.
+    const response = await fetch(externalUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json", // Critical for this backend
+        "Accept": "application/json",
+        "User-Agent": "PostmanRuntime/7.29.2" // Mimics your successful Postman test
+      }
+    });
+
+    console.log(`📡 External Status: ${response.status}`);
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      console.error("❌ External Error Body:", text);
+      return res.status(response.status).json({ error: "Remote error", details: text });
+    }
+
+    const data = JSON.parse(text);
+    
+    // Extract the 'result' object so React gets a clean product object
+    if (data && data.result) {
+      res.json(data.result);
+    } else {
+      res.status(502).json({ error: "Invalid JSON-RPC response", details: data });
+    }
+
+  } catch (error) {
+    console.error("🔥 Proxy Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// =========================================================
+// 📊 DASHBOARD (PROXY)
+// =========================================================
+app.get("/api/dashboard", async (req, res) => {
+  const url = `${EXTERNAL_BASE_URL}/api/v1/dashboard`;
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Missing Authorization header" });
+  }
+
+  // Exact JSON-RPC payload as requested by your API
+  const rpcPayload = {
+    jsonrpc: "2.0",
+    method: "call",
+    params: {}
+  };
+
+  console.log(`📡 Forwarding Dashboard request to: ${url}`);
+
+  const result = await safeFetch(url, {
+    method: "POST", // The external API requires POST for JSON-RPC
+    headers: { 
+      Authorization: authHeader,
+      "Content-Type": "application/json"
+    },
+    body: rpcPayload,
+  });
+
+  if (!result.ok) {
+    console.error("❌ Dashboard Proxy Error:", result.error);
+    return res.status(result.status).json(result);
+  }
+
+  // Sending back the raw data to the frontend
   res.json(result.data);
 });
 

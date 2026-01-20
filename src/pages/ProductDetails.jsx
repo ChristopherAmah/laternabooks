@@ -22,20 +22,23 @@ const ProductDetails = () => {
 
       try {
         const res = await fetch(`${API_BASE_URL}/${productId}`);
+
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
-        const data = await res.json();
-        if (!data.result) throw new Error("Invalid API response format");
+        const p = await res.json();
 
-        const p = data.result;
+        // Mapping the API data to our local state
         setProduct({
           id: p.id,
           name: p.name || "Unknown Product",
-          base_price: p.base_price || 0,
-          description: p.description || "No description",
-          image_url: p.image_url ? `http://41.78.157.87:32771${p.image_url}` : placeholderImg,
-          inStock: p.in_stock !== false,
-          attributes: p.attributes || [],
+          base_price: Number(p.base_price) || 0,
+          description: p.description || "No description provided.",
+          // Correctly prepending the IP to the relative image path
+          image_url: p.image_url 
+            ? `http://41.78.157.87:32771${p.image_url}` 
+            : placeholderImg,
+          inStock: p.in_stock === true || p.qty_available > 0,
+          attributes: Array.isArray(p.attributes) ? p.attributes : [],
         });
       } catch (err) {
         console.error("❌ Error fetching product details:", err);
@@ -48,7 +51,7 @@ const ProductDetails = () => {
     if (productId) fetchProductDetails();
   }, [productId]);
 
-  if (loading) return <div className="text-center p-10 text-xl">Loading...</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen text-xl">Loading...</div>;
   if (error) return <div className="text-center p-10 text-red-600">{error}</div>;
   if (!product) return <div className="text-center p-10">Product not found.</div>;
 
@@ -61,38 +64,47 @@ const ProductDetails = () => {
           onClick={() => navigate(-1)}
           className="flex items-center text-orange-600 hover:text-orange-800 transition mb-6"
         >
-          <FaArrowLeft className="mr-2" /> Back
+          <FaArrowLeft className="mr-2" /> Back to Shop
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="overflow-hidden rounded-lg shadow-lg">
+          {/* Image Section */}
+          <div className="overflow-hidden rounded-lg shadow-lg bg-gray-50 flex items-center justify-center">
             <img
               src={product.image_url}
               alt={product.name}
-              className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
+              className="max-h-[500px] object-contain transition-transform duration-500 hover:scale-105"
               onError={(e) => (e.target.src = placeholderImg)}
             />
           </div>
 
+          {/* Details Section */}
           <div className="space-y-6">
             <h1 className="text-4xl font-extrabold text-gray-800 border-b pb-4">{product.name}</h1>
+            
             <div className="flex items-center justify-between">
               <p className="text-3xl font-bold text-orange-600">
-                ₦{product.base_price.toLocaleString()}
+                ₦{(product.base_price || 0).toLocaleString()}
               </p>
-              <span className={`px-3 py-1 text-sm font-semibold rounded-full ${product.inStock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+              <span
+                className={`px-3 py-1 text-sm font-semibold rounded-full ${
+                  product.inStock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                }`}
+              >
                 {product.inStock ? "In Stock" : "Out of Stock"}
               </span>
             </div>
 
             <div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Description</h3>
-              <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.description}</p>
+              <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                {product.description}
+              </p>
             </div>
 
             {product.attributes.length > 0 && (
               <div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">Key Features</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">Specifications</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-600">
                   {product.attributes.map((attr, idx) => (
                     <li key={idx}>
@@ -107,7 +119,11 @@ const ProductDetails = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
-                className={`w-full py-3 flex items-center justify-center text-white font-bold rounded-lg shadow-md transition-all duration-300 ${product.inStock ? "bg-orange-500 hover:bg-orange-600" : "bg-gray-400 cursor-not-allowed"}`}
+                className={`w-full py-4 flex items-center justify-center text-white font-bold rounded-lg shadow-md transition-all duration-300 ${
+                  product.inStock 
+                    ? "bg-orange-500 hover:bg-orange-600" 
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
               >
                 <FaShoppingCart className="mr-3" size={20} />
                 {product.inStock ? "Add to Cart" : "Currently Unavailable"}

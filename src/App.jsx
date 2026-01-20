@@ -14,6 +14,7 @@ import ProductDetails from './pages/ProductDetails';
 import SearchResults from "./pages/SearchResults";
 import SubCategories from "./components/SubCategory"; 
 import CartPage from './components/CartPage';
+import WishlistPage from './components/WishlistPage';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import SubCategoryProducts from './components/SubCategoryProducts';
@@ -42,6 +43,7 @@ function App() {
           <Route path="/aboutus" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

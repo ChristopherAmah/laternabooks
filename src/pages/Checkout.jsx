@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const CHECKOUT_API = 'http://41.78.157.87:32771/api/shop/checkout';
+// Accessing environment variables
+const CHECKOUT_API = import.meta.env.VITE_CHECKOUT_API_URL;
+const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
 const defaultCartStructure = {
     cart: {
@@ -63,7 +65,7 @@ const CheckoutPage = () => {
 
     // --- STATE MANAGEMENT ---
     const [billingData, setBillingData] = useState(initialAddressState);
-    const [shippingData, setShippingData] = useState(initialAddressState); // New state for Shipping
+    const [shippingData, setShippingData] = useState(initialAddressState);
     const [shippingSameAsBilling, setShippingSameAsBilling] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -119,13 +121,41 @@ const CheckoutPage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
+            
             const result = await response.json();
-            if (response.ok) {
-                alert(`Success! Order ${cart.name || 'S000'} placed.`);
-                navigate('/');
-            } else {
+            
+            if (!response.ok) {
                 setError(result.message || "Checkout failed.");
+                setLoading(false);
+                return;
             }
+
+            // Launch Paystack payment using Environment Variable
+            const handler = window.PaystackPop.setup({
+                key: PAYSTACK_KEY, 
+                email: billingData.email,
+                amount: cart.amount_total * 100, // Paystack expects kobo
+                currency: cart.currency.name,
+                ref: `order_${cart.order_id || Math.floor(Math.random() * 1000000)}`,
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Full Name",
+                            variable_name: "full_name",
+                            value: billingData.name
+                        }
+                    ]
+                },
+                callback: function (response) {
+                    alert(`Payment successful! Reference: ${response.reference}`);
+                    navigate('/'); 
+                },
+                onClose: function () {
+                    alert('Payment window closed.');
+                }
+            });
+            handler.openIframe();
+
         } catch (err) {
             setError("Network error. Please try again.");
         } finally {
@@ -178,7 +208,7 @@ const CheckoutPage = () => {
                             </label>
                         </div>
 
-                        {/* SHIPPING SECTION (Only visible if checkbox is unchecked) */}
+                        {/* SHIPPING SECTION */}
                         {!shippingSameAsBilling && (
                             <div className="bg-orange-50/50 p-6 rounded-xl shadow-lg border border-orange-100 animate-in fade-in duration-300">
                                 <h2 className="text-2xl font-bold text-orange-900 mb-6 border-b border-orange-200 pb-4">Shipping Address</h2>
@@ -195,7 +225,7 @@ const CheckoutPage = () => {
                         )}
                     </div>
 
-                    {/* ORDER SUMMARY (Kept from your original code) */}
+                    {/* ORDER SUMMARY */}
                     <div className="lg:col-span-1">
                         <div className="bg-white p-6 rounded-xl shadow-lg sticky top-4 border border-gray-100">
                             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Order Summary</h2>

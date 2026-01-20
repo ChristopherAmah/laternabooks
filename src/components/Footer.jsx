@@ -69,17 +69,23 @@ const Footer = () => {
 
           {/* Social Icons */}
           <div className="flex gap-4 pt-2">
-            {[FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube].map(
-              (Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 hover:border-orange-500 hover:text-orange-600 transition"
-                >
-                  <Icon size={14} />
-                </a>
-              )
-            )}
+            {[
+              { icon: FaFacebookF, url: "https://www.facebook.com/laterna.ventures" },
+              { icon: FaTwitter, url: "https://x.com/laternabooks" },
+              { icon: FaLinkedinIn, url: "https://www.linkedin.com/company/laterna-ventures-ltd/?trk=biz-companies-cym" },
+              { icon: FaInstagram, url: "https://www.instagram.com/laternabooks/" },
+              { icon: FaYoutube, url: "https://www.youtube.com/channel/UCpq6etoaUTwf1Vl75uYIUDw" },
+            ].map(({ icon: Icon, url }, index) => (
+              <a
+                key={index}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 hover:border-orange-500 hover:text-orange-600 transition"
+              >
+                <Icon size={14} />
+              </a>
+            ))}
           </div>
         </div>
 
@@ -91,18 +97,18 @@ const Footer = () => {
 
           <ul className="space-y-3 text-sm text-gray-600">
             {[
-              "About Us",
-              "Contact Us",
-              "Return Policy",
-              "Terms & Conditions",
-              "Join Book Club",
-            ].map((link) => (
-              <li key={link}>
+              { name: "About Us", url: "/about" },
+              { name: "Contact Us", url: "/contact" },
+              { name: "Return Policy", url: "/return-policy" },
+              { name: "Terms & Conditions", url: "/terms" },
+              { name: "Join Book Club", url: "/book-club" },
+            ].map(({ name, url }) => (
+              <li key={name}>
                 <a
-                  href="#"
+                  href={url}
                   className="hover:text-orange-600 transition"
                 >
-                  {link}
+                  {name}
                 </a>
               </li>
             ))}

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const StoreContext = createContext();
 
@@ -7,35 +7,43 @@ export const useStore = () => {
 };
 
 export const StoreProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [wishlistCount, setWishlistCount] = useState(0);
+  // 1. Initialize states from LocalStorage to prevent data loss on refresh
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // 🔔 Notification state
+  const [wishlist, setWishlist] = useState(() => {
+    const savedWishlist = localStorage.getItem("wishlist");
+    return savedWishlist ? JSON.parse(savedWishlist) : [];
+  });
+
   const [notification, setNotification] = useState(null);
+
+  // 2. Sync states to LocalStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
 
   const showNotification = (message) => {
     setNotification(message);
     setTimeout(() => setNotification(null), 2000);
   };
 
-  // Cart count derived from quantity
-  const cartCount = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  // --- Cart Logic ---
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const addToCart = (product) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find(
-        (item) => item.id === product.id
-      );
-
+      const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
         showNotification("Quantity updated in cart");
         return prevItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
         showNotification("Added to cart");
@@ -45,18 +53,14 @@ export const StoreProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.id !== itemId)
-    );
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
     showNotification("Item removed from cart");
   };
 
   const incrementQuantity = (itemId) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+        item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
@@ -64,19 +68,34 @@ export const StoreProvider = ({ children }) => {
   const decrementQuantity = (itemId) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item
+        item.id === itemId ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item
       )
     );
   };
 
-  const addToWishlist = (quantity = 1) => {
-    setWishlistCount((prev) => prev + quantity);
+  // --- Wishlist Logic ---
+  // Derived count for the Navbar badge
+  const wishlistCount = wishlist.length;
+
+  const addToWishlist = (product) => {
+    setWishlist((prevWishlist) => {
+      const isExisting = prevWishlist.find((item) => item.id === product.id);
+      
+      if (isExisting) {
+        // Toggle feature: If it exists, remove it
+        showNotification("Removed from wishlist");
+        return prevWishlist.filter((item) => item.id !== product.id);
+      } else {
+        // Add new item
+        showNotification("Added to wishlist");
+        return [...prevWishlist, product];
+      }
+    });
   };
 
-  const removeFromWishlist = (quantity = 1) => {
-    setWishlistCount((prev) => Math.max(0, prev - quantity));
+  const removeFromWishlist = (productId) => {
+    setWishlist((prev) => prev.filter((item) => item.id !== productId));
+    showNotification("Removed from wishlist");
   };
 
   return (
@@ -84,14 +103,15 @@ export const StoreProvider = ({ children }) => {
       value={{
         cartItems,
         cartCount,
-        wishlistCount,
+        wishlist,        // Expose the actual array
+        wishlistCount,   // Expose the count for the UI
         addToCart,
         removeFromCart,
         incrementQuantity,
         decrementQuantity,
-        addToWishlist,
+        addToWishlist,   // Now accepts a product object
         removeFromWishlist,
-        notification, // 👈 expose notification
+        notification,
       }}
     >
       {children}

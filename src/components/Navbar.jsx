@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   FaTwitter,
   FaFacebookF,
@@ -16,12 +16,12 @@ import { useStore } from '../context/StoreContext';
 
 const Navbar = () => {
   const { cartCount, wishlistCount } = useStore();
+  const location = useLocation(); // Hook to listen to URL changes
+  const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState('/');
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
 
   const navLinks = [
     { to: '/home', label: 'HOME' },
@@ -30,11 +30,6 @@ const Navbar = () => {
     { to: '/aboutus', label: 'ABOUT' },
     { to: '/contactus', label: 'CONTACT' },
   ];
-
-  const handleNavClick = (to) => {
-    setActiveLink(to);
-    setIsMenuOpen(false);
-  };
 
   const handleMobileSearch = () => {
     if (searchQuery.trim()) {
@@ -45,8 +40,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="left-0 right-0 bg-white/90 backdrop-blur-sm z-50 sticky border-b border-gray-100 shadow-sm">
+    <nav className="left-0 right-0 bg-white z-50 sticky border-b border-gray-100 shadow-sm">
       <div className="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 md:h-16 h-16">
+        
         {/* Logo */}
         <div>
           <Link to="/home" className="block">
@@ -73,9 +69,8 @@ const Navbar = () => {
               {link.to ? (
                 <Link
                   to={link.to}
-                  onClick={() => setActiveLink(link.to)}
                   className={`text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-orange-600 py-3 px-2 after:transition-all ${
-                    activeLink === link.to
+                    location.pathname === link.to 
                       ? 'text-orange-600 after:w-full'
                       : 'text-gray-500 hover:text-orange-700'
                   }`}
@@ -119,7 +114,7 @@ const Navbar = () => {
             />
           )}
 
-          {/* Cart */}
+          {/* Cart Link */}
           <Link
             to="/cart" 
             className="bg-orange-500 p-3 rounded-full text-white relative cursor-pointer"
@@ -132,17 +127,20 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* Wishlist */}
-          <span className="bg-orange-500 p-3 rounded-full text-white relative">
-            <FaHeart className="cursor-pointer hover:text-orange-700" />
+          {/* Wishlist Link (Desktop) */}
+          <Link 
+            to="/wishlist" 
+            className="bg-orange-500 p-3 rounded-full text-white relative cursor-pointer hover:bg-orange-600 transition"
+          >
+            <FaHeart className="hover:text-orange-700" />
             {wishlistCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
                 {wishlistCount}
               </span>
             )}
-          </span>
+          </Link>
 
-          {/* Profile */}
+          {/* Profile Link */}
           <Link
             to="/profile"
             className="bg-orange-500 p-3 rounded-full text-white cursor-pointer hover:bg-orange-600 relative"
@@ -179,9 +177,9 @@ const Navbar = () => {
               <Link
                 key={index}
                 to={link.to}
-                onClick={() => handleNavClick(link.to)}
+                onClick={() => setIsMenuOpen(false)}
                 className={`block text-lg font-medium py-3 px-2 rounded-lg transition-colors ${
-                  activeLink === link.to
+                  location.pathname === link.to 
                     ? 'bg-orange-100 text-orange-700'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
@@ -191,16 +189,16 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Mobile Action Icons */}
-          <div className="flex justify-around pt-3 space-x-2">
-            {/* Cart */}
+          {/* Mobile Action Buttons */}
+          <div className="flex flex-wrap justify-between gap-y-3 pt-3">
+            {/* Cart Button */}
             <Link
               to="/cart"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-5/12 justify-center relative shadow-lg"
+              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-[48%] justify-center relative shadow-lg"
             >
               <FaShoppingCart size={20} />
-              <span className="font-bold">Cart</span>
+              <span className="font-bold text-sm">Cart</span>
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {cartCount} 
@@ -208,25 +206,29 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* Wishlist */}
-            <span className="flex items-center space-x-2 p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition w-5/12 justify-center relative shadow-lg">
+            {/* Wishlist Button (Mobile) */}
+            <Link 
+              to="/wishlist"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center space-x-2 p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition w-[48%] justify-center relative shadow-lg"
+            >
               <FaHeart size={20} />
-              <span className="font-bold">Wishlist</span>
+              <span className="font-bold text-sm">Wishlist</span>
               {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-white text-red-600 text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-red-600">
                   {wishlistCount}
                 </span>
               )}
-            </span>
+            </Link>
 
-            {/* Profile */}
+            {/* Profile Button */}
             <Link
               to="/profile"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-5/12 justify-center relative shadow-lg"
+              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-full justify-center relative shadow-lg"
             >
               <FaUser size={20} />
-              <span className="font-bold">Profile</span>
+              <span className="font-bold text-sm">Profile</span>
             </Link>
           </div>
 
