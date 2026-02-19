@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import cors from "cors";
 
 const app = express();
-const EXTERNAL_BASE_URL = "http://41.78.157.87:32771";
+const EXTERNAL_BASE_URL = "https://laternaerp.smerp.io";
 const PORT = 3001;
 
 // ---- MIDDLEWARE ---- //
