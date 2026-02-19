@@ -35,7 +35,7 @@ const ProductDetails = () => {
           description: p.description || "No description provided.",
           // Correctly prepending the IP to the relative image path
           image_url: p.image_url 
-            ? `http://41.78.157.87:32771${p.image_url}` 
+            ? `https://laternaerp.smerp.io${p.image_url}` 
             : placeholderImg,
           inStock: p.in_stock === true || p.qty_available > 0,
           attributes: Array.isArray(p.attributes) ? p.attributes : [],

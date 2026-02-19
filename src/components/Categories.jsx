@@ -8,7 +8,7 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://41.78.157.87:32771/api/v1/subcategories");
+        const res = await fetch("https://laternaerp.smerp.io/api/v1/subcategories");
         const data = await res.json();
 
         // Only keep main categories (those with parent_id === false)
@@ -39,7 +39,7 @@ const Categories = () => {
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
               <img
-                src={`http://41.78.157.87:32771/web/image/product.public.category/${category.id}/image_1920`}
+                src={`https://laternaerp.smerp.io/web/image/product.public.category/${category.id}/image_1920`}
                 alt={category.name}
                 className="w-full h-48 object-cover"
                 onError={(e) => (e.target.src = placeholderImg)}

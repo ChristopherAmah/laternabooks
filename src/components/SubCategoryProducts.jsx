@@ -53,7 +53,7 @@ const SubCategoryProducts = () => {
               className="bg-white rounded-xl shadow hover:shadow-xl transition-all p-5"
             >
               <img
-                src={`http://41.78.157.87:32771${product.image_url}`}
+                src={`https://laternaerp.smerp.io${product.image_url}`}
                 onError={(e) => (e.target.src = placeholderImg)}
                 alt={product.name}
                 className="w-full h-40 object-cover mb-4 rounded-md"

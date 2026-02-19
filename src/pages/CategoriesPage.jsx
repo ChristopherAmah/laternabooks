@@ -9,7 +9,7 @@ const CategoriesPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://41.78.157.87:32771/api/v1/categories"); 
+        const res = await axios.get("https://laternaerp.smerp.io/api/v1/categories"); 
         
         console.log("API response:", res.data);
 

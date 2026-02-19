@@ -10,7 +10,7 @@ const SearchResults = () => {
 
   useEffect(() => {
     if (query) {
-      fetch(`http://41.78.157.87:32771/api/v1/products?search=${query}`)
+      fetch(`https://laternaerp.smerp.io/api/v1/products?search=${query}`)
         .then((res) => res.json())
         .then((data) => setProducts(data.products || []))
         .catch((err) => console.error("Error fetching products:", err));

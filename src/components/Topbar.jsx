@@ -65,7 +65,7 @@ const Topbar = () => {
 
     try {
       const response = await fetch(
-        "http://41.78.157.87:32771/api/v1/auth/logout",
+        "https://laternaerp.smerp.io/api/v1/auth/logout",
         {
           method: "POST",
           headers: {

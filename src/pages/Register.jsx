@@ -38,7 +38,7 @@ const Signup = () => {
     
     try {
       const res = await fetch(
-        "http://41.78.157.87:32771/api/v1/portal/auth/register",
+        "https://laternaerp.smerp.io/api/v1/portal/auth/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

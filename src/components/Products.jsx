@@ -5,7 +5,7 @@ import { FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 
-const API_BASE_URL = "http://41.78.157.87:32771";
+const API_BASE_URL = "https://laternaerp.smerp.io";
 
 const Products = () => {
   const { addToCart, addToWishlist } = useStore();

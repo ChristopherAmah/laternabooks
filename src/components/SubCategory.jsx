@@ -11,7 +11,7 @@ const SubCategories = () => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-        const res = await fetch("http://41.78.157.87:32771/api/v1/subcategories");
+        const res = await fetch("https://laternaerp.smerp.io/api/v1/subcategories");
         const data = await res.json();
 
         // Find the selected category
@@ -60,7 +60,7 @@ const SubCategories = () => {
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden text-center p-5"
             >
               <img
-                src={`http://41.78.157.87:32771/web/image/product.public.category/${sub.id}/image_1920`}
+                src={`https://laternaerp.smerp.io/web/image/product.public.category/${sub.id}/image_1920`}
                 alt={sub.name}
                 className="w-full h-40 object-cover mb-4"
                 onError={(e) => (e.target.src = placeholderImg)}
