@@ -3,12 +3,14 @@ import NewsSection from '../components/NewsSection'
 import BlogSection from '../components/BlogSection';
 import CompanyLogo from '../components/CompanyLogo';
 import Hero from '../components/Hero'
+import HomeProducts from '../components/HomeProducts';
 
 const Home = () => {
   return (
     <>
         <Hero />
-        <NewsSection />
+        {/* <NewsSection /> */}
+        <HomeProducts />
         <BlogSection />
         <CompanyLogo />
     </>
