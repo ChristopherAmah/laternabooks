@@ -97,8 +97,8 @@ const Footer = () => {
 
           <ul className="space-y-3 text-sm text-gray-600">
             {[
-              { name: "About Us", url: "/about" },
-              { name: "Contact Us", url: "/contact" },
+              { name: "About Us", url: "/aboutus" },
+              { name: "Contact Us", url: "/contactus" },
               { name: "Return Policy", url: "/return-policy" },
               { name: "Terms & Conditions", url: "/terms" },
               { name: "Join Book Club", url: "/book-club" },

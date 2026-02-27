@@ -213,49 +213,64 @@ app.get("/api/category", async (req, res) => {
 
 
 // =========================================================
-// 🟥 PRODUCT DETAILS (GET)
+// 🟥 PRODUCT DETAILS (GET) - JSON-RPC COMPATIBLE
 // =========================================================
 app.get("/api/product_details/:id", async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) return res.status(400).json({ error: "Product ID is required" });
 
-    // Use the exact URL that worked in Postman
     const externalUrl = `${EXTERNAL_BASE_URL}/api/v1/product_details/${id}`;
+    console.log(`📡 Fetching external URL: ${externalUrl}`);
 
-    console.log(`📡 Sending GET to: ${externalUrl}`);
-
-    // We use standard fetch here to bypass any safeFetch defaults 
-    // that might be causing the 'type=json' error.
     const response = await fetch(externalUrl, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json", // Critical for this backend
-        "Accept": "application/json",
-        "User-Agent": "PostmanRuntime/7.29.2" // Mimics your successful Postman test
-      }
+        Accept: "application/json",
+        "User-Agent": "PostmanRuntime/7.29.2",
+      },
     });
-
-    console.log(`📡 External Status: ${response.status}`);
 
     const text = await response.text();
 
     if (!response.ok) {
-      console.error("❌ External Error Body:", text);
+      console.error("❌ External error body:", text);
       return res.status(response.status).json({ error: "Remote error", details: text });
     }
 
-    const data = JSON.parse(text);
-    
-    // Extract the 'result' object so React gets a clean product object
-    if (data && data.result) {
-      res.json(data.result);
-    } else {
-      res.status(502).json({ error: "Invalid JSON-RPC response", details: data });
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      console.error("❌ Invalid JSON response:", text.slice(0, 200));
+      return res.status(502).json({ error: "Invalid JSON response", raw: text.slice(0, 200) });
     }
 
+    // ---- UNWRAP JSON-RPC RESULT ---- //
+    // Some ERP responses wrap product details inside data.result.products
+    const productData = data?.result?.products?.[0] ?? data?.products?.[0];
+    if (!productData) {
+      return res.status(404).json({ error: "Product not found in response" });
+    }
+
+    // Normalize fields for React
+    const normalizedProduct = {
+      id: productData.id ?? null,
+      name: productData.name ?? "Unknown Product",
+      base_price: Number(productData.price ?? 0),
+      description: productData.description || "No description provided.",
+      image_url: productData.image_url
+        ? `https://laternaerp.smerp.io${productData.image_url}`
+        : placeholderImg,
+      inStock:
+        productData.in_stock === true ||
+        (typeof productData.stock === "number" && productData.stock > 0),
+      attributes: productData.attributes || [],
+    };
+
+    res.json(normalizedProduct);
   } catch (error) {
-    console.error("🔥 Proxy Error:", error.message);
+    console.error("🔥 Proxy error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

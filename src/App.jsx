@@ -1,6 +1,6 @@
 import './App.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Routes, Route, useLocation } from 'react-router-dom' // Import useLocation
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -23,43 +23,37 @@ import Overview from './pages/Overview';
 import CheckoutPage from './pages/Checkout';
 
 function App() {
-  // 1. Get the current location object
   const location = useLocation();
 
-  // 2. Define the path where the layout should be hidden
-  // You can add more paths here if needed (e.g., '/register', '/forgot-password')
-  const hideLayout = location.pathname === '/login'|| location.pathname === '/register' || location.pathname === '/';
+  // Hide layout for auth pages only
+  const hideLayout = ['/login', '/register'].includes(location.pathname);
 
   return (
     <main className='relative min-h-screen overflow-x-hidden'>
-      <div>
-        {/* 3. Conditionally render Topbar and Navbar */}
-        {!hideLayout && <Topbar />}
-        {!hideLayout && <Navbar />}
-        
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Overview />} />
-          <Route path="/aboutus" element={<About />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/category" element={<Categories />} />
-          <Route path="/categories/:id" element={<SubCategories />} />
-          <Route path="/categories" element={<CategoriesPage />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/productdetail/:productId" element={<ProductDetails />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/products/:subcategoryId" element={<SubCategoryProducts />} />
-        </Routes>
+      {!hideLayout && <Topbar />}
+      {!hideLayout && <Navbar />}
 
-        {/* 4. Conditionally render Footer */}
-        {!hideLayout && <Footer />}
-      </div>
+      <Routes>
+        <Route path="/" element={<Overview />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/aboutus" element={<About />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/category" element={<Categories />} />
+        <Route path="/categories/:id" element={<SubCategories />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:subcategoryId" element={<SubCategoryProducts />} />
+        <Route path="/productdetail/:productId" element={<ProductDetails />} />
+        <Route path="/search" element={<SearchResults />} />
+      </Routes>
+
+      {!hideLayout && <Footer />}
     </main>
   )
 }
