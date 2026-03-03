@@ -21,6 +21,7 @@ import SubCategoryProducts from './components/SubCategoryProducts';
 import Profile from './pages/Profile';
 import Overview from './pages/Overview';
 import CheckoutPage from './pages/Checkout';
+import Checker from './pages/Checker';
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
         <Route path="/products/:subcategoryId" element={<SubCategoryProducts />} />
         <Route path="/productdetail/:productId" element={<ProductDetails />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/checker" element={<Checker />} />
       </Routes>
 
       {!hideLayout && <Footer />}

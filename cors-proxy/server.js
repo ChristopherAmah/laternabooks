@@ -213,68 +213,77 @@ app.get("/api/category", async (req, res) => {
 
 
 // =========================================================
-// 🟥 PRODUCT DETAILS (GET) - JSON-RPC COMPATIBLE
+// 🟦 PRODUCT DETAILS (POST) - UPDATED FOR POSTMAN/ERP
 // =========================================================
 app.get("/api/product_details/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) return res.status(400).json({ error: "Product ID is required" });
+    const externalUrl = `https://laternaerp.smerp.io/api/v1/product_details/${id}`;
 
-    const externalUrl = `${EXTERNAL_BASE_URL}/api/v1/product_details/${id}`;
-    console.log(`📡 Fetching external URL: ${externalUrl}`);
-
+    // If your ERP requires POST, we change the method here
     const response = await fetch(externalUrl, {
-      method: "GET",
+      method: "POST", // Changed to POST
       headers: {
-        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
         "User-Agent": "PostmanRuntime/7.29.2",
       },
+      // If the ERP requires a body for the POST request, add it here:
+      // body: JSON.stringify({ params: { id: id } }) 
     });
 
-    const text = await response.text();
+    const rawJson = await response.json();
+    const p = rawJson.data;
 
-    if (!response.ok) {
-      console.error("❌ External error body:", text);
-      return res.status(response.status).json({ error: "Remote error", details: text });
-    }
+    if (!p) return res.status(404).json({ error: "Product not found" });
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (err) {
-      console.error("❌ Invalid JSON response:", text.slice(0, 200));
-      return res.status(502).json({ error: "Invalid JSON response", raw: text.slice(0, 200) });
-    }
-
-    // ---- UNWRAP JSON-RPC RESULT ---- //
-    // Some ERP responses wrap product details inside data.result.products
-    const productData = data?.result?.products?.[0] ?? data?.products?.[0];
-    if (!productData) {
-      return res.status(404).json({ error: "Product not found in response" });
-    }
-
-    // Normalize fields for React
+    // Normalization logic remains the same...
     const normalizedProduct = {
-      id: productData.id ?? null,
-      name: productData.name ?? "Unknown Product",
-      base_price: Number(productData.price ?? 0),
-      description: productData.description || "No description provided.",
-      image_url: productData.image_url
-        ? `https://laternaerp.smerp.io${productData.image_url}`
-        : placeholderImg,
-      inStock:
-        productData.in_stock === true ||
-        (typeof productData.stock === "number" && productData.stock > 0),
-      attributes: productData.attributes || [],
+      id: p.id,
+      name: p.name,
+      base_price: Number(p.base_price || 0),
+      description: p.description || "No description provided.",
+      image_url: (p.image_url && p.image_url !== false) 
+        ? `https://laternaerp.smerp.io${p.image_url}` 
+        : null,
+      inStock: p.in_stock === true,
+      attributes: p.attributes || []
     };
 
     res.json(normalizedProduct);
   } catch (error) {
-    console.error("🔥 Proxy error:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
+// =========================================================
+// 🔍 PRICE CHECKER (POST)
+// =========================================================
+app.post("/api/price-checker/search", async (req, res) => {
+  try {
+    const externalUrl = `${EXTERNAL_BASE_URL}/price-checker/search`;
+    
+    // We use the safeFetch utility you already have, which handles JSON-RPC
+    const result = await safeFetch(externalUrl, {
+      method: "POST",
+      headers: {
+        "User-Agent": "PostmanRuntime/7.29.2",
+      },
+      // req.body already contains { jsonrpc, method, params: { barcode } }
+      body: req.body, 
+    });
+
+    if (!result.ok) {
+      console.error("❌ Price Checker Proxy Error:", result.error);
+      return res.status(result.status).json(result);
+    }
+
+    res.json(result.data);
+  } catch (error) {
+    console.error("🔥 Server Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // =========================================================
 // 📊 DASHBOARD (PROXY)

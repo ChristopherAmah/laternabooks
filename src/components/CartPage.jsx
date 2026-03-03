@@ -130,7 +130,7 @@ const CartPage = () => {
                     }}
                 />
                 <div className="min-w-0">
-                    <Link to={`/product/${item.id}`} className="text-base font-semibold text-gray-800 hover:text-orange-600 transition line-clamp-2">
+                    <Link to={`/productdetail/${item.id}`} className="text-base font-semibold text-gray-800 hover:text-orange-600 transition line-clamp-2">
                         {item.name}
                     </Link>
                     <p className="text-sm text-gray-500">Item ID: {item.id}</p>
