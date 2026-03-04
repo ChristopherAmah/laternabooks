@@ -26,8 +26,14 @@ const Products = () => {
 
   /* ---------------- ADD TO CART API ---------------- */
   const addToCartAPI = async (product) => {
+    // PREVENT ACTION IF OUT OF STOCK
+    if (!product.inStock) {
+      alert("Sorry, this item is currently out of stock.");
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("token"); // adjust if needed
+      const token = localStorage.getItem("token");
 
       const res = await fetch(`${API_BASE_URL}/api/v1/cart/add`, {
         method: "POST",
@@ -46,10 +52,7 @@ const Products = () => {
       }
 
       const data = await res.json();
-
-      // sync local cart UI
       addToCart(product);
-
       console.log("Added to cart:", data);
     } catch (error) {
       console.error("Add to cart error:", error);
@@ -86,14 +89,20 @@ const Products = () => {
 
         const rawProducts = data.products || [];
 
-        const structured = rawProducts.map((p) => ({
-          id: p.id,
-          name: p.name || "Unknown Product",
-          price: p.price || 0,
-          image_url: p.image_url || placeholderImg,
-          description: p.description || "No description",
-          inStock: p.stock > 0 || p.in_stock === true,
-        }));
+        const structured = rawProducts.map((p) => {
+          // Calculate stock status: check numeric stock OR boolean flag
+          const hasStock = (p.stock > 0) || (p.in_stock === true);
+          
+          return {
+            id: p.id,
+            name: p.name || "Unknown Product",
+            price: p.price || 0,
+            image_url: p.image_url || placeholderImg,
+            description: p.description || "No description",
+            stock_count: p.stock || 0,
+            inStock: hasStock,
+          };
+        });
 
         setProducts(structured);
         if (data.pages) setTotalPages(data.pages);
@@ -136,7 +145,6 @@ const Products = () => {
       <div className="flex flex-col md:flex-row gap-6">
         {/* Sidebar */}
         <div className="bg-transparent p-5 w-full md:w-1/4 space-y-6">
-          {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Category</h3>
             {categories.length === 0 ? (
@@ -158,7 +166,6 @@ const Products = () => {
             )}
           </div>
 
-          {/* Search */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Search</h3>
             <input
@@ -173,7 +180,6 @@ const Products = () => {
             />
           </div>
 
-          {/* Stock */}
           <div className="space-y-4">
             <h3 className="font-bold text-gray-700 border-b pb-2">Status</h3>
             <div className="flex items-center">
@@ -193,7 +199,7 @@ const Products = () => {
           </div>
         </div>
 
-        {/* Products */}
+        {/* Products Grid */}
         <div className="w-full md:w-3/4">
           {loading ? (
             <p className="text-center text-gray-500">Loading...</p>
@@ -205,43 +211,59 @@ const Products = () => {
                 {productsToDisplay.map((product) => (
                   <div
                     key={product.id}
-                    className="bg-white rounded-xl hover:shadow-xl transition flex flex-col"
+                    className="bg-white rounded-xl hover:shadow-xl transition flex flex-col relative overflow-hidden"
                   >
+                    {/* Out of Stock Badge */}
+                    {!product.inStock && (
+                      <div className="absolute top-3 left-0 z-10 bg-red-600 text-white text-[10px] px-3 py-1 rounded-r-full font-bold uppercase shadow-md">
+                        Sold Out
+                      </div>
+                    )}
+
                     <div className="relative">
                       <img
                         src={product.image_url}
                         alt={product.name}
-                        className="w-full h-48 object-cover"
+                        className={`w-full h-48 object-cover transition-all duration-300 ${
+                          !product.inStock ? "grayscale opacity-60" : ""
+                        }`}
                         onError={(e) => (e.target.src = placeholderImg)}
                       />
                       <button
                         onClick={() => addToWishlist(product)}
-                        className="absolute top-2 right-2 p-2 bg-white rounded-full"
+                        className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition"
                       >
-                        <FaHeart />
+                        <FaHeart className="text-gray-400 hover:text-red-500" />
                       </button>
                     </div>
 
                     <div className="p-4 flex flex-col flex-1">
-                      <h2 className="font-semibold">{product.name}</h2>
-                      <p className="text-sm text-gray-500 flex-1">
+                      <h2 className="font-semibold text-gray-800 line-clamp-1">{product.name}</h2>
+                      <p className="text-xs text-gray-500 flex-1 mt-1 line-clamp-2">
                         {product.description}
                       </p>
 
-                      <div className="flex justify-between items-center mt-3">
-                        <span className="font-bold text-orange-600">
+                      <div className="flex justify-between items-center mt-4">
+                        <span className="font-bold text-orange-600 text-lg">
                           ₦{product.price.toLocaleString()}
                         </span>
+                        
                         <button
                           onClick={() => addToCartAPI(product)}
-                          className="p-2 bg-orange-500 text-white rounded-full"
+                          disabled={!product.inStock}
+                          className={`p-2.5 rounded-full transition-all ${
+                            product.inStock
+                              ? "bg-orange-500 text-white hover:bg-orange-600 shadow-md"
+                              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          }`}
+                          title={product.inStock ? "Add to Cart" : "Out of Stock"}
                         >
-                          <FaCartPlus />
+                          <FaCartPlus size={18} />
                         </button>
                       </div>
 
-                      <Link to={`/productdetail/${product.id}`}>
-                        <button className="mt-4 w-full py-2 bg-orange-100 text-orange-700 rounded-lg">
+                      <Link to={`/productdetail/${product.id}`} className="mt-4">
+                        <button className="w-full py-2 bg-orange-50 text-orange-700 rounded-lg font-medium hover:bg-orange-100 transition">
                           See Details
                         </button>
                       </Link>
@@ -251,23 +273,23 @@ const Products = () => {
               </div>
 
               {/* Pagination */}
-              <div className="flex justify-center gap-4 mt-6">
+              <div className="flex justify-center items-center gap-6 mt-10">
                 <button
                   onClick={() => setPage((p) => Math.max(p - 1, 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 bg-orange-200 rounded"
+                  className="px-5 py-2 bg-white border border-orange-200 text-orange-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-50 transition"
                 >
                   Previous
                 </button>
 
-                <span>
-                  Page {page} of {totalPages}
+                <span className="text-sm font-medium text-gray-600">
+                  Page <span className="text-orange-600">{page}</span> of {totalPages}
                 </span>
 
                 <button
                   onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                   disabled={page === totalPages}
-                  className="px-4 py-2 bg-orange-200 rounded"
+                  className="px-5 py-2 bg-white border border-orange-200 text-orange-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-50 transition"
                 >
                   Next
                 </button>

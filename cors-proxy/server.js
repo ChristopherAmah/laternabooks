@@ -116,12 +116,54 @@ function extractAndNormalizeProfile(resultData) {
 }
 
 // =========================================================
-// 🔐 LOGIN
+// 🔐 LOGIN - UPDATED
 // =========================================================
 app.post("/api/login", async (req, res) => {
   const url = `${EXTERNAL_BASE_URL}/api/v1/auth/login`;
-  const result = await safeFetch(url, { method: "POST", body: req.body });
-  if (!result.ok) return res.status(result.status).json(result);
+  
+  // Forward the login credentials (email/password) to SMERP
+  const result = await safeFetch(url, { 
+    method: "POST", 
+    body: req.body 
+  });
+
+  if (!result.ok) {
+    return res.status(result.status).json(result);
+  }
+
+  // result.data now contains: { status, session_token, user_id, expires_in, token }
+  // We send this to the frontend so it can store the 'token' in LocalStorage
+  res.json(result.data);
+});
+
+
+// =========================================================
+// 🚪 LOGOUT
+// =========================================================
+app.post("/api/logout", async (req, res) => {
+  const url = `${EXTERNAL_BASE_URL}/api/v1/auth/logout`;
+  const authHeader = req.headers.authorization;
+
+  // Most ERPs require the token to know which session to kill
+  if (!authHeader) {
+    return res.status(401).json({ error: "Missing Authorization header" });
+  }
+
+  const result = await safeFetch(url, { 
+    method: "POST", 
+    headers: { 
+      Authorization: authHeader,
+      "User-Agent": "PostmanRuntime/7.29.2"
+    },
+    // If your API requires specific parameters for logout, 
+    // you can pass req.body here.
+    body: req.body 
+  });
+
+  if (!result.ok) {
+    return res.status(result.status).json(result);
+  }
+
   res.json(result.data);
 });
 
@@ -253,35 +295,6 @@ app.get("/api/product_details/:id", async (req, res) => {
     res.json(normalizedProduct);
   } catch (error) {
     res.status(500).json({ error: "Server Error" });
-  }
-});
-
-// =========================================================
-// 🔍 PRICE CHECKER (POST)
-// =========================================================
-app.post("/api/price-checker/search", async (req, res) => {
-  try {
-    const externalUrl = `${EXTERNAL_BASE_URL}/price-checker/search`;
-    
-    // We use the safeFetch utility you already have, which handles JSON-RPC
-    const result = await safeFetch(externalUrl, {
-      method: "POST",
-      headers: {
-        "User-Agent": "PostmanRuntime/7.29.2",
-      },
-      // req.body already contains { jsonrpc, method, params: { barcode } }
-      body: req.body, 
-    });
-
-    if (!result.ok) {
-      console.error("❌ Price Checker Proxy Error:", result.error);
-      return res.status(result.status).json(result);
-    }
-
-    res.json(result.data);
-  } catch (error) {
-    console.error("🔥 Server Error:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

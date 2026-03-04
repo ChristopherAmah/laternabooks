@@ -22,6 +22,8 @@ import Profile from './pages/Profile';
 import Overview from './pages/Overview';
 import CheckoutPage from './pages/Checkout';
 import Checker from './pages/Checker';
+import ScrollToTop from "./ScrollToTop";
+
 
 function App() {
   const location = useLocation();
@@ -33,6 +35,8 @@ function App() {
     <main className='relative min-h-screen overflow-x-hidden'>
       {!hideLayout && <Topbar />}
       {!hideLayout && <Navbar />}
+
+      <ScrollToTop />
 
       <Routes>
         <Route path="/" element={<Overview />} />

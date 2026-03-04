@@ -26,17 +26,26 @@ const Login = () => {
 
       const data = await res.json();
 
-      if (res.ok && data.result && data.result.status === "success") {
-        const authToken = data.result.token || data.result.session_token;
+      // UPDATED LOGIC: Checking for 'status' directly on the flat 'data' object
+      if (res.ok && data.status === "success") {
+        // Use 'token' from the flat response as the main auth identifier
+        const authToken = data.token; 
+        
         if (authToken) {
           localStorage.setItem("authToken", authToken);
-          localStorage.setItem("user", JSON.stringify(data.result));
+          localStorage.setItem("session_token", data.session_token);
+          localStorage.setItem("user_id", data.user_id);
+          // Store the whole flat object for easy access to user details later
+          localStorage.setItem("user", JSON.stringify(data));
         }
+        
         navigate("/products");
       } else {
-        setError(data?.result?.message || data?.error || "Login failed.");
+        // Map the error message from the flat 'message' key
+        setError(data?.message || data?.error || "Login failed. Please check your credentials.");
       }
     } catch (err) {
+      console.error("Login Connection Error:", err);
       setError("Cannot connect to the server.");
     } finally {
       setLoading(false);
@@ -56,10 +65,6 @@ const Login = () => {
             alt="Pet Food Hero" 
             className="w-full h-full object-cover"
           />
-          {/* Brand Overlay */}
-          {/* <div className="absolute top-10 left-10 z-20">
-             <img src={laterna} alt="Logo" className="h-10 brightness-0 invert" />
-          </div> */}
         </div>
 
         {/* Right Panel (Login Form) */}
