@@ -15,20 +15,24 @@ import {
 } from "lucide-react";
 import placeholderImg from "../assets/laterna.png";
 
-// Utility
 const getAuthToken = () => localStorage.getItem("authToken");
 
-// ---------------- INFO ITEM ----------------
+/* ---------------- INFO ITEM ---------------- */
 const InfoItem = React.memo(
   ({ label, value, editing, name, type = "text", handleChange, icon: Icon }) => {
     const displayValue =
       value === false || value === null || value === undefined ? "" : value;
 
     return (
-      <div className="group flex flex-col md:flex-row md:items-center py-3 px-3 rounded-xl border border-transparent hover:border-gray-200 hover:bg-white transition">
-        <div className="flex items-center gap-2 w-36 shrink-0 mb-1 md:mb-0">
-          {Icon && <Icon size={16} className="text-gray-400" />}
-          <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
+      <div className="group flex flex-col md:flex-row md:items-center py-4 px-4 rounded-xl hover:bg-white/60 transition-all">
+        <div className="flex items-center gap-3 w-40 shrink-0 mb-2 md:mb-0">
+          {Icon && (
+            <Icon
+              size={16}
+              className="text-gray-400 group-hover:text-orange-500 transition"
+            />
+          )}
+          <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
             {label}
           </span>
         </div>
@@ -40,12 +44,14 @@ const InfoItem = React.memo(
               name={name}
               value={displayValue}
               onChange={handleChange}
-              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 outline-none transition"
+              className="w-full bg-white/80 backdrop-blur border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all"
             />
           ) : (
-            <span className="text-gray-900 font-medium group-hover:text-gray-700 transition">
+            <span className="text-gray-900 font-medium text-sm">
               {displayValue || (
-                <span className="text-gray-300 italic">Not specified</span>
+                <span className="text-gray-300 italic font-normal">
+                  Not provided
+                </span>
               )}
             </span>
           )}
@@ -55,7 +61,29 @@ const InfoItem = React.memo(
   }
 );
 
-// ---------------- PROFILE ----------------
+/* ---------------- STAT CARD ---------------- */
+const StatCard = ({ label, value, icon: Icon }) => (
+  <div className="relative overflow-hidden bg-white/80 backdrop-blur-lg p-6 rounded-2xl border border-white/50 transition-all duration-300 hover:-translate-y-1 group">
+    <div className="absolute -right-6 -top-6 w-24 h-24 bg-orange-100 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition" />
+
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs uppercase font-semibold text-gray-400 tracking-wider mb-2">
+          {label}
+        </p>
+        <p className="text-3xl font-bold text-gray-900">
+          {value || 0}
+        </p>
+      </div>
+
+      <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
+        <Icon size={22} />
+      </div>
+    </div>
+  </div>
+);
+
+/* ---------------- MAIN PROFILE ---------------- */
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [dashboard, setDashboard] = useState(null);
@@ -66,12 +94,13 @@ const Profile = () => {
   const [error, setError] = useState(null);
 
   const syncFormData = useCallback((data) => {
-    const partner = data?.partner || {};
+    if (!data) return;
+    const partner = data.partner || {};
     setFormData({
-      name: data?.name || "",
-      email: data?.email || "",
-      phone: data?.phone || "",
-      mobile: data?.mobile || "",
+      name: data.name || "",
+      email: data.email || "",
+      phone: data.phone || "",
+      mobile: data.mobile || "",
       street: partner.street || "",
       city: partner.city || "",
       state: partner.state || "",
@@ -82,15 +111,12 @@ const Profile = () => {
 
   const fetchData = async () => {
     const token = getAuthToken();
-
     if (!token) {
-      setError("You are not logged in.");
       setLoading(false);
       return;
     }
 
     try {
-      // Fetching from your Local Proxy to avoid CORS and Method errors
       const [profileRes, dashboardRes] = await Promise.all([
         fetch("http://localhost:3001/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
@@ -100,21 +126,24 @@ const Profile = () => {
         }),
       ]);
 
-      if (!profileRes.ok) throw new Error("Profile failed to load");
+      if (profileRes.status === 401)
+        throw new Error("Session expired. Please log in again.");
+      if (!profileRes.ok) throw new Error("Could not fetch profile");
 
-      const profile = await profileRes.json();
-      setUser(profile);
-      syncFormData(profile);
+      const profileData = await profileRes.json();
+      setUser(profileData);
+      syncFormData(profileData);
 
       if (dashboardRes.ok) {
-        const dashboardJson = await dashboardRes.json();
-        // Accessing the nested data from the JSON-RPC result
-        if (dashboardJson.result && dashboardJson.result.data) {
-          setDashboard(dashboardJson.result.data);
-        }
+        const dashData = await dashboardRes.json();
+        setDashboard(dashData.result?.data?.metrics || null);
       }
     } catch (err) {
-      setError("Failed to load profile and dashboard data.");
+      setError(err.message);
+      if (err.message.includes("expired")) {
+        localStorage.removeItem("authToken");
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -124,10 +153,8 @@ const Profile = () => {
     fetchData();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (e) =>
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleCancel = () => {
     syncFormData(user);
@@ -150,168 +177,177 @@ const Profile = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error("Failed to update profile.");
 
       const updatedProfile = await res.json();
       setUser(updatedProfile);
       setEditing(false);
-    } catch {
-      setError("Failed to save profile.");
+    } catch (err) {
+      setError(err.message);
     } finally {
       setIsSaving(false);
     }
   };
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin h-12 w-12 rounded-full border-t-2 border-b-2 border-orange-500" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-orange-50">
+        <div className="animate-spin h-12 w-12 rounded-full border-4 border-orange-200 border-t-orange-500" />
       </div>
     );
-  }
 
-  if (!user) {
+  if (!user)
     return (
-      <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="p-8 max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">You’re not logged in</h2>
-          <a href="/login" className="mt-4 inline-block bg-orange-500 text-white px-6 py-2 rounded-full font-semibold">
-            Go to Login
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-orange-50">
+        <div className="bg-white p-10 rounded-3xl shadow-xl text-center max-w-md w-full">
+          <User size={40} className="mx-auto text-orange-500 mb-6" />
+          <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
+          <a
+            href="/login"
+            className="block bg-orange-600 text-white py-3 rounded-xl font-semibold hover:bg-orange-700 transition"
+          >
+            Sign In
           </a>
         </div>
       </div>
     );
-  }
 
   return (
-    <div className="max-w-5xl mx-auto my-12 px-4">
-      {/* 📊 DASHBOARD METRICS SECTION */}
-      {dashboard && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <StatCard 
-            label="Orders" 
-            value={dashboard.metrics.total_orders} 
-            icon={Package} 
-            color="bg-blue-50 text-blue-600" 
-          />
-          <StatCard 
-            label="Cart Items" 
-            value={dashboard.metrics.total_carts} 
-            icon={ShoppingCart} 
-            color="bg-orange-50 text-orange-600" 
-          />
-          <StatCard 
-            label="Revenue" 
-            value={`₦${dashboard.metrics.total_revenue.toLocaleString()}`} 
-            icon={TrendingUp} 
-            color="bg-green-50 text-green-600" 
-          />
-          <StatCard 
-            label="Total Spend" 
-            value={`₦${dashboard.metrics.total_order_amount.toLocaleString()}`} 
-            icon={CreditCard} 
-            color="bg-purple-50 text-purple-600" 
-          />
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 py-20 px-6">
+      <div className="max-w-6xl mx-auto">
 
-      <div className="bg-white rounded-3xl shadow-sm shadow-orange-100/40 border border-gray-100 overflow-hidden">
-        {/* Banner */}
-        <div className="h-36 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 relative">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.25),transparent_60%)]" />
-        </div>
+        {dashboard && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <StatCard label="Orders" value={dashboard.total_orders} icon={Package} />
+            <StatCard label="Cart Items" value={dashboard.total_carts} icon={ShoppingCart} />
+            <StatCard
+              label="Revenue"
+              value={`₦${dashboard.total_revenue?.toLocaleString()}`}
+              icon={TrendingUp}
+            />
+            <StatCard
+              label="Total Spend"
+              value={`₦${dashboard.total_order_amount?.toLocaleString()}`}
+              icon={CreditCard}
+            />
+          </div>
+        )}
 
-        <div className="relative px-8 pb-10">
-          {/* Profile Header */}
-          <div className="flex flex-col md:flex-row items-end -mt-16 mb-10 gap-6">
-            <div className="relative group">
-              <img
-                src={user.image_1920 ? `data:image/svg+xml;base64,${user.image_1920}` : placeholderImg}
-                alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg bg-white"
-              />
-              {editing && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition">
-                  <Camera className="text-white mb-1" size={18} />
-                  <span className="text-[10px] font-bold text-white uppercase tracking-tighter">Change</span>
-                </div>
-              )}
-            </div>
+        <div className="backdrop-blur-xl bg-white/70 rounded-3xl border border-white/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
 
-            <div className="flex-1 text-center md:text-left pb-2">
-              {editing ? (
-                <input
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="text-3xl md:text-4xl font-extrabold text-gray-900 border-b-2 border-orange-500 focus:outline-none bg-transparent w-full"
-                />
-              ) : (
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">{user.name}</h2>
-              )}
-              <p className="text-gray-500 flex items-center justify-center md:justify-start gap-1 mt-2 text-sm">
-                <Mail size={14} /> {user.email}
-              </p>
-            </div>
-
-            <div className="flex gap-3 mb-2">
-              {editing ? (
-                <>
-                  <button onClick={handleSave} disabled={isSaving} className="bg-orange-500 text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 hover:bg-orange-600 transition">
-                    <Save size={18} /> {isSaving ? "Saving..." : "Save"}
-                  </button>
-                  <button onClick={handleCancel} className="bg-gray-100 text-gray-700 px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 hover:bg-gray-200 transition">
-                    <X size={18} /> Cancel
-                  </button>
-                </>
-              ) : (
-                <button onClick={() => setEditing(true)} className="border border-gray-200 bg-white text-gray-700 px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 hover:bg-gray-50 transition">
-                  <Edit2 size={18} /> Edit Profile
-                </button>
-              )}
-            </div>
+          {/* Banner */}
+          <div className="h-56 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-400" />
+            <div className="absolute -top-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
           </div>
 
-          {error && <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">{error}</div>}
+          <div className="relative px-6 md:px-16 pb-16">
+            <div className="flex flex-col md:flex-row items-center md:items-end -mt-20 mb-12 gap-8">
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <section>
-              <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><Phone size={20} className="text-orange-500" /> Contact Details</h3>
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <InfoItem label="Phone" name="phone" value={editing ? formData.phone : user.phone} editing={editing} handleChange={handleChange} />
-                <InfoItem label="Mobile" name="mobile" value={editing ? formData.mobile : user.mobile} editing={editing} handleChange={handleChange} />
-                <InfoItem label="Email" name="email" value={editing ? formData.email : user.email} editing={editing} handleChange={handleChange} />
+              {/* Avatar */}
+              <div className="relative">
+                <div className="w-40 h-40 rounded-3xl border-4 border-white overflow-hidden shadow-xl bg-white">
+                  <img
+                    src={user.image_url || placeholderImg}
+                    alt="Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
-            </section>
 
-            <section>
-              <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><MapPin size={20} className="text-orange-500" /> Shipping Address</h3>
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <InfoItem label="Street" name="street" value={editing ? formData.street : user.partner?.street} editing={editing} handleChange={handleChange} />
-                <InfoItem label="City" name="city" value={editing ? formData.city : user.partner?.city} editing={editing} handleChange={handleChange} />
-                <InfoItem label="State" name="state" value={editing ? formData.state : user.partner?.state} editing={editing} handleChange={handleChange} />
-                <InfoItem label="ZIP Code" name="zip" value={editing ? formData.zip : user.partner?.zip} editing={editing} handleChange={handleChange} />
-                <InfoItem label="Country" name="country" value={editing ? formData.country : user.partner?.country} editing={editing} handleChange={handleChange} />
+              {/* Name */}
+              <div className="flex-1 text-center md:text-left">
+                {editing ? (
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="text-4xl font-bold border-b-2 border-orange-500 bg-transparent focus:outline-none"
+                  />
+                ) : (
+                  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+                    {user.name}
+                  </h2>
+                )}
+
+                <p className="text-gray-500 mt-2 flex items-center gap-2 justify-center md:justify-start">
+                  <Mail size={16} /> {user.email}
+                </p>
+
+                {/* {!editing && (
+                  // <span className="inline-block mt-3 px-4 py-1 bg-gradient-to-r from-orange-500 to-amber-400 text-white text-xs font-semibold rounded-full shadow-md">
+                  //   Premium Member
+                  // </span>
+                )} */}
               </div>
-            </section>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                {editing ? (
+                  <>
+                    <button
+                      onClick={handleSave}
+                      className="bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-700 transition flex items-center gap-2"
+                    >
+                      <Save size={18} /> Save
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="bg-gray-200 px-6 py-3 rounded-xl hover:bg-gray-300 transition"
+                    >
+                      <X size={18} />
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setEditing(true)}
+                    className="bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition flex items-center gap-2"
+                  >
+                    <Edit2 size={18} /> Edit Profile
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {error && (
+              <div className="mb-8 p-4 bg-red-50 text-red-600 rounded-xl border border-red-200">
+                {error}
+              </div>
+            )}
+
+            {/* Info Sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+              <section>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-6">
+                  Account Access
+                </h3>
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-white/40 shadow-sm">
+                  <InfoItem label="Mobile" name="mobile" value={editing ? formData.mobile : user.mobile} editing={editing} handleChange={handleChange} icon={Phone} />
+                  <InfoItem label="Work Phone" name="phone" value={editing ? formData.phone : user.phone} editing={editing} handleChange={handleChange} icon={Phone} />
+                  <InfoItem label="Email" name="email" value={editing ? formData.email : user.email} editing={editing} handleChange={handleChange} icon={Mail} />
+                </div>
+              </section>
+
+              <section>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-6">
+                  Default Shipping
+                </h3>
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-white/40 shadow-sm">
+                  <InfoItem label="Street" name="street" value={editing ? formData.street : user.partner?.street} editing={editing} handleChange={handleChange} icon={MapPin} />
+                  <InfoItem label="City" name="city" value={editing ? formData.city : user.partner?.city} editing={editing} handleChange={handleChange} />
+                  <InfoItem label="State" name="state" value={editing ? formData.state : user.partner?.state} editing={editing} handleChange={handleChange} />
+                  <InfoItem label="Zip" name="zip" value={editing ? formData.zip : user.partner?.zip} editing={editing} handleChange={handleChange} />
+                  <InfoItem label="Country" name="country" value={editing ? formData.country : user.partner?.country} editing={editing} handleChange={handleChange} />
+                </div>
+              </section>
+
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-// Sub-component for Dashboard Metrics
-const StatCard = ({ label, value, icon: Icon, color }) => (
-  <div className="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-4 transition-transform hover:-translate-y-1">
-    <div className={`p-3 rounded-2xl ${color}`}>
-      <Icon size={24} />
-    </div>
-    <div>
-      <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">{label}</p>
-      <p className="text-xl font-extrabold text-gray-900">{value}</p>
-    </div>
-  </div>
-);
 
 export default Profile;

@@ -17,6 +17,7 @@ const Login = () => {
     setLoading(true);
 
     try {
+      // Pointing to your Local Proxy
       const API_URL = "http://localhost:3001/api/login";
       const res = await fetch(API_URL, {
         method: "POST",
@@ -26,45 +27,51 @@ const Login = () => {
 
       const data = await res.json();
 
-      // UPDATED LOGIC: Checking for 'status' directly on the flat 'data' object
+      // Based on your response: { "status": "success", "access_token": "..." }
       if (res.ok && data.status === "success") {
-        // Use 'token' from the flat response as the main auth identifier
-        const authToken = data.token; 
+        
+        // 1. Capture the access_token
+        const authToken = data.access_token; 
         
         if (authToken) {
+          // 2. Store specific auth details in LocalStorage
           localStorage.setItem("authToken", authToken);
-          localStorage.setItem("session_token", data.session_token);
           localStorage.setItem("user_id", data.user_id);
-          // Store the whole flat object for easy access to user details later
+          localStorage.setItem("user_name", data.name);
+          
+          // 3. Store the full object for profile access
           localStorage.setItem("user", JSON.stringify(data));
+          
+          // 4. Redirect to shop
+          navigate("/products");
+        } else {
+          setError("Session could not be established. Please try again.");
         }
-        
-        navigate("/products");
       } else {
-        // Map the error message from the flat 'message' key
-        setError(data?.message || data?.error || "Login failed. Please check your credentials.");
+        // Handle API-side errors (wrong password, user not found, etc.)
+        setError(data?.message || data?.error || "Invalid login credentials.");
       }
     } catch (err) {
       console.error("Login Connection Error:", err);
-      setError("Cannot connect to the server.");
+      setError("Cannot connect to the server. Please check your connection.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex items-center justify-center min-h-screen">
       {/* Main Card Container */}
-      <div className="flex w-full overflow-hidden bg-white border border-gray-100  min-h-[70vh]">
+      <div className="flex w-full max-w-7xl overflow-hidden min-h-[70vh]">
         
         {/* Left Panel (Hero Image) */}
-        <div className="hidden lg:block w-1/2 relative bg-blue-50">
-          <div className="absolute z-10"></div>
+        <div className="hidden lg:block w-1/2 relative">
           <img 
             src={hero} 
-            alt="Pet Food Hero" 
+            alt="Hero background" 
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-orange-500/10 mix-blend-multiply"></div>
         </div>
 
         {/* Right Panel (Login Form) */}
@@ -134,7 +141,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold tracking-widest uppercase hover:bg-orange-700 transition shadow-lg shadow-orange-600/20 disabled:bg-gray-300 flex items-center justify-center gap-2"
+                className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold tracking-widest uppercase hover:bg-orange-700 transition shadow-lg shadow-orange-600/20 disabled:bg-gray-400 flex items-center justify-center gap-2 active:scale-95"
               >
                 {loading ? (
                   <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -152,7 +159,7 @@ const Login = () => {
               {/* Brand Link */}
               <div className="flex justify-center transition-transform hover:scale-105">
                 <Link to='/products'>
-                  <img src={laterna} alt="Laterna" className="h-8 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+                  <img src={laterna} alt="Laterna Logo" className="h-8 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
                 </Link>
               </div>
             </form>
