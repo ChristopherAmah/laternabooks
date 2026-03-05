@@ -2,32 +2,30 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { useStore } from "../context/StoreContext";
+import placeholderImg from "../assets/guitar.jpg";
 
 const SearchResults = () => {
   const [products, setProducts] = useState([]);
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
 
+  const { addToCart, addToWishlist } = useStore();
+
   useEffect(() => {
     if (query) {
-      fetch(`https://laternaerp.smerp.io/api/v1/products?search=${query}`)
+      fetch(`https://laternaerp.smerp.io/api/v2/products?search=${query}`)
         .then((res) => res.json())
         .then((data) => setProducts(data.products || []))
         .catch((err) => console.error("Error fetching products:", err));
     }
   }, [query]);
 
-  const handleAddToCart = (product) => {
-    console.log("Added to cart:", product);
-  };
-
-  const handleAddToWishlist = (product) => {
-    console.log("Added to wishlist:", product);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
+
+        {/* Page Title */}
         <h1 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800">
           Search results for:{" "}
           <span className="text-orange-600">{query}</span>
@@ -38,19 +36,20 @@ const SearchResults = () => {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="group bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col"
+                className="group bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
               >
-                {/* Product Image + Wishlist Button */}
+
+                {/* Product Image */}
                 <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
                   <img
-                    src={product.image}
+                    src={product.image || placeholderImg}
                     alt={product.name}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
                   />
 
-                  {/* Wishlist button */}
+                  {/* Wishlist */}
                   <button
-                    onClick={() => handleAddToWishlist(product)}
+                    onClick={() => addToWishlist(product)}
                     className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-pink-50 transition"
                   >
                     <FiHeart
@@ -60,32 +59,39 @@ const SearchResults = () => {
                   </button>
                 </div>
 
-                {/* Product Details */}
+                {/* Product Info */}
                 <div className="flex flex-col flex-grow p-4">
                   <h2 className="font-semibold text-gray-800 text-sm md:text-base mb-1 line-clamp-2">
                     {product.name}
                   </h2>
+
                   <p className="text-orange-600 font-bold mb-3">
-                    ₦{product.price}
+                    ₦{Number(product.price).toLocaleString()}
                   </p>
 
-                  {/* Action buttons */}
+                  {/* Buttons */}
                   <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100 text-sm text-gray-600">
+
+                    {/* Details */}
                     <Link
-                      to={`/products/${product.id}`}
+                      to={`/productdetail/${product.id}`}
                       className="hover:text-orange-600 transition font-medium"
                     >
                       Details
                     </Link>
 
+                    {/* Add to Cart */}
                     <button
-                      onClick={() => handleAddToCart(product)}
+                      onClick={() => addToCart(product)}
                       className="flex items-center gap-1 hover:text-green-600 transition"
                     >
-                      <FiShoppingCart size={16} /> Add
+                      <FiShoppingCart size={16} />
+                      Add
                     </button>
+
                   </div>
                 </div>
+
               </div>
             ))}
           </div>
@@ -102,6 +108,7 @@ const SearchResults = () => {
             </p>
           </div>
         )}
+
       </div>
     </div>
   );

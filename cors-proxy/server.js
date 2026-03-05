@@ -200,19 +200,53 @@ app.get("/api/profile", async (req, res) => {
 // =========================================================
 // 📊 DASHBOARD
 // =========================================================
+
+/**
+ * Fetches dashboard metrics (carts, orders, revenue)
+ * Requires: Authorization: Bearer <token>
+ */
 app.get("/api/dashboard", async (req, res) => {
   const url = `${EXTERNAL_BASE_URL}/api/v1/dashboard`;
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: "Missing Authorization header" });
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Missing Authorization header" });
+  }
+
+  // Your API requires a POST even though we are "getting" data
+  const rpcPayload = createJsonRpcPayload("call", {});
 
   const result = await safeFetch(url, {
     method: "POST",
-    headers: { Authorization: authHeader },
-    body: createJsonRpcPayload("call", {}),
+    headers: { 
+      "Authorization": authHeader,
+      "Content-Type": "application/json" 
+    },
+    body: rpcPayload,
   });
 
-  if (!result.ok) return res.status(result.status).json(result);
-  res.json(result.data);
-});
+  if (!result.ok) {
+    return res.status(result.status).json(result);
+  }
 
+  // The raw response has a 'data' wrapper based on your example
+  const dashboardData = result.data.data || result.data;
+
+  // Optional: Clean up the data for the frontend
+  const normalizedDashboard = {
+    user: dashboardData.user || "Guest",
+    metrics: {
+      totalCarts: dashboardData.metrics?.total_carts ?? 0,
+      totalOrders: dashboardData.metrics?.total_orders ?? 0,
+      abandonedCarts: dashboardData.metrics?.abandoned_carts ?? 0,
+      totalRevenue: dashboardData.metrics?.total_revenue ?? 0.0,
+      totalDue: dashboardData.metrics?.total_due_amount ?? 0,
+      uniqueProducts: dashboardData.metrics?.unique_products_purchased ?? 0
+    },
+    latestOrders: dashboardData.latest_orders || []
+  };
+
+  res.json(normalizedDashboard);
+});
+  
 app.listen(PORT, () => console.log(`🚀 Proxy running at http://localhost:${PORT}`));
