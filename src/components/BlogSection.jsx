@@ -25,7 +25,7 @@ function BlogSection() {
         {cards.map((card, idx) => (
           <div
             key={idx}
-            className="bg-white border border-gray-100 shadow-sm rounded-lg max-w-sm w-full flex flex-col hover:shadow-lg transition duration-300"
+            className="bg-white border border-gray-100 shadow-sm rounded-lg max-w-xs w-full flex flex-col hover:shadow-lg transition duration-300"
           >
             <div className="overflow-hidden">
               <img
