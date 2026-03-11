@@ -17,8 +17,26 @@ async function safeFetch(url, options = {}) {
     },
     body: finalBody,
   });
-  const data = await response.json();
-  return data;
+
+  const text = await response.text();
+  if (!text) return { ok: false, status: 502, error: "Empty response body" };
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    return { ok: false, status: 502, error: "Non-JSON response", raw: text.slice(0, 100) };
+  }
+
+  if (data.error) {
+    return { ok: false, status: 400, error: data.error.message || "RPC Error", data };
+  }
+
+  if (!response.ok) {
+    return { ok: false, status: response.status, error: data?.error || "Backend error", data };
+  }
+
+  return { ok: true, status: response.status, data };
 }
 
 export default async function handler(req, res) {
@@ -32,7 +50,8 @@ export default async function handler(req, res) {
 
   try {
     const result = await safeFetch(`${EXTERNAL_BASE_URL}/api/v1/auth/login`, { method: "POST", body: payload });
-    res.status(200).json(result);
+    if (!result.ok) return res.status(result.status).json(result);
+    res.status(200).json(result.data);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Login proxy failed" });
