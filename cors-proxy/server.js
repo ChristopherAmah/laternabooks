@@ -4,7 +4,7 @@ import cors from "cors";
 
 const app = express();
 const EXTERNAL_BASE_URL = "https://laternaerp.smerp.io";
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // ---- MIDDLEWARE ---- //
 app.use(express.json());
@@ -296,4 +296,8 @@ app.post("/api/logout", async (req, res) => {
   res.json(result.data);
 });
   
-app.listen(PORT, () => console.log(`🚀 Proxy running at http://localhost:${PORT}`));
+if (process.env.START_PROXY !== "false") {
+  app.listen(PORT, () => console.log(`🚀 Proxy running at http://localhost:${PORT}`));
+}
+
+export default app;

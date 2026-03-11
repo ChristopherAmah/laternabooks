@@ -1,4 +1,4 @@
-# ---------- 1️⃣ Build Stage ----------
+# ---------- 1: Build Stage ----------
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -9,12 +9,21 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 RUN npm run build
 
-# ---------- 2️⃣ Production Stage ----------
-FROM nginx:alpine
+# ---------- 2: Production Stage ----------
+FROM node:20-alpine
 
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV START_PROXY=false
+
+COPY package.json package-lock.json* ./
+RUN npm ci --legacy-peer-deps --omit=dev
+
+COPY --from=builder /app/dist /app/dist
+COPY cors-proxy /app/cors-proxy
+COPY server.js /app/server.js
+
+EXPOSE 3000
+CMD ["node", "server.js"]
