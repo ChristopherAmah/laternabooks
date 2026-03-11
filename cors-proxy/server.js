@@ -176,7 +176,7 @@ app.get("/api/product_details/:id", async (req, res) => {
 
 // =========================================================
 // 🟨 CATEGORIES
-// =========================================================
+// ===================================================
 app.get("/api/categories", async (req, res) => {
   const url = `${EXTERNAL_BASE_URL}/api/v1/categories`;
   const payload = createJsonRpcPayload("call", {});
