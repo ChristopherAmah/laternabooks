@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { applyCors } from "./_cors.js";
 
 const EXTERNAL_BASE_URL = "https://laternaerp.smerp.io";
 
@@ -8,12 +9,20 @@ function createJsonRpcPayload(method = "call", params = {}) {
 
 async function safeFetch(url, options = {}) {
   const finalBody = options.body ? JSON.stringify(options.body) : undefined;
-  const response = await fetch(url, { ...options, body: finalBody });
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+    body: finalBody,
+  });
   const data = await response.json();
   return data;
 }
 
 export default async function handler(req, res) {
+  if (applyCors(req, res)) return;
   if (req.method !== "GET") return res.status(405).json({ message: "Method not allowed" });
 
   const authHeader = req.headers.authorization;

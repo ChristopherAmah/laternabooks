@@ -14,6 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import placeholderImg from "../assets/laterna.png";
+import { API_BASE } from "../utils/api";
 
 const getAuthToken = () => localStorage.getItem("authToken");
 
@@ -118,10 +119,10 @@ const Profile = () => {
 
     try {
       const [profileRes, dashboardRes] = await Promise.all([
-        fetch("http://localhost:3001/api/profile", {
+        fetch(`${API_BASE}/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://localhost:3001/api/dashboard", {
+        fetch(`${API_BASE}/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -136,7 +137,23 @@ const Profile = () => {
 
       if (dashboardRes.ok) {
         const dashData = await dashboardRes.json();
-        setDashboard(dashData.result?.data?.metrics || null);
+        const rawMetrics =
+          dashData.metrics || dashData.result?.data?.metrics || dashData.data?.metrics || null;
+
+        if (rawMetrics) {
+          const normalizedMetrics =
+            rawMetrics.total_orders !== undefined
+              ? rawMetrics
+              : {
+                  total_orders: rawMetrics.totalOrders ?? 0,
+                  total_carts: rawMetrics.totalCarts ?? 0,
+                  total_revenue: rawMetrics.totalRevenue ?? 0,
+                  total_order_amount: rawMetrics.totalDue ?? 0,
+                };
+          setDashboard(normalizedMetrics);
+        } else {
+          setDashboard(null);
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -168,7 +185,7 @@ const Profile = () => {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:3001/api/profile", {
+      const res = await fetch(`${API_BASE}/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

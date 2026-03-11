@@ -8,4 +8,9 @@ export default defineConfig({
     react(), 
     tailwindcss(),
   ],
+  server: {
+    allowedHosts: [
+      "wearifully-innominate-shella.ngrok-free.dev"
+    ]
+  }
 })

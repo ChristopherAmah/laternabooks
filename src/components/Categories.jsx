@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import placeholderImg from "../assets/guitar.jpg";
+import { API_BASE } from "../utils/api";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -8,11 +9,14 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://laternaerp.smerp.io/api/v1/subcategories");
+        const res = await fetch(`${API_BASE}/categories`);
+        if (!res.ok) throw new Error(`Categories request failed: ${res.status}`);
         const data = await res.json();
 
-        // Only keep main categories (those with parent_id === false)
-        const mainCategories = data.filter((cat) => cat.parent_id === false);
+        const raw = data?.categories || [];
+
+        // Only keep main categories (those with parent_id === false) if present
+        const mainCategories = raw.filter((cat) => cat.parent_id === false || cat.parent_id === 0 || cat.parent_id == null);
         setCategories(mainCategories);
       } catch (error) {
         console.error("Error fetching categories:", error);

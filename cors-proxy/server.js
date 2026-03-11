@@ -175,6 +175,32 @@ app.get("/api/product_details/:id", async (req, res) => {
 });
 
 // =========================================================
+// 🟨 CATEGORIES
+// =========================================================
+app.get("/api/categories", async (req, res) => {
+  const url = `${EXTERNAL_BASE_URL}/api/v1/categories`;
+  const payload = createJsonRpcPayload("call", {});
+
+  let result = await safeFetch(url, {
+    method: "POST",
+    body: payload,
+  });
+
+  // Fallback: some servers don't accept POST bodies for this endpoint
+  if (!result.ok) {
+    result = await safeFetch(url, { method: "GET" });
+  }
+
+  if (!result.ok) return res.status(result.status).json(result);
+
+  const categories = Array.isArray(result.data)
+    ? result.data
+    : result.data?.categories || result.data?.result || result.data?.data || [];
+
+  res.json({ categories });
+});
+
+// =========================================================
 // 🟪 PROFILE (GET & PATCH)
 // =========================================================
 app.get("/api/profile", async (req, res) => {
@@ -247,6 +273,27 @@ app.get("/api/dashboard", async (req, res) => {
   };
 
   res.json(normalizedDashboard);
+});
+
+// =========================================================
+// 🟥 LOGOUT
+// =========================================================
+app.post("/api/logout", async (req, res) => {
+  const url = `${EXTERNAL_BASE_URL}/api/v1/auth/logout`;
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: "Missing Authorization header" });
+
+  const email = req.body?.email;
+  if (!email) return res.status(400).json({ error: "Email is required" });
+
+  const result = await safeFetch(url, {
+    method: "POST",
+    headers: { Authorization: authHeader },
+    body: { email },
+  });
+
+  if (!result.ok) return res.status(result.status).json(result);
+  res.json(result.data);
 });
   
 app.listen(PORT, () => console.log(`🚀 Proxy running at http://localhost:${PORT}`));

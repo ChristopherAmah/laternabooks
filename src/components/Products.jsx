@@ -4,6 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
+import { API_BASE } from "../utils/api";
 
 const API_BASE_URL = "https://laternaerp.smerp.io";
 
@@ -80,7 +81,7 @@ const Products = () => {
       setLoading(true);
 
       const apiUrl = selectedCategoryId
-        ? `http://localhost:3001/api/category?category_id=${selectedCategoryId}&page=${page}`
+        ? `${API_BASE}/category?category_id=${selectedCategoryId}&page=${page}`
         : `${API_BASE_URL}/api/v2/products?page=${page}`;
 
       try {

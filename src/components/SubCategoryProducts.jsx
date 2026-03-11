@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import placeholderImg from "../assets/guitar.jpg";
+import { API_BASE } from "../utils/api";
 
 const SubCategoryProducts = () => {
   const { subcategoryId } = useParams(); // correct param name
@@ -12,7 +13,7 @@ const SubCategoryProducts = () => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/category?category_id=${subcategoryId}`
+          `${API_BASE}/category?category_id=${subcategoryId}`
         );
         const data = await res.json();
 

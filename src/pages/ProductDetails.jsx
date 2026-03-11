@@ -3,9 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import placeholderImg from "../assets/guitar.jpg";
 import { FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { useStore } from "../context/StoreContext";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api";
+import { API_BASE } from "../utils/api";
 
 const ProductDetails = () => {
   const { productId } = useParams();

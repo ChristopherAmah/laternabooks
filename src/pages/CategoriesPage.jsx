@@ -1,6 +1,6 @@
 // src/pages/CategoriesPage.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { API_BASE } from "../utils/api";
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -9,14 +9,17 @@ const CategoriesPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("https://laternaerp.smerp.io/api/v1/categories"); 
-        
-        console.log("API response:", res.data);
+        const res = await fetch(`${API_BASE}/categories`);
+        const data = await res.json();
 
-        if (res.data && Array.isArray(res.data)) {
-          setCategories(res.data);
-        } else if (res.data.categories) {
-          setCategories(res.data.categories);
+        if (data && Array.isArray(data)) {
+          setCategories(data);
+        } else if (data.categories) {
+          setCategories(data.categories);
+        } else if (data.result) {
+          setCategories(data.result);
+        } else if (data.data) {
+          setCategories(data.data);
         } else {
           setCategories([]);
         }

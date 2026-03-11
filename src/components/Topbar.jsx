@@ -6,6 +6,7 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE } from "../utils/api";
 
 const Topbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,6 +35,8 @@ const Topbar = () => {
   const handleLogout = async () => {
     setLoading(true);
     const token = localStorage.getItem("authToken");
+    const user = localStorage.getItem("user");
+    const email = user ? JSON.parse(user).email : null;
 
     // If no token, just clear local state
     if (!token) {
@@ -44,12 +47,13 @@ const Topbar = () => {
 
     try {
       // Point to your LOCAL PROXY, not the external ERP directly
-      const response = await fetch("http://localhost:3001/api/logout", {
+      const response = await fetch(`${API_BASE}/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`, // Pass the JWT token
         },
+        body: JSON.stringify({ email }),
       });
 
       // We clear local data regardless of whether the server call was 200 OK

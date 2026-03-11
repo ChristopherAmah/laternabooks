@@ -23,18 +23,24 @@ async function safeFetch(url, options = {}) {
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return;
-  if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
+  if (req.method !== "GET" && req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
 
-  const payload = {
-    login: req.body.login || req.body.email,
-    password: req.body.password,
-  };
+  const payload = createJsonRpcPayload("call", {});
 
   try {
-    const result = await safeFetch(`${EXTERNAL_BASE_URL}/api/v1/auth/login`, { method: "POST", body: payload });
-    res.status(200).json(result);
+    const result = await safeFetch(`${EXTERNAL_BASE_URL}/api/v1/categories`, {
+      method: "POST",
+      body: payload,
+    });
+    const categories = Array.isArray(result)
+      ? result
+      : result.categories || result.result || result.data || [];
+
+    res.status(200).json({ categories });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Login proxy failed" });
+    res.status(500).json({ success: false, message: "Categories fetch failed" });
   }
 }

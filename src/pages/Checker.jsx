@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { API_BASE } from "../utils/api";
 
-const PROXY_URL = "http://localhost:3001/api/price-checker"; 
-// 🔁 Change this to your deployed proxy URL in production
+const PROXY_URL = `${API_BASE}/price-checker`;
 
 const PriceChecker = () => {
   const [barcode, setBarcode] = useState("");

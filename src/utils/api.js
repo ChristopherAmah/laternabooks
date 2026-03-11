@@ -1,5 +1,7 @@
 // Central API helper for login, profile, dashboard
-const API_BASE = "/api"; // Vercel serverless root
+export const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? "http://localhost:3001/api" : "/api");
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("authToken");
