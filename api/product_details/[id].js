@@ -17,8 +17,26 @@ async function safeFetch(url, options = {}) {
     },
     body: finalBody,
   });
-  const data = await response.json();
-  return data;
+
+  const text = await response.text();
+  if (!text) return { ok: false, status: 502, error: "Empty response body" };
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    return { ok: false, status: 502, error: "Non-JSON response", raw: text.slice(0, 100) };
+  }
+
+  if (data.error) {
+    return { ok: false, status: 400, error: data.error.message || "RPC Error", data };
+  }
+
+  if (!response.ok) {
+    return { ok: false, status: response.status, error: data?.error || "Backend error", data };
+  }
+
+  return { ok: true, status: response.status, data };
 }
 
 export default async function handler(req, res) {
@@ -34,6 +52,8 @@ export default async function handler(req, res) {
       method: "POST",
       body: rpcPayload,
     });
+
+    if (!result.ok) return res.status(result.status).json(result);
 
     const p = result.data || result;
 
