@@ -25,40 +25,15 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  /* ---------------- ADD TO CART API ---------------- */
-  const addToCartAPI = async (product) => {
-    // PREVENT ACTION IF OUT OF STOCK
+  /* ---------------- ADD TO CART ---------------- */
+  const addToCartAPI = (product) => {
     if (!product.inStock) {
       alert("Sorry, this item is currently out of stock.");
       return;
     }
 
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${API_BASE_URL}/api/v1/cart/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify({
-          product_id: product.id,
-          quantity: 1,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to add to cart");
-      }
-
-      const data = await res.json();
-      addToCart(product);
-      console.log("Added to cart:", data);
-    } catch (error) {
-      console.error("Add to cart error:", error);
-      alert("Could not add item to cart");
-    }
+    addToCart(product);
+    console.log("Added to cart locally:", product);
   };
 
   /* ---------------- FETCH CATEGORIES ---------------- */
