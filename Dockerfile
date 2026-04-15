@@ -19,7 +19,7 @@ ENV PORT=3000
 ENV START_PROXY=false
 
 COPY package.json package-lock.json* ./
-RUN npm ci --legacy-peer-deps --omit=dev
+RUN npm install --legacy-peer-deps --omit=dev
 
 COPY --from=builder /app/dist /app/dist
 COPY cors-proxy /app/cors-proxy
