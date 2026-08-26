@@ -113,17 +113,14 @@ app.post("/api/login", async (req, res) => {
 
 /**
  * NEW: Fetch all products using the JSON-RPC call structure
- * Endpoint: http://localhost:3001/api/all-products
+ * Endpoint: http://localhost:3001/api/allproduct
  */
-app.post("/api/all-products", async (req, res) => {
-  const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct`;
-  
-  // Create payload: { jsonrpc: "2.0", method: "call", params: {} }
-  const payload = createJsonRpcPayload("call", req.body.params || {});
+app.post("/api/allproduct", async (req, res) => {
+  const query = new URLSearchParams(req.body?.params || {});
+  const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct${query.size ? `?${query}` : ""}`;
 
   const result = await safeFetch(url, {
-    method: "POST",
-    body: payload,
+    method: "GET",
   });
 
   if (!result.ok) return res.status(result.status).json(result);
@@ -134,13 +131,12 @@ app.post("/api/all-products", async (req, res) => {
 });
 
 // GET version for easier browser testing/simple fetching
-app.get("/api/all-products", async (req, res) => {
-  const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct`;
-  const payload = createJsonRpcPayload("call", {});
+app.get("/api/allproduct", async (req, res) => {
+  const query = new URLSearchParams(req.query);
+  const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct${query.size ? `?${query}` : ""}`;
 
   const result = await safeFetch(url, {
-    method: "POST",
-    body: payload,
+    method: "GET",
   });
 
   if (!result.ok) return res.status(result.status).json(result);

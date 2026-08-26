@@ -115,9 +115,9 @@ app.post("/api/login", async (req, res) => {
 
 /**
  * NEW: Fetch all products using the JSON-RPC call structure
- * Endpoint: http://localhost:3001/api/all-products
+ * Endpoint: http://localhost:3001/api/allproduct
  */
-app.post("/api/all-products", async (req, res) => {
+app.post("/api/allproduct", async (req, res) => {
   const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct`;
   
   // Create payload: { jsonrpc: "2.0", method: "call", params: {} }
@@ -136,7 +136,7 @@ app.post("/api/all-products", async (req, res) => {
 });
 
 // GET version for easier browser testing/simple fetching
-app.get("/api/all-products", async (req, res) => {
+app.get("/api/allproduct", async (req, res) => {
   const url = `${EXTERNAL_BASE_URL}/api/v1/allproduct`;
   const payload = createJsonRpcPayload("call", {});
 

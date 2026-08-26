@@ -4,6 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
+import { api } from "../utils/api";
 
 const API_BASE_URL = "https://laternaerp.smerp.io";
 
@@ -52,8 +53,9 @@ const HomeProducts = () => {
       setLoading(true);
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v2/products?page=1`);
-        const data = await res.json();
+        const data = await api.post("/allproduct", {
+          params: { page: 1, limit: 8 },
+        });
 
         const structured = (data.products || []).slice(0, 8).map((p) => {
           const hasStock = (p.stock > 0) || (p.in_stock === true);

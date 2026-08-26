@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
-import { API_BASE } from "../utils/api";
+import { api } from "../utils/api";
 
 const API_BASE_URL = "https://laternaerp.smerp.io";
 
@@ -20,7 +20,7 @@ const Products = () => {
   const [stockActive, setStockActive] = useState(false);
 
   const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -65,8 +65,7 @@ const Products = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/categories`);
-        const data = await res.json();
+        const data = await api.get("/categories");
         if (data.categories) setCategories(data.categories);
       } catch (err) {
         console.error("Error fetching categories:", err);
@@ -80,13 +79,10 @@ const Products = () => {
     const fetchProducts = async () => {
       setLoading(true);
 
-      const apiUrl = selectedCategoryId
-        ? `${API_BASE}/category?category_id=${selectedCategoryId}&page=${page}`
-        : `${API_BASE_URL}/api/v2/products?page=${page}`;
-
       try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
+        const data = await api.post("/allproduct", {
+          params: { page, limit: 20 },
+        });
 
         const rawProducts = data.products || [];
 
@@ -101,12 +97,13 @@ const Products = () => {
             image_url: p.image_url || placeholderImg,
             description: p.description || "No description",
             stock_count: p.stock || 0,
+            category_ids: p.category_ids || [],
             inStock: hasStock,
           };
         });
 
         setProducts(structured);
-        if (data.pages) setTotalPages(data.pages);
+        setTotalPages(data.pagination?.pages || 1);
       } catch (err) {
         console.error("Error fetching products:", err);
       } finally {
@@ -115,7 +112,7 @@ const Products = () => {
     };
 
     fetchProducts();
-  }, [selectedCategoryId, page]);
+  }, [page]);
 
   /* ---------------- FILTER LOGIC ---------------- */
   const derivedFilteredProducts = useMemo(() => {
@@ -131,11 +128,21 @@ const Products = () => {
       filteredList = filteredList.filter((p) => p.inStock);
     }
 
+    if (selectedCategoryIds.length > 0) {
+      filteredList = filteredList.filter((p) =>
+        p.category_ids.some((categoryId) => selectedCategoryIds.includes(categoryId))
+      );
+    }
+
     return filteredList;
-  }, [search, searchActive, inStock, stockActive, products]);
+  }, [search, searchActive, inStock, stockActive, products, selectedCategoryIds]);
 
   const toggleCategory = (cat) => {
-    setSelectedCategoryId(selectedCategoryId === cat.id ? null : cat.id);
+    setSelectedCategoryIds((currentIds) =>
+      currentIds.includes(cat.id)
+        ? currentIds.filter((categoryId) => categoryId !== cat.id)
+        : [...currentIds, cat.id]
+    );
     setPage(1);
   };
 
@@ -155,7 +162,7 @@ const Products = () => {
                 <div key={cat.id} className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={selectedCategoryId === cat.id}
+                    checked={selectedCategoryIds.includes(cat.id)}
                     onChange={() => toggleCategory(cat)}
                     className="rounded text-orange-600"
                   />
