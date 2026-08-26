@@ -146,11 +146,9 @@ app.get("/api/allproduct", async (req, res) => {
 app.get("/api/product_details/:id", async (req, res) => {
   const { id } = req.params;
   const url = `${EXTERNAL_BASE_URL}/api/v1/product_details/${id}`;
-  const rpcPayload = createJsonRpcPayload("call", {});
 
   const result = await safeFetch(url, {
-    method: "POST",
-    body: rpcPayload,
+    method: "GET",
   });
 
   if (!result.ok) return res.status(result.status).json(result);
@@ -161,9 +159,11 @@ app.get("/api/product_details/:id", async (req, res) => {
     name: p.name || "",
     sku: p.sku || "",
     base_price: Number(p.base_price || 0),
+    current_price: Number(p.current_price ?? p.base_price ?? 0),
     description: p.description || "",
     image_url: p.image_url ? (p.image_url.startsWith('http') ? p.image_url : `${EXTERNAL_BASE_URL}${p.image_url}`) : null,
     in_stock: p.in_stock === true,
+    out_of_stock_message: p.out_of_stock_message || "Out of stock",
     attributes: p.attributes || [],
   };
 

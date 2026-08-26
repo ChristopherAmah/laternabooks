@@ -4,6 +4,9 @@ import { FaTrash, FaCartPlus, FaHeartBroken } from "react-icons/fa";
 import { useStore } from "../context/StoreContext";
 import placeholderImg from "../assets/guitar.jpg";
 
+const isInStock = (product) =>
+  product.inStock === true || product.in_stock === true || Number(product.stock) > 0;
+
 const Wishlist = () => {
   const { wishlist, removeFromWishlist, addToCart } = useStore();
 
@@ -73,8 +76,16 @@ const Wishlist = () => {
                 <img
                   src={product.image_url || placeholderImg}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${
+                    !isInStock(product) ? "grayscale opacity-60" : ""
+                  }`}
                 />
+
+                {!isInStock(product) && (
+                  <div className="absolute left-0 top-4 bg-red-600 px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
+                    Sold Out
+                  </div>
+                )}
 
                 {/* Remove Button */}
                 <button
@@ -115,10 +126,16 @@ const Wishlist = () => {
 
                     <button
                       onClick={() => addToCart(product)}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                      disabled={!isInStock(product)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                        isInStock(product)
+                          ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:scale-[1.02] active:scale-95"
+                          : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      }`}
+                      title={isInStock(product) ? "Add to cart" : "Out of stock"}
                     >
                       <FaCartPlus size={14} />
-                      Add
+                      {isInStock(product) ? "Add" : "Sold Out"}
                     </button>
                   </div>
 
