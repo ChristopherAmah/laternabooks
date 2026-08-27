@@ -5,24 +5,24 @@ const AboutUs = () => {
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}
-      <section className="relative  py-12">
-        <div className="max-w-6xl mx-auto text-center px-6">
-          <h1 className="text-4xl font-bold text-orange-600 text-center">
+      <section className="relative py-8 sm:py-12">
+        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+          <h1 className="text-center text-3xl font-bold text-orange-600 sm:text-4xl">
             About Us
           </h1>
         </div>
       </section>
 
       {/* Who We Are */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="flex flex-col md:flex-row items-center gap-10">
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
+        <div className="flex flex-col items-center gap-6 sm:gap-10 md:flex-row">
           <img
             src={aboutImage}
             alt="LaternaBooks Store"
-            className="w-full md:w-1/2 rounded-2xl shadow-md object-cover"
+            className="h-56 w-full rounded-2xl object-cover shadow-md sm:h-72 md:h-auto md:w-1/2"
           />
           <div className="md:w-1/2">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">
+            <h2 className="mb-4 text-2xl font-bold text-orange-600 sm:text-3xl">
               WHO WE ARE
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -46,15 +46,15 @@ const AboutUs = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-orange-600 mb-10">
+      <section className="bg-gray-50 py-10 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="mb-6 text-center text-2xl font-bold text-orange-600 sm:mb-10 sm:text-3xl">
             Our Categories
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {/* Bibles */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">Bibles</h3>
               <p className="text-gray-700">
                 We offer a wide variety of Bible translations for spiritual
@@ -63,7 +63,7 @@ const AboutUs = () => {
             </div>
 
             {/* Children’s Books */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Children’s Books
               </h3>
@@ -74,7 +74,7 @@ const AboutUs = () => {
             </div>
 
             {/* Educational Toys */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Educational Toys
               </h3>
@@ -85,7 +85,7 @@ const AboutUs = () => {
             </div>
 
             {/* Frames & Plaques */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Frames & Plaques
               </h3>
@@ -96,7 +96,7 @@ const AboutUs = () => {
             </div>
 
             {/* Notebooks & Journals */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Notebooks & Journals
               </h3>
@@ -107,7 +107,7 @@ const AboutUs = () => {
             </div>
 
             {/* Business & Christian Books */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Business & Christian Books
               </h3>
@@ -118,7 +118,7 @@ const AboutUs = () => {
             </div>
 
             {/* Stationery */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Stationery
               </h3>
@@ -129,7 +129,7 @@ const AboutUs = () => {
             </div>
 
             {/* Home Fragrances */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Home Fragrances
               </h3>
@@ -140,7 +140,7 @@ const AboutUs = () => {
             </div>
 
             {/* Book Reading Events */}
-            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+            <div className="rounded-xl bg-white p-5 shadow transition hover:shadow-lg sm:p-6">
               <h3 className="text-2xl font-semibold mb-2 text-gray-900">
                 Book Reading Sessions
               </h3>

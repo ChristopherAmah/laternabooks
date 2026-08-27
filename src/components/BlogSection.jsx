@@ -17,11 +17,11 @@ const cards = [
 
 function BlogSection() {
   return (
-    <div className="bg-white py-12 px-4">
+    <div className="bg-white px-4 py-10 sm:py-12">
       <h2 className="text-2xl text-center font-semibold text-gray-700">Book Clubs</h2>
           <div className="w-16 border-t-2 border-orange-300 mx-auto mb-5 my-3"></div>
 
-      <div className="flex flex-col md:flex-row justify-center items-center gap-8">
+      <div className="flex flex-col items-center justify-center gap-5 sm:gap-8 md:flex-row">
         {cards.map((card, idx) => (
           <div
             key={idx}
@@ -31,10 +31,10 @@ function BlogSection() {
               <img
                 src={card.image}
                 alt={card.title}
-                className="h-56 w-full object-cover rounded-t-lg transition-transform duration-300 hover:scale-110"
+                className="h-44 w-full rounded-t-lg object-cover transition-transform duration-300 hover:scale-110 sm:h-56"
               />
             </div>
-            <div className="p-6 flex flex-col justify-between flex-1">
+            <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
               <h3 className="text-lg font-semibold text-orange-500 mb-3">
                 {card.title}
               </h3>

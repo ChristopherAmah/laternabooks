@@ -149,13 +149,13 @@ const StarRating = ({ rating }) => {
 
 // 🛍️ Product Card
 const ProductCard = ({ product }) => (
-  <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center p-3 sm:p-4">
+  <div className="relative flex flex-col items-center overflow-hidden rounded-lg bg-white p-3 shadow-md sm:p-4">
     {product.onSale && (
       <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] sm:text-xs font-bold p-2 rounded-full z-10 shadow-md">
         Sale!
       </span>
     )}
-    <div className="w-full max-h-72 sm:max-h-80 md:max-h-96 rounded-md mb-3 border border-gray-200 shadow-sm bg-gray-100">
+    <div className="mb-3 max-h-48 w-full rounded-md border border-gray-200 bg-gray-100 shadow-sm sm:max-h-56 md:max-h-72">
       <img
         src={product.image}
         alt={product.title}
@@ -206,7 +206,7 @@ const NewsSection = () => {
       <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg">
 
         {/* 🆕 Latest Products Section */}
-        <div className="py-16 bg-gray-50 relative">
+        <div className="relative bg-gray-50 py-10 sm:py-16">
           {/* Section Title */}
           <div className="text-center mb-10">
             <h2 className="text-2xl font-semibold text-gray-700">Latest Products</h2>
@@ -232,11 +232,11 @@ const NewsSection = () => {
             {/* Scrollable Row */}
             <div
               ref={scrollRef}
-              className="overflow-x-auto scroll-smooth px-6 scrollbar-thin scrollbar-thumb-orange-400 scrollbar-track-gray-100"
+              className="scrollbar-thin scrollbar-thumb-orange-400 scrollbar-track-gray-100 overflow-x-auto px-4 scroll-smooth sm:px-6"
             >
-              <div className="flex space-x-6 md:space-x-8 w-max pb-4">
+              <div className="flex w-max space-x-4 pb-4 sm:space-x-6 md:space-x-8">
                 {/* Product 1 */}
-                <div className="min-w-[220px] bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-3 text-center flex-shrink-0">
+                <div className="min-w-[180px] flex-shrink-0 rounded-xl bg-white p-3 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:min-w-[220px]">
                   <img
                     src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
                     alt="Atomic Habits"
@@ -315,7 +315,7 @@ const NewsSection = () => {
   </p>
 
   {/* Book Grid */}
-  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-10 mt-12 w-full max-w-7xl">
+  <div className="mt-8 grid w-full max-w-7xl grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-6 md:grid-cols-4 lg:grid-cols-5 lg:gap-10">
     {collection.map((book, index) => (
       <div
         key={index}
@@ -328,7 +328,7 @@ const NewsSection = () => {
         </div>
 
         {/* Image */}
-        <div className="w-full h-64 bg-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="flex h-32 w-full items-center justify-center overflow-hidden bg-gray-50 sm:h-64">
           <img
             src={book.image}
             alt={book.title}
@@ -385,14 +385,14 @@ const NewsSection = () => {
 
 
         {/* 🌟 Featured Products */}
-<div className="min-h-screen py-16 px-6 bg-gradient-to-b from-white to-orange-50">
+<div className="min-h-screen bg-gradient-to-b from-white to-orange-50 px-4 py-10 sm:px-6 sm:py-16">
   <header className="text-center mb-14">
     <h2 className="text-3xl font-bold text-gray-800 mb-3">Special Deals</h2>
     <div className="w-20 border-t-4 border-orange-400 mx-auto mb-4"></div>
     <p className="text-gray-500">Grab these limited-time offers before they’re gone!</p>
   </header>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 max-w-7xl mx-auto">
+  <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-10">
     {products.map((product) => (
       <div
         key={product.id}

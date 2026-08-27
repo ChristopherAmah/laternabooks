@@ -42,8 +42,8 @@ const SubCategories = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-orange-600 text-center mb-10">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <h1 className="mb-6 text-center text-2xl font-bold text-orange-600 sm:mb-10 sm:text-3xl">
         {categoryName} Subcategories
       </h1>
 
@@ -52,17 +52,17 @@ const SubCategories = () => {
           No subcategories found under this category.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
           {subCategories.map((sub) => (
             <Link 
               key={sub.id}
               to={`/products/${sub.id}`}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden text-center p-5"
+              className="overflow-hidden rounded-xl bg-white p-3 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-5"
             >
               <img
                 src={`https://laternaerp.smerp.io/web/image/product.public.category/${sub.id}/image_1920`}
                 alt={sub.name}
-                className="w-full h-40 object-cover mb-4"
+                className="mb-3 h-24 w-full object-cover sm:mb-4 sm:h-40"
                 onError={(e) => (e.target.src = placeholderImg)}
               />
               <h2 className="text-lg font-semibold text-orange-500">

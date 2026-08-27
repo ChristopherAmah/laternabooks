@@ -164,19 +164,19 @@ const CheckoutPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+        <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-8">
             <form onSubmit={handleCheckout} className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Proceed to Checkout</h1>
+                <h1 className="mb-6 text-2xl font-extrabold text-gray-900 sm:mb-8 sm:text-3xl">Proceed to Checkout</h1>
 
                 {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 gap-5 sm:gap-8 lg:grid-cols-3">
                     <div className="lg:col-span-2 space-y-6">
                         
                         {/* BILLING SECTION */}
-                        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Billing Details</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-lg sm:p-6">
+                            <h2 className="mb-5 border-b pb-3 text-xl font-bold text-gray-800 sm:mb-6 sm:pb-4 sm:text-2xl">Billing Details</h2>
+                            <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                                 <InputField label="Full Name" name="name" value={billingData.name} onChange={handleBillingChange} />
                                 <InputField label="Email Address" name="email" type="email" value={billingData.email} onChange={handleBillingChange} />
                                 <InputField label="Phone Number" name="phone" value={billingData.phone} onChange={handleBillingChange} />
@@ -210,9 +210,9 @@ const CheckoutPage = () => {
 
                         {/* SHIPPING SECTION */}
                         {!shippingSameAsBilling && (
-                            <div className="bg-orange-50/50 p-6 rounded-xl shadow-lg border border-orange-100 animate-in fade-in duration-300">
-                                <h2 className="text-2xl font-bold text-orange-900 mb-6 border-b border-orange-200 pb-4">Shipping Address</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="animate-in rounded-xl border border-orange-100 bg-orange-50/50 p-4 shadow-lg duration-300 sm:p-6">
+                                <h2 className="mb-5 border-b border-orange-200 pb-3 text-xl font-bold text-orange-900 sm:mb-6 sm:pb-4 sm:text-2xl">Shipping Address</h2>
+                                <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                                     <InputField label="Recipient Name" name="name" value={shippingData.name} onChange={handleShippingChange} />
                                     <InputField label="Recipient Phone" name="phone" value={shippingData.phone} onChange={handleShippingChange} />
                                     <div className="md:col-span-2">
@@ -227,9 +227,9 @@ const CheckoutPage = () => {
 
                     {/* ORDER SUMMARY */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-xl shadow-md sticky top-4 border border-gray-100">
+                        <div className="sticky top-16 rounded-xl border border-gray-100 bg-white p-4 shadow-md sm:p-6 md:top-20">
                             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Order Summary</h2>
-                            <div className="space-y-4 mb-6 max-h-60 overflow-y-auto">
+                            <div className="mb-6 max-h-40 space-y-4 overflow-y-auto sm:max-h-60">
                                 {cart.lines.map((line, index) => (
                                     <div key={index} className="flex justify-between items-center text-sm">
                                         <div className="flex-1 pr-4">

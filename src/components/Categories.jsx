@@ -27,15 +27,15 @@ const Categories = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-orange-600 text-center mb-10">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <h1 className="mb-6 text-center text-2xl font-bold text-orange-600 sm:mb-10 sm:text-3xl">
         Categories
       </h1>
 
       {categories.length === 0 ? (
         <p className="text-center text-gray-500">No categories found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -45,10 +45,10 @@ const Categories = () => {
               <img
                 src={`https://laternaerp.smerp.io/web/image/product.public.category/${category.id}/image_1920`}
                 alt={category.name}
-                className="w-full h-48 object-cover"
+                className="h-28 w-full object-cover sm:h-40 md:h-48"
                 onError={(e) => (e.target.src = placeholderImg)}
               />
-              <div className="p-5">
+              <div className="p-3 sm:p-5">
                 <h2 className="text-lg font-semibold text-orange-500 mb-2">
                   {category.name}
                 </h2>

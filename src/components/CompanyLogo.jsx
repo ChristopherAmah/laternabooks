@@ -10,14 +10,14 @@ const CompanyLogo = () => {
   ];
 
   return (
-    <div className="w-full overflow-hidden bg-white py-16">
+    <div className="w-full overflow-hidden bg-white py-10 sm:py-16">
       <div className="relative mx-auto max-w-7xl">
         <div className="flex animate-marquee items-center whitespace-nowrap">
           
           {[...words, ...words].map((word, index) => (
             <span
               key={index}
-              className="mx-12 text-lg md:text-xl font-semibold tracking-wide text-gray-500
+              className="mx-4 text-base font-semibold tracking-wide text-gray-500 sm:mx-6 sm:text-lg md:mx-8 md:text-xl lg:mx-12
                          transition-all duration-300 ease-out
                          hover:scale-105 hover:text-transparent
                          hover:bg-clip-text hover:bg-gradient-to-r

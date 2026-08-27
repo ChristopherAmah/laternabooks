@@ -39,17 +39,17 @@ const CategoriesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
       <h1 className="text-2xl font-bold mb-6">Categories</h1>
 
       {categories.length === 0 ? (
         <p>No categories found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className="bg-white shadow rounded p-4 hover:shadow-lg transition"
+              className="rounded bg-white p-3 shadow transition hover:shadow-lg sm:p-4"
             >
               <h2 className="text-lg font-semibold">{cat.name}</h2>
               {cat.description && (

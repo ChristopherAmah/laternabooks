@@ -12,15 +12,15 @@ import verve from "../assets/verve.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 pt-14 pb-6 text-gray-700">
+    <footer className="border-t border-gray-200 bg-white pb-6 pt-10 text-gray-700 sm:pt-14">
       {/* Top Section */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[2fr_1fr_1fr] gap-12">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 md:grid-cols-3 md:gap-12 lg:grid-cols-[2fr_1fr_1fr]">
         {/* Logo & Delivery Info */}
         <div className="space-y-6">
           <img
             src={LaternaLogo}
             alt="LaternaBooks Logo"
-            className="w-48 object-contain"
+            className="w-40 max-w-full object-contain sm:w-48"
           />
 
           <div>
@@ -117,16 +117,16 @@ const Footer = () => {
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-200 my-10" />
+      <div className="my-8 border-t border-gray-200 sm:my-10" />
 
       {/* Bottom Section */}
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-4 sm:px-6 md:flex-row md:gap-6">
         <p className="text-sm text-gray-500 text-center md:text-left">
           LaternaBooks © {new Date().getFullYear()} — All Rights Reserved
         </p>
 
         {/* Payment Icons */}
-        <div className="flex items-center gap-5 flex-wrap justify-center">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-5">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png"
             alt="Mastercard"

@@ -47,7 +47,7 @@ const Hero = () => {
   const [animationKey, setAnimationKey] = useState(0);
 
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden">
+    <div className="relative h-[58vh] min-h-[26rem] w-full overflow-hidden sm:h-[68vh] md:h-[80vh]">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -81,7 +81,7 @@ const Hero = () => {
               >
                 <motion.h1
                   variants={childVariants}
-                  className="text-white text-4xl md:text-[90px] font-bold mb-6"
+                  className="mb-5 text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
                 >
                   {slide.title}
                 </motion.h1>

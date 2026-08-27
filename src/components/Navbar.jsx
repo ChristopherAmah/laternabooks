@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -9,6 +9,7 @@ import {
   FaShoppingCart,
   FaHeart,
   FaUser,
+  FaSignOutAlt,
 } from 'react-icons/fa';
 
 import LaternaLogo from '../assets/laterna.png';
@@ -22,6 +23,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const navLinks = [
     { to: '/home', label: 'HOME' },
@@ -36,6 +39,42 @@ const Navbar = () => {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
       setSearchQuery("");
       setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoggedIn(Boolean(localStorage.getItem("authToken") && localStorage.getItem("user")));
+  }, [location.pathname]);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    const token = localStorage.getItem("authToken");
+    const storedUser = localStorage.getItem("user");
+    const email = storedUser ? JSON.parse(storedUser).email : null;
+
+    try {
+      if (token && email) {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? "http://localhost:3001/api" : "/api")}/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ email }),
+        });
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("session_token");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("user_name");
+      localStorage.removeItem("user");
+      setIsLoggedIn(false);
+      setIsMenuOpen(false);
+      setIsLoggingOut(false);
+      navigate("/login");
     }
   };
 
@@ -54,13 +93,28 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition"
-        >
-          {isMenuOpen ? <HiX className="size-6" /> : <HiMenu className="size-6" />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <Link
+            to="/cart"
+            className="relative p-2 text-gray-700 transition hover:text-orange-600"
+            aria-label="Shopping cart"
+          >
+            <FaShoppingCart size={18} />
+            {cartCount > 0 && (
+              <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[9px] font-bold text-white">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-gray-700 transition hover:text-orange-600"
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          >
+            {isMenuOpen ? <HiX className="size-6" /> : <HiMenu className="size-6" />}
+          </button>
+        </div>
 
         {/* Desktop nav items */}
         <div className="hidden md:flex items-center gap-2">
@@ -152,33 +206,33 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 py-4 px-4 sm:px-6 shadow-xl transition-all duration-300">
+        <div className="border-t border-gray-100 bg-white px-3 py-3 shadow-xl transition-all duration-300 sm:px-6 md:hidden">
           {/* Mobile Search */}
-          <div className="flex items-center space-x-2 mb-4 p-2 bg-gray-100 rounded-lg">
+          <div className="mb-3 flex items-center space-x-2 rounded-lg bg-gray-100 p-1.5">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleMobileSearch()}
               placeholder="Search products..."
-              className="flex-grow p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 border border-gray-200"
+              className="flex-grow rounded-md border border-gray-200 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             <button 
               onClick={handleMobileSearch}
-              className="p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+              className="rounded-lg bg-orange-600 p-2.5 text-white transition hover:bg-orange-700"
             >
               <FaSearch size={16} />
             </button>
           </div>
 
           {/* Mobile Navigation Links */}
-          <div className="flex flex-col space-y-1 border-b border-gray-200 pb-3 mb-3">
+          <div className="mb-3 flex flex-col space-y-0.5 border-b border-gray-200 pb-2">
             {navLinks.map((link, index) => (
               <Link
                 key={index}
                 to={link.to}
                 onClick={() => setIsMenuOpen(false)}
-                className={`block text-lg font-medium py-3 px-2 rounded-lg transition-colors ${
+                className={`block rounded-lg px-2 py-2 text-sm font-semibold transition-colors sm:text-base ${
                   location.pathname === link.to 
                     ? 'bg-orange-100 text-orange-700'
                     : 'text-gray-700 hover:bg-gray-50'
@@ -190,15 +244,15 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Action Buttons */}
-          <div className="flex flex-wrap justify-between gap-y-3 pt-3">
+          <div className="flex flex-wrap justify-between gap-y-2 pt-2">
             {/* Cart Button */}
             <Link
               to="/cart"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-[48%] justify-center relative shadow-lg"
+              className="relative flex w-[48%] items-center justify-center space-x-1.5 rounded-lg bg-orange-500 p-2.5 text-white shadow-lg transition hover:bg-orange-600"
             >
-              <FaShoppingCart size={20} />
-              <span className="font-bold text-sm">Cart</span>
+              <FaShoppingCart size={16} />
+              <span className="text-xs font-bold">Cart</span>
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {cartCount} 
@@ -210,10 +264,10 @@ const Navbar = () => {
             <Link 
               to="/wishlist"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition w-[48%] justify-center relative shadow-lg"
+              className="relative flex w-[48%] items-center justify-center space-x-1.5 rounded-lg bg-red-500 p-2.5 text-white shadow-lg transition hover:bg-red-600"
             >
-              <FaHeart size={20} />
-              <span className="font-bold text-sm">Wishlist</span>
+              <FaHeart size={16} />
+              <span className="text-xs font-bold">Wishlist</span>
               {wishlistCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-white text-red-600 text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-red-600">
                   {wishlistCount}
@@ -225,18 +279,29 @@ const Navbar = () => {
             <Link
               to="/profile"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 p-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition w-full justify-center relative shadow-lg"
+              className="relative flex w-full items-center justify-center space-x-1.5 rounded-lg bg-orange-500 p-2.5 text-white shadow-lg transition hover:bg-orange-600"
             >
-              <FaUser size={20} />
-              <span className="font-bold text-sm">Profile</span>
+              <FaUser size={16} />
+              <span className="text-xs font-bold">Profile</span>
             </Link>
+            {isLoggedIn && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="relative flex w-full items-center justify-center space-x-1.5 rounded-lg border border-red-200 bg-red-50 p-2.5 text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <FaSignOutAlt size={16} />
+                <span className="text-xs font-bold">{isLoggingOut ? "Logging out" : "Log out"}</span>
+              </button>
+            )}
           </div>
 
           {/* Social Icons */}
-          <div className="flex justify-center space-x-6 mt-8 border-t pt-4">
-            <FaTwitter className="text-gray-500 hover:text-blue-400 cursor-pointer transition" size={20} />
-            <FaFacebookF className="text-gray-500 hover:text-blue-600 cursor-pointer transition" size={20} />
-            <FaInstagram className="text-gray-500 hover:text-pink-600 cursor-pointer transition" size={20} />
+          <div className="mt-5 flex justify-center space-x-5 border-t pt-3">
+            <FaTwitter className="cursor-pointer text-gray-500 transition hover:text-blue-400" size={16} />
+            <FaFacebookF className="cursor-pointer text-gray-500 transition hover:text-blue-600" size={16} />
+            <FaInstagram className="cursor-pointer text-gray-500 transition hover:text-pink-600" size={16} />
           </div>
         </div>
       )}

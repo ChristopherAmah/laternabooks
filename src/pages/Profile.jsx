@@ -25,8 +25,8 @@ const InfoItem = React.memo(
       value === false || value === null || value === undefined ? "" : value;
 
     return (
-      <div className="group flex flex-col md:flex-row md:items-center py-4 px-4 rounded-xl hover:bg-white/60 transition-all">
-        <div className="flex items-center gap-3 w-40 shrink-0 mb-2 md:mb-0">
+      <div className="group flex flex-col px-3 py-3 transition-all hover:bg-white/60 sm:px-4 md:flex-row md:items-center md:py-4">
+        <div className="mb-2 flex w-full items-center gap-3 md:mb-0 md:w-40 md:shrink-0">
           {Icon && (
             <Icon
               size={16}
@@ -64,7 +64,7 @@ const InfoItem = React.memo(
 
 /* ---------------- STAT CARD ---------------- */
 const StatCard = ({ label, value, icon: Icon }) => (
-  <div className="relative overflow-hidden bg-white/80 backdrop-blur-lg p-6 rounded-2xl border border-white/50 transition-all duration-300 hover:-translate-y-1 group">
+  <div className="group relative overflow-hidden rounded-2xl border border-white/50 bg-white/80 p-4 backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 sm:p-6">
     <div className="absolute -right-6 -top-6 w-24 h-24 bg-orange-100 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition" />
 
     <div className="flex items-center justify-between">
@@ -72,7 +72,7 @@ const StatCard = ({ label, value, icon: Icon }) => (
         <p className="text-xs uppercase font-semibold text-gray-400 tracking-wider mb-2">
           {label}
         </p>
-        <p className="text-3xl font-bold text-gray-900">
+        <p className="text-2xl font-bold text-gray-900 sm:text-3xl">
           {value || 0}
         </p>
       </div>
@@ -230,11 +230,11 @@ const Profile = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 py-20 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
       <div className="max-w-6xl mx-auto">
 
         {dashboard && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="mb-8 grid grid-cols-2 gap-3 sm:mb-12 sm:gap-6 lg:grid-cols-4">
             <StatCard label="Orders" value={dashboard.total_orders} icon={Package} />
             <StatCard label="Cart Items" value={dashboard.total_carts} icon={ShoppingCart} />
             <StatCard
@@ -253,17 +253,17 @@ const Profile = () => {
         <div className="backdrop-blur-xl bg-white/70 rounded-3xl border border-white/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
 
           {/* Banner */}
-          <div className="h-56 relative overflow-hidden">
+          <div className="relative h-40 overflow-hidden sm:h-48 md:h-56">
             <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-400" />
             <div className="absolute -top-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
           </div>
 
-          <div className="relative px-6 md:px-16 pb-16">
-            <div className="flex flex-col md:flex-row items-center md:items-end -mt-20 mb-12 gap-8">
+          <div className="relative px-4 pb-10 sm:px-6 sm:pb-16 md:px-16">
+            <div className="mb-8 flex flex-col items-center gap-5 -mt-16 sm:mb-12 sm:gap-8 md:-mt-20 md:flex-row md:items-end">
 
               {/* Avatar */}
               <div className="relative">
-                <div className="w-40 h-40 rounded-3xl border-4 border-white overflow-hidden shadow-xl bg-white">
+                <div className="h-28 w-28 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-xl sm:h-32 sm:w-32 md:h-40 md:w-40 md:rounded-3xl">
                   <img
                     src={user.image_url || placeholderImg}
                     alt="Avatar"
@@ -282,7 +282,7 @@ const Profile = () => {
                     className="text-4xl font-bold border-b-2 border-orange-500 bg-transparent focus:outline-none"
                   />
                 ) : (
-                  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+                  <h2 className="text-2xl font-extrabold text-gray-900 sm:text-3xl md:text-4xl lg:text-5xl">
                     {user.name}
                   </h2>
                 )}
@@ -333,7 +333,7 @@ const Profile = () => {
             )}
 
             {/* Info Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-2">
 
               <section>
                 <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-6">

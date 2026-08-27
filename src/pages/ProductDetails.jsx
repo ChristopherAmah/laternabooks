@@ -71,7 +71,7 @@ const ProductDetails = () => {
   const hasPriceReduction = current_price != null && current_price < base_price;
 
   return (
-    <div className="min-h-screen bg-[#f7f8fa] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+    <div className="min-h-screen bg-[#f7f8fa] px-3 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12">
       <div className="mx-auto max-w-7xl">
         <button
           type="button"
@@ -82,7 +82,7 @@ const ProductDetails = () => {
         </button>
 
         <div className="grid overflow-hidden border border-gray-200 bg-white lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
-          <section className="relative flex min-h-[22rem] items-center justify-center border-b border-gray-200 bg-[#eef1f5] p-8 sm:min-h-[34rem] sm:p-14 lg:border-b-0 lg:border-r">
+          <section className="relative flex min-h-[16rem] items-center justify-center border-b border-gray-200 bg-[#eef1f5] p-5 sm:min-h-[22rem] sm:p-14 lg:min-h-[34rem] lg:border-b-0 lg:border-r">
             <div className="flex h-full w-full items-center justify-center bg-white p-6 shadow-sm sm:p-10">
               <img
                 src={image_url || placeholderImg}
@@ -109,7 +109,7 @@ const ProductDetails = () => {
                 </span>
               </div>
 
-              <h1 className="max-w-xl text-3xl font-bold leading-tight text-gray-950 sm:text-4xl">{name}</h1>
+              <h1 className="max-w-xl text-2xl font-bold leading-tight text-gray-950 sm:text-3xl md:text-4xl">{name}</h1>
 
               <div className="mt-7 flex items-end gap-3">
                 <span className="text-3xl font-bold text-orange-600">&#8358;{Number(price).toLocaleString()}</span>

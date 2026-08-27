@@ -47,7 +47,7 @@ const Topbar = () => {
 
     try {
       // Point to your LOCAL PROXY, not the external ERP directly
-      const response = await fetch(`${API_BASE}/logout`, {
+      await fetch(`${API_BASE}/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,11 +68,11 @@ const Topbar = () => {
   };
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-1 flex flex-row items-center justify-between relative">
+    <section className="hidden bg-white md:block">
+      <div className="relative mx-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-6 lg:px-8">
         
         {/* Social Icons */}
-        <div className="flex space-x-4 text-sm text-orange-500 z-10">
+        <div className="z-10 flex gap-3 text-xs text-orange-500 sm:gap-4 sm:text-sm">
           <a href="https://x.com/laternabooks" target="_blank" rel="noreferrer" className="hover:text-orange-600"><FaTwitter /></a>
           <a href="https://www.facebook.com/laterna.ventures" target="_blank" rel="noreferrer" className="hover:text-orange-600"><FaFacebookF /></a>
           <a href="https://www.linkedin.com/company/laterna-ventures-ltd/" target="_blank" rel="noreferrer" className="hover:text-orange-600"><FaLinkedinIn /></a>
@@ -80,7 +80,7 @@ const Topbar = () => {
         </div>
 
         {/* Auth Buttons */}
-        <div className="relative z-10 flex space-x-4 text-white">
+        <div className="relative z-10 flex gap-2 text-white sm:gap-4">
           {!isLoggedIn ? (
             <>
               <Link to="/register">

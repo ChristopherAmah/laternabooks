@@ -180,7 +180,7 @@ const CartPage = () => {
 
     if (cartCount === 0) {
         return (
-            <div className="container mx-auto px-4 py-20 text-center bg-gray-50 rounded-xl m-10">
+            <div className="container mx-auto my-6 rounded-xl bg-gray-50 px-4 py-14 text-center sm:my-10 sm:py-20">
                 <FaShoppingCart className="text-orange-400 size-20 mx-auto mb-6" />
                 <h1 className="text-xl lg:text-3xl font-bold text-gray-800 mb-2">Your Shopping Cart is Empty</h1>
                 <p className="text-gray-600 mb-6">Looks like you haven't added anything to your cart yet.</p>
@@ -194,17 +194,17 @@ const CartPage = () => {
     return (
         <div className="container mx-auto px-4 py-12">
             {/* ... Cart Header (omitted for brevity) ... */}
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-8 flex items-center">
+            <h1 className="mb-6 flex flex-wrap items-center gap-y-2 text-2xl font-extrabold text-gray-900 sm:mb-8 sm:text-3xl">
                 <FaShoppingCart className="mr-3 text-orange-600" />
                 Your Shopping Cart 
-                <span className="ml-4 text-base px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-extrabold">
+                <span className="ml-2 rounded-full bg-orange-100 px-3 py-1 text-sm font-extrabold text-orange-700 sm:ml-4 sm:text-base">
                     {cartCount} Items
                 </span>
             </h1>
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Cart Items */}
-                <div className="lg:w-2/3 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-lg sm:p-6 lg:w-2/3">
                     <div className="hidden sm:flex justify-between py-3 border-b-2 border-orange-500 font-bold text-sm text-gray-600 uppercase">
                         <span className="sm:w-2/5">Product</span>
                         <span className="sm:w-1/5 text-center">Price</span>
@@ -221,7 +221,7 @@ const CartPage = () => {
 
                 {/* Order Summary */}
                 <div className="lg:w-1/3">
-                    <div className="sticky top-20 bg-gray-50 p-6 rounded-2xl shadow-xl border border-gray-200">
+                    <div className="sticky top-16 rounded-2xl border border-gray-200 bg-gray-50 p-4 shadow-xl sm:p-6 md:top-20">
                         <h2 className="text-2xl font-bold text-gray-800 border-b pb-3 mb-4">Order Summary</h2>
                         
                         {/* Coupon Code Input (omitted for brevity) */}

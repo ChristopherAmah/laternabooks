@@ -61,9 +61,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-3 py-6 sm:px-6">
       {/* Main Card Container */}
-      <div className="flex w-full max-w-7xl overflow-hidden min-h-[70vh]">
+      <div className="flex min-h-full w-full max-w-7xl overflow-hidden bg-white sm:min-h-[70vh]">
         
         {/* Left Panel (Hero Image) */}
         <div className="hidden lg:block w-1/2 relative">
@@ -76,12 +76,12 @@ const Login = () => {
         </div>
 
         {/* Right Panel (Login Form) */}
-        <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+        <div className="flex w-full flex-col justify-center p-5 sm:p-8 md:p-12 lg:w-1/2 lg:p-16">
           <div className="max-w-sm mx-auto w-full">
-            <h2 className="text-4xl font-bold text-orange-500 mb-2 uppercase tracking-tight">
+            <h2 className="mb-2 text-3xl font-bold uppercase tracking-tight text-orange-500 sm:text-4xl">
               Login
             </h2>
-            <p className="mb-10 text-gray-500 font-medium">
+            <p className="mb-7 text-gray-500 font-medium sm:mb-10">
               Not a member yet?{" "}
               <Link to="/register" className="text-orange-600 hover:text-orange-700 underline underline-offset-4 transition">
                 Register now
@@ -105,7 +105,7 @@ const Login = () => {
                   required
                   placeholder="Email or Username"
                   disabled={loading}
-                  className="w-full px-5 py-4 border border-gray-200 rounded-2xl bg-gray-50/50 text-gray-800 transition focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 outline-none"
+                  className="w-full rounded-2xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-800 outline-none transition focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 sm:px-5 sm:py-4"
                 />
               </div>
 
@@ -118,12 +118,12 @@ const Login = () => {
                   required
                   placeholder="Password"
                   disabled={loading}
-                  className="w-full px-5 py-4 border border-gray-200 rounded-2xl bg-gray-50/50 text-gray-800 transition focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 outline-none"
+                  className="w-full rounded-2xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-800 outline-none transition focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 sm:px-5 sm:py-4"
                 />
               </div>
               
               {/* Actions Row */}
-              <div className="flex items-center justify-between px-1">
+              <div className="flex flex-col gap-3 px-1 text-left sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                 <label className="flex items-center cursor-pointer group">
                   <input
                     type="checkbox"
@@ -142,7 +142,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold tracking-widest uppercase hover:bg-orange-700 transition shadow-lg shadow-orange-600/20 disabled:bg-gray-400 flex items-center justify-center gap-2 active:scale-95"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-orange-600 py-3 font-bold uppercase tracking-widest text-white shadow-lg shadow-orange-600/20 transition hover:bg-orange-700 active:scale-95 disabled:bg-gray-400 sm:py-4"
               >
                 {loading ? (
                   <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

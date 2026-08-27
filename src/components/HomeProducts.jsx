@@ -101,7 +101,7 @@ const HomeProducts = () => {
       {loading ? (
         <p className="text-center text-gray-500">Loading products...</p>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
             <div
               key={product.id}
@@ -119,7 +119,7 @@ const HomeProducts = () => {
                 <img
                   src={product.image_url}
                   alt={product.name}
-                  className={`w-full h-40 sm:h-48 object-cover transition-all duration-300 ${
+                  className={`h-28 w-full object-cover transition-all duration-300 sm:h-40 md:h-48 ${
                     !product.inStock ? "grayscale opacity-60" : ""
                   }`}
                   onError={(e) => (e.target.src = placeholderImg)}
@@ -135,7 +135,7 @@ const HomeProducts = () => {
               </div>
 
               {/* Product Info */}
-              <div className="p-4 flex flex-col flex-1">
+              <div className="flex flex-1 flex-col p-3 sm:p-5">
                 <h3 className="font-semibold text-gray-800 line-clamp-1">
                   {product.name}
                 </h3>

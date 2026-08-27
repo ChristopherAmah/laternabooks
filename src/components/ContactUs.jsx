@@ -3,10 +3,10 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 const ContactUs = () => {
   return (
-    <div className="bg-gray-50 min-h-screen py-16 px-6">
+    <div className="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 sm:py-16">
       {/* Page Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-orange-600 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-orange-600 sm:text-4xl">
           Contact Us
         </h1>
         <p className="text-gray-600">
@@ -14,9 +14,9 @@ const ContactUs = () => {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-6 sm:gap-10 md:grid-cols-2">
         {/* Left: Google Map */}
-        <div className="rounded-xl overflow-hidden h-[400px] shadow-lg">
+        <div className="h-64 overflow-hidden rounded-xl shadow-lg sm:h-80 md:h-96 lg:h-[400px]">
           <iframe
             title="Laterna Ventures Location"
             src="https://www.google.com/maps?q=1611+Adeola+Hopewell+St,+Victoria+Island,+Lagos+106104,+Lagos&output=embed"
@@ -30,7 +30,7 @@ const ContactUs = () => {
         </div>
 
         {/* Right: Contact Info + Form */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
+        <div className="rounded-2xl bg-white p-5 shadow-lg sm:p-8">
           {/* Contact Details */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-orange-600 mb-4">

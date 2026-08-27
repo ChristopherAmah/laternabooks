@@ -64,9 +64,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-0">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-3 py-6 sm:px-6">
       {/* Main Card Container */}
-      <div className="flex w-full overflow-hidden bg-white border border-gray-100 min-h-[85vh]">
+      <div className="flex min-h-full w-full overflow-hidden border border-gray-100 bg-white sm:min-h-[85vh]">
         
         {/* Left Panel (Hero Image) */}
         <div className="hidden lg:block w-1/2 relative ">
@@ -83,9 +83,9 @@ const Signup = () => {
         </div>
 
         {/* Right Panel (Registration Form) */}
-        <div className="w-full lg:w-1/2 p-8 md:p-12 overflow-y-auto">
+        <div className="w-full overflow-y-auto p-5 sm:p-8 md:p-12 lg:w-1/2">
           <div className="max-w-md mx-auto">
-            <h2 className="text-3xl font-bold text-orange-500 mb-2 uppercase tracking-tight">
+            <h2 className="mb-2 text-2xl font-bold uppercase tracking-tight text-orange-500 sm:text-3xl">
               Create Account
             </h2>
             <p className="mb-8 text-gray-600">
@@ -166,7 +166,7 @@ const Signup = () => {
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-0 focus:border-orange-500 outline-none transition"
               />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <input
                   type="text"
                   name="city"
@@ -201,7 +201,7 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-orange-600 text-white py-4 rounded-xl font-bold tracking-widest uppercase hover:bg-orange-700 transition shadow-lg disabled:bg-gray-300 mt-6 flex items-center justify-center gap-2"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-600 py-3 font-bold uppercase tracking-widest text-white shadow-lg transition hover:bg-orange-700 disabled:bg-gray-300 sm:py-4"
               >
                 {loading ? (
                   <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

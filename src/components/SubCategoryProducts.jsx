@@ -37,8 +37,8 @@ const SubCategoryProducts = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-orange-600 text-center mb-10">
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
+      <h1 className="mb-6 text-center text-2xl font-bold text-orange-600 sm:mb-10 sm:text-3xl">
         {subcategoryName} Products
       </h1>
 
@@ -47,17 +47,17 @@ const SubCategoryProducts = () => {
           No products found in this subcategory.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-xl shadow hover:shadow-xl transition-all p-5"
+              className="rounded-xl bg-white p-3 shadow transition-all hover:shadow-xl sm:p-5"
             >
               <img
                 src={`https://laternaerp.smerp.io${product.image_url}`}
                 onError={(e) => (e.target.src = placeholderImg)}
                 alt={product.name}
-                className="w-full h-40 object-cover mb-4 rounded-md"
+                className="mb-3 h-24 w-full rounded-md object-cover sm:mb-4 sm:h-40"
               />
 
               <h2 className="text-lg font-semibold text-gray-800">

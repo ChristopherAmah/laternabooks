@@ -13,9 +13,9 @@ const Wishlist = () => {
   /* ---------------- EMPTY STATE ---------------- */
   if (wishlist.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 flex flex-col items-center justify-center px-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-orange-50 px-4 text-center sm:px-6">
 
-        <div className="bg-white/70 backdrop-blur-xl p-12 rounded-3xl shadow-xl border border-white/40 max-w-md w-full">
+        <div className="w-full max-w-md rounded-3xl border border-white/40 bg-white/70 p-6 shadow-xl backdrop-blur-xl sm:p-12">
           <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center bg-orange-50 rounded-full">
             <FaHeartBroken size={40} className="text-orange-500" />
           </div>
@@ -41,13 +41,13 @@ const Wishlist = () => {
 
   /* ---------------- MAIN PAGE ---------------- */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 py-16 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 px-4 py-10 sm:px-6 sm:py-16">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+        <div className="mb-8 flex flex-col md:mb-12 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
               My Wishlist
             </h1>
             <p className="text-gray-500 mt-2">
@@ -64,7 +64,7 @@ const Wishlist = () => {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 lg:gap-10">
           {wishlist.map((product) => (
             <div
               key={product.id}
@@ -72,7 +72,7 @@ const Wishlist = () => {
             >
 
               {/* IMAGE */}
-              <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+              <div className="relative h-28 overflow-hidden bg-gradient-to-br from-gray-50 to-white sm:h-56 md:h-64">
                 <img
                   src={product.image_url || placeholderImg}
                   alt={product.name}
@@ -98,7 +98,7 @@ const Wishlist = () => {
               </div>
 
               {/* CONTENT */}
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="flex flex-grow flex-col p-3 sm:p-6">
 
                 <h2 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">
                   {product.name}

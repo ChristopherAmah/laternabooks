@@ -22,17 +22,17 @@ const SearchResults = () => {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-6 md:px-12 lg:px-24">
+    <div className="min-h-screen bg-gray-50 px-4 py-8 sm:px-6 sm:py-12 md:px-12 lg:px-16">
       <div className="max-w-7xl mx-auto">
 
         {/* Page Title */}
-        <h1 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800">
+        <h1 className="mb-6 text-2xl font-bold text-gray-800 sm:mb-8 md:text-3xl">
           Search results for:{" "}
           <span className="text-orange-600">{query}</span>
         </h1>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product) => (
               <div
                 key={product.id}
@@ -40,7 +40,7 @@ const SearchResults = () => {
               >
 
                 {/* Product Image */}
-                <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
+                <div className="relative h-28 w-full overflow-hidden rounded-t-2xl sm:h-48">
                   <img
                     src={product.image || placeholderImg}
                     alt={product.name}
@@ -60,7 +60,7 @@ const SearchResults = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="flex flex-col flex-grow p-4">
+                <div className="flex flex-col flex-grow p-3 sm:p-4">
                   <h2 className="font-semibold text-gray-800 text-sm md:text-base mb-1 line-clamp-2">
                     {product.name}
                   </h2>
