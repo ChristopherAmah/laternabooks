@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import placeholderImg from "../assets/guitar.jpg";
 import { FaHeart } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa6";
+import { FaArrowRight, FaCartPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 import { api } from "../utils/api";
@@ -85,15 +85,18 @@ const HomeProducts = () => {
   return (
     <section className="bg-gray-100 py-10 sm:py-14 px-4 sm:px-6 lg:px-16">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <h2 className="text-lg font-bold text-gray-800 sm:text-2xl">
           Featured Products
         </h2>
 
-        <Link to="/products" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition text-sm sm:text-base">
-            See All Products
-          </button>
+        <Link
+          to="/products"
+          className="flex shrink-0 items-center gap-1 text-sm font-semibold text-orange-600 transition hover:text-orange-700 sm:rounded-full sm:bg-orange-500 sm:px-5 sm:py-2 sm:text-base sm:text-white sm:hover:bg-orange-600 sm:hover:text-white"
+        >
+          <span className="sm:hidden">All</span>
+          <span className="hidden sm:inline">See All Products</span>
+          <FaArrowRight size={14} aria-hidden="true" />
         </Link>
       </div>
 
